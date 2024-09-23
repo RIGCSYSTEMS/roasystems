@@ -29,3 +29,19 @@ route::get('/clientes/creacion', function () {
 
 
 
+
+
+
+
+
+
+    
+
+// Route::get('/clientes/{id}/{despacho?}', function ($id, $despacho = null) {
+    
+//     if ($despacho) {
+//         return "Cliente DataRoa con ID {$id} del despacho {$despacho}";
+//     }
+//     return "Cliente DataRoa con ID {$id}";
+
+//     });
