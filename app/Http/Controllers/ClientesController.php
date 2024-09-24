@@ -8,21 +8,21 @@ class ClientesController extends Controller
 {
     public function index()
     {
-        return "Bienvenido a la página de clientes";
+        return view('clientes.index');
     }
 
     public function creacion()
     {
-        return "Bienvenido a la página de creación de clientes ROA";
+        return view('clientes.create');
     }
 
-    public function edicion()
-    {
-        return "Bienvenido a la página de edicion de clientes ROA";
-    }
+    // public function edicion()
+    // {
+    //     return view('clientes.edicion');
+    // }
 
     public function show($id)
     {
-        return "Bienvenido a la página de clientes con ID {$id}";
+        return view('clientes.show', ['id' => $id]);
     }
 }

@@ -8,20 +8,20 @@ class ResidentesController extends Controller
 {
     public function index()
     {
-        return "Bienvenido a la página de Residentes Temporales";
+        return view('residentes.index');
     }
 
     public  function creacion()
     {
-        return "Bienvenido a la página de creacion de Residentes Temporales ROA";
+        return view('residentes.create');
     }
-     public  function edicion()
-     {
-            return "Bienvenido a la página de edicion de Residentes Temporales ROA";
-     }
+    //  public  function edicion()
+    //  {
+    //         return "Bienvenido a la página de edicion de Residentes Temporales ROA";
+    //  }
 
      public  function show($id)
      {
-            return "Bienvenido a la página de Residentes Temporales con ID {$id}";
+            return view('residentes.show', ['id' => $id]);
      }
 }

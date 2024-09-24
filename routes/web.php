@@ -12,22 +12,22 @@ Route::get('/', HomeController::class);
 // RUTAS CLIENTES
 Route::get('/clientes',[ClientesController::class, 'index']);
 route::get('/clientes/creacion',[ClientesController::class, 'creacion']);
-route::get('/clientes/edicion',[ClientesController::class, 'edicion']);
+// route::get('/clientes/edicion',[ClientesController::class, 'edicion']);
 route::get('/clientes/{id}',[ClientesController::class, 'show']);
 // RUTAS SEGUIMIENTO
 Route::get('/seguimientos', [SeguimientosController::class, 'index']);
 route::get('/seguimientos/creacion',[SeguimientosController::class, 'creacion']);
-route::get('/seguimientos/edicion',[SeguimientosController::class, 'edicion']);
+// route::get('/seguimientos/edicion',[SeguimientosController::class, 'edicion']);
 route::get('/seguimientos/{id}',[SeguimientosController::class, 'show']);
 // RUTAS RESIDENTES TEMPORALES
 Route::get('/residentes', [ResidentesController::class, 'index']);
 route::get('/residentes/creacion',[ResidentesController::class, 'creacion']);
-route::get('/residentes/edicion', [ResidentesController::class, 'edicion']);
+// route::get('/residentes/edicion', [ResidentesController::class, 'edicion']);
 route::get('/residentes/{id}', [ResidentesController::class, 'show']);
 // RUTAS LLAMADA ENTRANTES
 Route::get('/llamadas', [LlamadasController::class, 'index']);
 route::get('/llamadas/creacion', [LlamadasController::class, 'creacion']);
-route::get('/llamadas/edicion', [LlamadasController::class, 'edicion']);
+// route::get('/llamadas/edicion', [LlamadasController::class, 'edicion']);
 route::get('/llamadas/{id}', [LlamadasController::class, 'show']);
    
 

@@ -8,20 +8,20 @@ class LlamadasController extends Controller
 {
     public function index()
     {
-        return "Bienvenido a la página de llamadas";
+        return view('llamadas.index');
     }
 
     public  function creacion()
     {
-        return "Bienvenido a la página de creacion de llamadas ROA";
+        return view('llamadas.create');
     }
-     public  function edicion()
-     {
-            return "Bienvenido a la página de edicion de llamadas ROA";
-     }
+    //  public  function edicion()
+    //  {
+    //         return "Bienvenido a la página de edicion de llamadas ROA";
+    //  }
 
      public  function show($id)
      {
-            return "Bienvenido a la página de llamadas con ID {$id}";
+            return view('llamadas.show', ['id' => $id]);
      }
 }
