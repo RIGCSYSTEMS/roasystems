@@ -13,6 +13,16 @@ return new class extends Migration
     {
         Schema::create('resident', function (Blueprint $table) {
             $table->id();
+            $table->string('id_cliente');
+            $table->string('fecha_de_demanda');
+            $table->string('tipo_de_demanda');
+            $table->string('usuario');
+            $table->string('password');
+            $table->longText('preguntas_respuestas');
+            $table->string('despacho');
+            $table->string('abogado');
+            $table->string('confirmacion');
+            $table->longText('notas');
             $table->timestamps();
         });
     }

@@ -15,32 +15,34 @@ class clientSeeder extends Seeder
     {
     
         
-        client::factory(10)->create();
+        
 
-        // $client = new client();
+        $client = new client();
 
-        // $client->nombre_de_cliente = 'Ivan';
-        // $client->otros_nombres_de_cliente = 'Rigc1234';
-        // $client->direccion = 'Calle 123';
-        // $client->telefono = '12345678';
-        // $client->email = 'admin@example.com';
-        // $client->profesion = 'Ingeniero';
-        // $client->pais = 'Mexico';
-        // $client->despacho = 'Despacho 1';
-        // $client->tipo_de_expediente = 'Expediente 1';
-        // $client->lenguaje = 'Español';
-        // $client->honorarios = 'Honorarios 1';
-        // $client->fecha_de_apertura = '2024-09-26';
-        // $client->estatus = 'Activo';
-        // $client->observaciones = 'Observaciones 1';
-        // $client->numero_de_expediente = 'Expediente 1';
-        // $client->permiso_de_trabajo = 'Permiso 1';
-        // $client->IUC = 'IUC 1';
-        // $client->ubicacion_del_despacho = 'Despacho 1';
-        // $client->fecha_de_cierre = '2024-09-26';
-        // $client->cierre_del_numero_de_caja = 'Caja 1';
+        $client->nombre_de_cliente = 'Ivan';
+        $client->otros_nombres_de_cliente = 'Rigc1234';
+        $client->direccion = 'Calle 123';
+        $client->telefono = '12345678';
+        $client->email = 'admin@example.com';
+        $client->profesion = 'Ingeniero';
+        $client->pais = 'Mexico';
+        $client->despacho = 'Despacho 1';
+        $client->tipo_de_expediente = 'Expediente 1';
+        $client->lenguaje = 'Español';
+        $client->honorarios = 'Honorarios 1';
+        $client->fecha_de_apertura = '2024-09-26';
+        $client->estatus = 'Activo';
+        $client->observaciones = 'Observaciones 1';
+        $client->numero_de_expediente = 'Expediente 1';
+        $client->permiso_de_trabajo = 'Permiso 1';
+        $client->IUC = 'IUC 1';
+        $client->ubicacion_del_despacho = 'Despacho 1';
+        $client->fecha_de_cierre = '2024-09-26';
+        $client->cierre_del_numero_de_caja = 'Caja 1';
  
-        //  $client->save();
+         $client->save();
+
+        client::factory(100)->create();
 
     }
 }

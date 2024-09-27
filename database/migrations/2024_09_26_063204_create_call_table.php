@@ -13,6 +13,13 @@ return new class extends Migration
     {
         Schema::create('call', function (Blueprint $table) {
             $table->id();
+            $table->string('fecha');
+            $table->string('nombre');
+            $table->string('telefono');
+            $table->string('aboagado');
+            $table->string('motivo');
+            $table->string('nota');
+            $table->string('requiere_accion');
             $table->timestamps();
         });
     }
