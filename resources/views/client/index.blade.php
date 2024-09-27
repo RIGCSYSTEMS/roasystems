@@ -13,6 +13,15 @@
     <div class="center">
         <h1>ROASYSTEMS ------- CLIENTES ROA</h1>   
     </div> --}}
+    
+    
+    <h1>CLIENTES ROA</h1>
+
+    <a href="/client/create">
+        Crear un nuevo cliente
+    </a>
+
+
 
     <ul>    
         @foreach ($clients as $client)

@@ -15,11 +15,15 @@ class clientController extends Controller
         return view('client.index',compact('clients'));
     }
 
-    public function creacion()
+    public function create()
     {
         return view('client.create');
     }
 
+    public function store()
+    {
+        return request()->all();
+    }
     // public function edicion()
     // {
     //     return view('clientes.edicion');

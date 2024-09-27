@@ -12,6 +12,7 @@ Route::get('/', HomeController::class);
 // RUTAS CLIENTES
 Route::get('/client', [ClientController::class, 'index']);
 route::get('/client/create',[ClientController::class, 'create']);
+route::post('/client',[ClientController::class, 'store']);
 // route::get('/clientes/edicion',[ClientesController::class, 'edicion']);
 route::get('/client/{id}',[ClientController::class, 'show']);
 // RUTAS SEGUIMIENTO
