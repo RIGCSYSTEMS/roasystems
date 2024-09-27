@@ -132,11 +132,11 @@
                             if ($link == 'Inicio') {
                                 $url = '/';
                             } elseif ($link == 'Clientes') {
-                                $url = '/clientes';
+                                $url = '/client';
                             } elseif ($link == 'Residentes Temporales') {
-                                $url = '/residentes';
+                                $url = '/resident';
                             } elseif ($link == 'Llamadas Entrantes') {
-                                $url = '/llamadas';
+                                $url = '/call';
                             } else {
                                 $url = '/' . strtolower(str_replace(' ', '-', $link));
                             }

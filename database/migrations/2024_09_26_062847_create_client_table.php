@@ -29,7 +29,7 @@ return new class extends Migration
             $table->longText('observaciones');
             $table->string('numero_de_expediente');
             $table->string('permiso_de_trabajo');
-            $table->string('IUC');
+            $table->string('iuc');
             $table->string('ubicacion_del_despacho');
             $table->string('fecha_de_cierre');
             $table->string('cierre_del_numero_de_caja');

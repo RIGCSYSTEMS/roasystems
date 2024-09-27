@@ -4,16 +4,16 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class ResidentesController extends Controller
+class ResidentController extends Controller
 {
     public function index()
     {
-        return view('residentes.index');
+        return view('resident.index');
     }
 
     public  function creacion()
     {
-        return view('residentes.create');
+        return view('resident.create');
     }
     //  public  function edicion()
     //  {
@@ -22,6 +22,6 @@ class ResidentesController extends Controller
 
      public  function show($id)
      {
-            return view('residentes.show', ['id' => $id]);
+            return view('resident.show', ['id' => $id]);
      }
 }

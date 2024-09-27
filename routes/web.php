@@ -2,33 +2,33 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\ClientesController;
-use App\Http\Controllers\SeguimientosController;
-use App\Http\Controllers\ResidentesController;
-use App\Http\Controllers\LlamadasController;
+use App\Http\Controllers\ClientController;
+use App\Http\Controllers\followController;
+use App\Http\Controllers\ResidentController;
+use App\Http\Controllers\callController;
 
 // RUTA PRINCIPAL
 Route::get('/', HomeController::class);
 // RUTAS CLIENTES
-Route::get('/clientes',[ClientesController::class, 'index']);
-route::get('/clientes/creacion',[ClientesController::class, 'creacion']);
+Route::get('/client', [ClientController::class, 'index']);
+route::get('/client/create',[ClientController::class, 'create']);
 // route::get('/clientes/edicion',[ClientesController::class, 'edicion']);
-route::get('/clientes/{id}',[ClientesController::class, 'show']);
+route::get('/client/{id}',[ClientController::class, 'show']);
 // RUTAS SEGUIMIENTO
-Route::get('/seguimientos', [SeguimientosController::class, 'index']);
-route::get('/seguimientos/creacion',[SeguimientosController::class, 'creacion']);
+Route::get('/follow', [followController::class, 'index']);
+route::get('/follow/create',[followController::class, 'create']);
 // route::get('/seguimientos/edicion',[SeguimientosController::class, 'edicion']);
-route::get('/seguimientos/{id}',[SeguimientosController::class, 'show']);
+route::get('/follow/{id}',[followController::class, 'show']);
 // RUTAS RESIDENTES TEMPORALES
-Route::get('/residentes', [ResidentesController::class, 'index']);
-route::get('/residentes/creacion',[ResidentesController::class, 'creacion']);
+Route::get('/resident', [ResidentController::class, 'index']);
+route::get('/resident/create',[ResidentController::class, 'create']);
 // route::get('/residentes/edicion', [ResidentesController::class, 'edicion']);
-route::get('/residentes/{id}', [ResidentesController::class, 'show']);
+route::get('/residentes/{id}', [ResidentController::class, 'show']);
 // RUTAS LLAMADA ENTRANTES
-Route::get('/llamadas', [LlamadasController::class, 'index']);
-route::get('/llamadas/creacion', [LlamadasController::class, 'creacion']);
+Route::get('/call', [callController::class, 'index']);
+route::get('/call/create', [callController::class, 'create']);
 // route::get('/llamadas/edicion', [LlamadasController::class, 'edicion']);
-route::get('/llamadas/{id}', [LlamadasController::class, 'show']);
+route::get('/call/{id}', [callController::class, 'show']);
    
 
 // Route::get('/clientes/{id}/{despacho?}', function ($id, $despacho = null) {

@@ -4,16 +4,16 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class SeguimientosController extends Controller
+class followController extends Controller
 {
     public function index()
     {
-        return view('seguimientos.index');
+        return view('follow.index');
     }
 
     public  function creacion()
     {
-        return view('seguimientos.create');
+        return view('follow.create');
     }
     //  public  function edicion()
     //  {
@@ -22,6 +22,6 @@ class SeguimientosController extends Controller
 
      public  function show($id)
      {
-            return view('seguimientos.show', ['id' => $id]);
+            return view('follow.show', ['id' => $id]);
      }
 }
