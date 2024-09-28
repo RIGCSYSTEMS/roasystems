@@ -73,8 +73,24 @@
         <input type="text" name="numero_de_expediente" id="numero_de_expediente">
         <br>
         <br>        
-        <label for="permiso">Permiso de trabajo:</label>
-        <input type="text" name="permiso" id="permiso">
+        <label for="permiso_de_trabajo">Permiso de trabajo:</label>
+        <input type="text" name="permiso_de_trabajo" id="permiso_de_trabajo">
+        <br>
+        <br>
+        <label for="iuc">IUC:</label>
+        <input type="text" name="iuc" id="iuc">
+        <br>
+        <br>
+        <label for="ubicacion_del_despacho">Ubicacion del despacho:</label>
+        <input type="text" name="ubicacion_del_despacho" id="ubicacion_del_despacho">
+        <br>
+        <br>
+        <label for="fecha_de_cierre">Fecha de cierre:</label>
+        <input type="text" name="fecha_de_cierre" id="fecha_de_cierre">
+        <br>
+        <br>
+        <label for="cierre_del_numero_de_caja">Cierre de Numero de caja:</label>
+        <input type="text" name="cierre_del_numero_de_caja" id="cierre_del_numero_de_caja">
         <br>
         <br>
     <button type="submit">

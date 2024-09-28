@@ -6,6 +6,7 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\followController;
 use App\Http\Controllers\ResidentController;
 use App\Http\Controllers\callController;
+use App\Models\client;
 
 // RUTA PRINCIPAL
 Route::get('/', HomeController::class);
@@ -13,8 +14,10 @@ Route::get('/', HomeController::class);
 Route::get('/client', [ClientController::class, 'index']);
 route::get('/client/create',[ClientController::class, 'create']);
 route::post('/client',[ClientController::class, 'store']);
-// route::get('/clientes/edicion',[ClientesController::class, 'edicion']);
+route::get('/client/{id}/edit',[clientController::class, 'edit']);
 route::get('/client/{id}',[ClientController::class, 'show']);
+route::put('/client/{id}',[ClientController::class, 'update']);
+route::delete('/client/{id}',[ClientController::class, 'destroy']);
 // RUTAS SEGUIMIENTO
 Route::get('/follow', [followController::class, 'index']);
 route::get('/follow/create',[followController::class, 'create']);

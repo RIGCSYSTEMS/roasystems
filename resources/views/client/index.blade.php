@@ -37,6 +37,7 @@
         @endforeach
     </ul>
 
+    {{ $clients->links() }}
 
 
 @endsection

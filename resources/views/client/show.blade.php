@@ -71,6 +71,12 @@
         <b>Cierre del numero de caja:</b> {{$client->cierre_del_numero_de_caja}}
     </p>
 
+    <a href="/client/{{$client->id}}/edit">Editar</a>
+
+    <form action="/client/{{$client->id}}" method="post">
+        @csrf
+        @method('delete')
+        <button type="submit">Eliminar Cliente</button>
 
 @endsection
 
