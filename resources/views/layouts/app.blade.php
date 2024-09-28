@@ -9,20 +9,40 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
             background-color: #F3E5F5;
         }
         header {
             background-color: #8E24AA;
             color: white;
             padding: 6px;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+        footer {
+            background-color: #4A148C;
+            color: white;
+            padding: 1rem 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            z-index: 1000;
         }
         .container {
             width: 90%;
-            max-width: 12000%;
-            margin: 1px auto;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        main {
+            padding: 100px 0; /* Añade suficiente espacio para el encabezado y pie de página */
+            margin-bottom: 50px; /* Espacio para el pie de página */
+        }
+        .content-area {
+            background-color: white;
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         .header-content {
             display: flex;
@@ -54,30 +74,14 @@
         nav ul li a:hover {
             color: #E1BEE7;
         }
-        main {
-            flex-grow: 1;
-            padding: 2rem 0;
-        }
-        .content-area {
-            background-color: white;
-            border-radius: 8px;
-            padding: 2rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        footer {
-            background-color: #4A148C;
-            flex-direction: column;
-            color: white;
-            padding: 1rem 0;
-        }
         .footer-content {
             display: flex;
-            justify-content: flex-start;
-            align-items: flex-start;
+            justify-content: flex-end;
+            align-items: center;
             flex-wrap: wrap;
             width: 100%;
             margin: 0;
-            padding: 0;
+            padding: auto;
             font-size: 0.6rem;
         }
         .footer-links {
@@ -119,7 +123,7 @@
     <header>
         <div class="container header-content">
             <div class="logo">
-                <img src="{{ asset('images/logo.png') }}" alt="Logo" width="50" height="50">
+                <img src="{{ asset('images/logo.png') }}" alt="Logo" width="180" height="80">
                 <h1>ROA SYSTEMS</h1>
             </div>
             <nav>
@@ -140,10 +144,7 @@
                             } else {
                                 $url = '/' . strtolower(str_replace(' ', '-', $link));
                             }
-
-
                         @endphp
-                    
                         <li><a href="{{ $url }}">{{ $link }}</a></li>
                     @endforeach
                 </ul>
@@ -152,16 +153,14 @@
     </header>
 
     <main class="container">
-        @yield('content')
+        <div class="content-area">
+            @yield('content')
+        </div>
     </main>
 
     <footer>
         <div class="container footer-content">
-            {{-- <div class="logo"> --}}
-                {{-- <img src="{{ asset('images/logo-small.png') }}" alt="Logo pequeño" width="30" height="30"> --}}
-                <span>&copy; {{ date('Y') }} Developed by RIGCSYSTEMS.COM</span>
-                </span>
-            </div>
+            <span>&copy; {{ date('Y') }} Developed by RIGCSYSTEMS.COM</span>
             <div class="footer-links">
                 <a href="https://www.canada.ca/">Formularie Web d'IRCC</a>
                 <a href="https://www.canada.ca/">Medicin Designe</a>
@@ -177,47 +176,6 @@
     </footer>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
