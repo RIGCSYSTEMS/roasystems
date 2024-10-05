@@ -12,6 +12,7 @@ use App\Models\client;
 Route::get('/', HomeController::class);
 // RUTAS CLIENTES
 Route::get('/client', [ClientController::class, 'index']);
+Route::get('/client/lista/getDataClientes', [ClientController::class, 'getDataClientes']);
 route::get('/client/create',[ClientController::class, 'create']);
 route::post('/client',[ClientController::class, 'store']);
 route::get('/client/{id}/edit',[clientController::class, 'edit']);
@@ -34,12 +35,3 @@ route::get('/call/create', [callController::class, 'create']);
 // route::get('/llamadas/edicion', [LlamadasController::class, 'edicion']);
 route::get('/call/{id}', [callController::class, 'show']);
    
-
-// Route::get('/clientes/{id}/{despacho?}', function ($id, $despacho = null) {
-    
-//     if ($despacho) {
-//         return "Cliente DataRoa con ID {$id} del despacho {$despacho}";
-//     }
-//     return "Cliente DataRoa con ID {$id}";
-
-//     });

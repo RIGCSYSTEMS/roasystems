@@ -1,0 +1,112 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f7f6f6!important;
+}
+header {
+    background-color: #8E24AA;
+    color: white;
+    padding: 6px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+footer {
+    background-color: #4A148C;
+    color: white;
+    padding: 1rem 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 1000;
+}
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+main {
+    padding: 100px 0; /* Añade suficiente espacio para el encabezado y pie de página */
+    margin-bottom: 50px; /* Espacio para el pie de página */
+}
+.content-area {
+    background-color: white;
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.logo {
+    display: flex;
+    align-items: center;
+}
+.logo img {
+    margin-right: 1rem;
+}
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+}
+nav ul li {
+    margin-left: 1rem;
+    margin-bottom: 0.5rem;
+}
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+nav ul li a:hover {
+    color: #E1BEE7;
+}
+.footer-content {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 100%;
+    margin: 0;
+    padding: auto;
+    font-size: 0.6rem;
+}
+.footer-links {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    font-size: 0.8rem;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+.footer-links a {
+    color: #ffffff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+.footer-links a:hover {
+    color: rgb(190, 141, 235);
+}
+@media (max-width: 768px) {
+    .header-content, .footer-content {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    nav ul {
+        margin-top: 1rem;
+    }
+    .footer-content > div {
+        margin-bottom: 1rem;
+    }
+    .footer-links {
+        margin-top: 1rem;
+    }
+}

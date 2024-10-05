@@ -1,124 +1,22 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'ROA SYSTEMS')</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #F3E5F5;
-        }
-        header {
-            background-color: #8E24AA;
-            color: white;
-            padding: 6px;
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-        }
-        footer {
-            background-color: #4A148C;
-            color: white;
-            padding: 1rem 0;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            z-index: 1000;
-        }
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        main {
-            padding: 100px 0; /* Añade suficiente espacio para el encabezado y pie de página */
-            margin-bottom: 50px; /* Espacio para el pie de página */
-        }
-        .content-area {
-            background-color: white;
-            border-radius: 8px;
-            padding: 2rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .logo {
-            display: flex;
-            align-items: center;
-        }
-        .logo img {
-            margin-right: 1rem;
-        }
-        nav ul {
-            list-style-type: none;
-            padding: 0;
-            display: flex;
-            flex-wrap: wrap;
-        }
-        nav ul li {
-            margin-left: 1rem;
-            margin-bottom: 0.5rem;
-        }
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-        nav ul li a:hover {
-            color: #E1BEE7;
-        }
-        .footer-content {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            flex-wrap: wrap;
-            width: 100%;
-            margin: 0;
-            padding: auto;
-            font-size: 0.6rem;
-        }
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-            font-size: 0.8rem;
-            margin: 0;
-            padding: 0;
-            width: 100%;
-        }
-        .footer-links a {
-            color: #ffffff;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-        .footer-links a:hover {
-            color: rgb(190, 141, 235);
-        }
-        @media (max-width: 768px) {
-            .header-content, .footer-content {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            nav ul {
-                margin-top: 1rem;
-            }
-            .footer-content > div {
-                margin-bottom: 1rem;
-            }
-            .footer-links {
-                margin-top: 1rem;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('/css/app.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
+    </script>
+
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css">
 </head>
+
 <body>
     <header>
         <div class="container header-content">
@@ -131,7 +29,7 @@
                     @php
                         $links = ['Inicio', 'Clientes', 'Residentes Temporales', 'Llamadas Entrantes'];
                     @endphp
-                    @foreach($links as $link)
+                    @foreach ($links as $link)
                         @php
                             if ($link == 'Inicio') {
                                 $url = '/';
@@ -153,8 +51,15 @@
     </header>
 
     <main class="container">
-        <div class="content-area">
-            @yield('content')
+        {{-- <div class="content-area"> --}}
+        {{-- @yield('content')
+        </div> --}}
+
+        <div class="card">
+            <div class="card-body">
+                @yield('content')
+            </div>
+        </div>
         </div>
     </main>
 
@@ -175,6 +80,9 @@
         </div>
     </footer>
 </body>
+
+<script src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
+
 </html>
 
 

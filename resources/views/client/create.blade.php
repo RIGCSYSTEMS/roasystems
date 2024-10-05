@@ -3,175 +3,162 @@
 @section('title', 'ROASYSTEMS')
 
 @section('content')
-
-    <h1>Creacion de clientes</h1>
-    
-
-    <form action="/client"method="post">
-
-        @csrf
-
-        <label>
-            Nombre de cliente:
-        <input type="text" name="nombre_de_cliente">
-    </label>
-<br>
-<br>
-        <label for="otros_nombres_de_cliente">Otros nombres de cliente:</label>
-        <input type="text" name="otros_nombres_de_cliente" id="otros_nombres_de_cliente">
-        <br>
-        <br>     
-        <label for="direccion">Direccion:</label>
-        <input type="text" name="direccion" id="direccion">
-        <br>
-        <br>        
-        <label for="telefono">Telefono:</label>
-        <input type="text" name="telefono" id="telefono">
-        <br>
-        <br>        
-        <label for="email">Correo:</label>
-        <input type="text" name="email" id="email">
-        <br>
-        <br>        
-        <label for="profesion">Profesion:</label>
-        <input type="text" name="profesion" id="profesion">
-        <br>
-        <br>        
-        <label for="pais">Pais de origen:</label>
-        <input type="text" name="pais" id="pais">
-        <br>
-        <br>        
-        <label for="despacho">Despacho:</label>
-        <input type="text" name="despacho" id="despacho">
-        <br>
-        <br>        
-        <label for="tipo_de_expediente">Tipo de expediente:</label>
-        <input type="text" name="tipo_de_expediente" id="tipo_de_expediente">
-        <br>
-        <br>        
-        <label for="lenguaje">Lenguaje:</label>
-        <input type="text" name="lenguaje" id="lenguaje">
-        <br>
-        <br>        
-        <label for="honorarios">Honorarios:</label>
-        <input type="text" name="honorarios" id="honorarios">
-        <br>
-        <br>        
-        <label for="fecha_de_apertura">Fecha de apertura:</label>
-        <input type="text" name="fecha_de_apertura" id="fecha_de_apertura">
-        <br>
-        <br>        
-        <label for="estatus">Estatus:</label>
-        <input type="text" name="estatus" id="estatus">
-        <br>
-        <br>        
-        <label for="observaciones">Observaciones:</label>
-        <input type="text" name="observaciones" id="observaciones">
-        <br>
-        <br>        
-        <label for="numero_de_expediente">Numero de expediente:</label>
-        <input type="text" name="numero_de_expediente" id="numero_de_expediente">
-        <br>
-        <br>        
-        <label for="permiso_de_trabajo">Permiso de trabajo:</label>
-        <input type="text" name="permiso_de_trabajo" id="permiso_de_trabajo">
-        <br>
-        <br>
-        <label for="iuc">IUC:</label>
-        <input type="text" name="iuc" id="iuc">
-        <br>
-        <br>
-        <label for="ubicacion_del_despacho">Ubicacion del despacho:</label>
-        <input type="text" name="ubicacion_del_despacho" id="ubicacion_del_despacho">
-        <br>
-        <br>
-        <label for="fecha_de_cierre">Fecha de cierre:</label>
-        <input type="text" name="fecha_de_cierre" id="fecha_de_cierre">
-        <br>
-        <br>
-        <label for="cierre_del_numero_de_caja">Cierre de Numero de caja:</label>
-        <input type="text" name="cierre_del_numero_de_caja" id="cierre_del_numero_de_caja">
-        <br>
-        <br>
-    <button type="submit">
-        Crear cliente
-    </button>
-    <a href="/client">Volver a la lista de clientes</a>        
-
-
-
-    </form>
-
-
-
-
-
-
-
-
-
-
-
-
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 text-left">
+                <h1 class="my-4">Creacion de clientes</h1>
+            </div>
+            <div class="col-md-4 text-right float-right">
+                <a href="{{url('/')}}/client" class="text-primary float-right badge bg-secondary" style="text-decoration: none; color:aliceblue!important">Lista de clientes</a>
+            </div>
+        </div>
+        <form action="/client"method="post">
+            @csrf
+            <div class="row">
+                <div class="col-md-3 my-2">
+                    <label><strong style="color: red">*</strong> Nombre de cliente:</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control form-control-sm float-right" id="nombre_de_cliente"
+                            name="nombre_de_cliente" required>
+                    </div>
+                </div>
+                <div class="col-md-3 my-2">
+                    <label> Otros nombres de cliente:</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control form-control-sm float-right"
+                            name="otros_nombres_de_cliente" id="otros_nombres_de_cliente" required>
+                    </div>
+                </div>
+                <div class="col-md-3 my-2">
+                    <label> Direccion:</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control form-control-sm float-right" name="direccion"
+                            id="direccion" required>
+                    </div>
+                </div>
+                <div class="col-md-3 my-2">
+                    <label> Teléfono:</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control form-control-sm float-right" name="telefono"
+                            id="telefono" required>
+                    </div>
+                </div>
+                <div class="col-md-3 my-2">
+                    <label> <strong style="color: red">*</strong> Correo:</label>
+                    <div class="input-group">
+                        <input type="email" class="form-control form-control-sm float-right" name="email" id="email"
+                            required>
+                    </div>
+                </div>
+                <div class="col-md-3 my-2">
+                    <label> <strong style="color: red">*</strong> Lenguaje:</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control form-control-sm float-right" name="lenguaje" id="lenguaje"
+                            required>
+                    </div>
+                </div>
+                <div class="col-md-3 my-2">
+                    <label> Profesión:</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control form-control-sm float-right" name="profesion"
+                            id="profesion" required>
+                    </div>
+                </div>
+                <div class="col-md-3 my-2">
+                    <label> Pais de origen:</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control form-control-sm float-right" name="pais" id="pais"
+                            required>
+                    </div>
+                </div>
+                <div class="col-md-3 my-2">
+                    <label> Despacho:</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control form-control-sm float-right" name="despacho"
+                            id="despacho" required>
+                    </div>
+                </div>
+                <div class="col-md-3 my-2">
+                    <label> Tipo de expediente:</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control form-control-sm float-right" name="tipo_de_expediente"
+                            id="tipo_de_expediente" required>
+                    </div>
+                </div>
+                <div class="col-md-3 my-2">
+                    <label> Honorarios:</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control form-control-sm float-right" name="honorarios"
+                            id="honorarios" required>
+                    </div>
+                </div>
+                <div class="col-md-3 my-2">
+                    <label> <strong style="color: red">*</strong> Fecha de apertura:</label>
+                    <div class="input-group">
+                        <input type="date" class="form-control form-control-sm float-right" name="fecha_de_apertura"
+                            id="fecha_de_apertura" required>
+                    </div>
+                </div>
+                <div class="col-md-3 my-2">
+                    <label> Estatus:</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control form-control-sm float-right" name="estatus" id="estatus"
+                            required>
+                    </div>
+                </div>
+                <div class="col-md-3 my-2">
+                    <label> Observaciones:</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control form-control-sm float-right" name="observaciones"
+                            id="observaciones" required>
+                    </div>
+                </div>
+                <div class="col-md-3 my-2">
+                    <label> Numero de expediente:</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control form-control-sm float-right" name="numero_de_expediente"
+                            id="numero_de_expediente" required>
+                    </div>
+                </div>
+                <div class="col-md-3 my-2">
+                    <label>Permiso de trabajo:</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control form-control-sm float-right" name="permiso_de_trabajo"
+                            id="permiso_de_trabajo" required>
+                    </div>
+                </div>
+                <div class="col-md-3 my-2">
+                    <label>IUC:</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control form-control-sm float-right" name="iuc"
+                            id="iuc" required>
+                    </div>
+                </div>
+                <div class="col-md-3 my-2">
+                    <label>Ubicacion del despacho:</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control form-control-sm float-right"
+                            name="ubicacion_del_despacho" id="ubicacion_del_despacho" required>
+                    </div>
+                </div>
+                <div class="col-md-3 my-2">
+                    <label>Fecha de cierre:</label>
+                    <div class="input-group">
+                        <input type="date" class="form-control form-control-sm float-right" name="fecha_de_cierre"
+                            id="fecha_de_cierre" required>
+                    </div>
+                </div>
+                <div class="col-md-3 my-2">
+                    <label>Cierre de Numero de caja:</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control form-control-sm float-right"
+                            name="cierre_del_numero_de_caja" id="cierre_del_numero_de_caja" required>
+                    </div>
+                </div>
+                <div class="offset-md-5 col-md-2 my-5">
+                    <button type="submit" class="btn btn-primary w-100">Crear cliente</button>
+                </div>
+            </div>
+        </form>
+    </div>
 @endsection
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-{{-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>DATASYSTEMS/CLIENTES</title>
-</head>
-<body>
-    <H1>DATASYSTEMS ------- CREACION DE CLIENTES </H1>
-</body>
-</html> --}}
