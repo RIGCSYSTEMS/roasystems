@@ -171,19 +171,19 @@
         <div class="buttons-grid">
             @php
             $buttons = [
-                ['name' => 'ASILO', 'icon' => 'images/asilo.png'],
+                ['name' => 'ASILO', 'icon' => 'images/asilo.png', 'url' => '/client'],
                 ['name' => 'APPEL', 'icon' => '🏠'],
-                ['name' => 'RESIDENCIA PERMANENTE', 'icon' => 'images/card.png'],
-                ['name' => 'ERAR', 'icon' => '🚫'],
-                ['name' => 'APADRINAMIENTO', 'icon' => '👥'],
-                ['name' => 'HUMANITARIAS', 'icon' => 'images/humanitario.png'],
-                ['name' => 'RESIDENCIA TEMPORAL', 'icon' => 'images/visa.png'],
+                ['name' => 'RESIDENCIA PERMANENTE', 'icon' => 'images/card.png','url' => '/client'],
+                ['name' => 'ERAR', 'icon' => '🚫','url' => '/client'],
+                ['name' => 'APADRINAMIENTO', 'icon' => '👥','url' => '/client'],
+                ['name' => 'HUMANITARIAS', 'icon' => 'images/humanitario.png','url' => '/client'],
+                ['name' => 'RESIDENCIA TEMPORAL', 'icon' => 'images/visa.png','url' => '/client'],
             ];
             @endphp
 
 
     @foreach ($buttons as $index => $button)
-    <button class="button button-{{ $index }}">
+    <a href="{{ $button['url'] ?? '#' }}" class="button button-{{ $index }}">
                 <div class="button-icon">
                     @if (strpos($button['icon'], 'images/') === 0)
                         <img src="{{ asset($button['icon']) }}" alt="{{ $button['name'] }}">
