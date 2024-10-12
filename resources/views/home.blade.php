@@ -62,6 +62,7 @@
             grid-template-columns: repeat(3, 1fr);
             gap: 1rem;
             margin-bottom: 2rem;
+            cursor: pointer;
         }
         .button {
             background-color: rgba(255, 255, 255, 0.2);
@@ -171,8 +172,8 @@
         <div class="buttons-grid">
             @php
             $buttons = [
-                ['name' => 'ASILO', 'icon' => 'images/asilo.png', 'url' => '/client'],
-                ['name' => 'APPEL', 'icon' => '🏠'],
+                ['name' => 'ASILO', 'icon' => 'images/asilo.png','url' => '/client'],
+                ['name' => 'APPEL', 'icon' => '🏠','url' => '/client'],
                 ['name' => 'RESIDENCIA PERMANENTE', 'icon' => 'images/card.png','url' => '/client'],
                 ['name' => 'ERAR', 'icon' => '🚫','url' => '/client'],
                 ['name' => 'APADRINAMIENTO', 'icon' => '👥','url' => '/client'],
@@ -183,7 +184,7 @@
 
 
     @foreach ($buttons as $index => $button)
-    <a href="{{ $button['url'] ?? '#' }}" class="button button-{{ $index }}">
+    <button class="button button-{{ $index }}" data-url="{{ $button['url'] }}">
                 <div class="button-icon">
                     @if (strpos($button['icon'], 'images/') === 0)
                         <img src="{{ asset($button['icon']) }}" alt="{{ $button['name'] }}">
@@ -195,6 +196,7 @@
             </button>
             @endforeach
         </div>
+   
         <div class="footer-buttons">
             <a href="#agenda" class="footer-button">
                 <span class="footer-button-icon">📅</span>
@@ -207,6 +209,19 @@
         </div>
     </div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const buttons = document.querySelectorAll('.buttons-grid .button');
+            buttons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const url = this.getAttribute('data-url');
+                    if (url) {
+                        window.location.href = url;
+                    }
+                });
+            });
+        });
+        </script>
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
