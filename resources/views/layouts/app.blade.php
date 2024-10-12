@@ -8,116 +8,136 @@
     <link rel="stylesheet" href="{{ asset('/css/app.css') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
-    </script>
-
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-
     <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        @keyframes headerAnimation {
+            0% {background-position: 0% 50%;}
+            50% {background-position: 100% 50%;}
+            100% {background-position: 0% 50%;}
+        }
+        
+        header {
+            background: linear-gradient(-30deg, #ffffff, #8a2be2, #ffffff, #9370db);
+            background-size: 400% 400%;
+            animation: headerAnimation 10s ease infinite;
+        }
+        
+        footer {
+            background-color: #7d0dee;
+            color: #ffffff;
+            font-size: 14px;
+            height: 80px;
+            font-weight: bold;
+        }
+        
+        header .nav-link {
+            color: #4a0e78;
+            font-weight: bold;
+        }
+        
+        footer .nav-link {
+            color: #ffffff !important;
+        }
+        
+        footer .navbar-nav .nav-link {
+            color: #ffffff;
+        }
+        
+        header .nav-link:hover, footer .nav-link:hover {
+            color: #e0e0e0;
+            transition: color 0.3s ease;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .nav-container .nav-link {
+            padding: 0.5rem 1rem;
+        }
+
+        .container-fluid {
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+
+        .logo-container, .copyright {
+            padding-left: 0;
+        }
+
+        .navbar {
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        .main-content {
+            flex: 1;
+        }
+    </style>
 </head>
 
 <body>
-    <header>
-        <div class="container header-content">
-            <div class="logo">
-                <img src="{{ asset('images/logo.png') }}" alt="Logo" width="180" height="80">
-                <h1>ROA SYSTEMS</h1>
+    <header class="py-3 mb-4">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-md-3 d-flex align-items-center logo-container">
+                    <img src="{{ asset('images/logo.png') }}" alt="Logo" width="180" height="80" class="img-fluid me-3">
+                    <h1 class="h3 mb-0">ROA SYSTEMS</h1>
+                </div>
+                <div class="col-md-9">
+                    <nav class="navbar navbar-expand-lg navbar-light justify-content-end">
+                        <ul class="navbar-nav">
+                            @foreach (config('navigation.main') as $text => $url)
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ $url }}">{{ $text }}</a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </nav>
+                </div>
             </div>
-            <nav>
-                <ul>
-                    @php
-                        $links = ['Inicio', 'Clientes', 'Residentes Temporales', 'Llamadas Entrantes'];
-                    @endphp
-                    @foreach ($links as $link)
-                        @php
-                            if ($link == 'Inicio') {
-                                $url = '/';
-                            } elseif ($link == 'Clientes') {
-                                $url = '/client';
-                            } elseif ($link == 'Residentes Temporales') {
-                                $url = '/resident';
-                            } elseif ($link == 'Llamadas Entrantes') {
-                                $url = '/call';
-                            } else {
-                                $url = '/' . strtolower(str_replace(' ', '-', $link));
-                            }
-                        @endphp
-                        <li><a href="{{ $url }}">{{ $link }}</a></li>
-                    @endforeach
-                </ul>
-            </nav>
         </div>
     </header>
 
-    <main class="container">
-        {{-- <div class="content-area"> --}}
-        {{-- @yield('content')
-        </div> --}}
-
-        <div class="card">
+    <main class="main-content container-fluid my-4">
+        <div class="card shadow">
             <div class="card-body">
                 @yield('content')
             </div>
         </div>
-        </div>
     </main>
 
-    <footer>
-        <div class="container footer-content">
-            <span>&copy; {{ date('Y') }} Developed by RIGCSYSTEMS.COM</span>
-            <div class="footer-links">
-                <a href="https://www.canada.ca/">Formularie Web d'IRCC</a>
-                <a href="https://www.canada.ca/">Medicin Designe</a>
-                <a href="https://www.canada.ca/">Delais</a>
-                <a href="https://www.canada.ca/">Preuve Electroniques</a>
-                <a href="https://www.canada.ca/">Etat de la demande du client</a>
-                <a href="https://www.canada.ca/">Mon Dossier</a>
-                <a href="https://www.canada.ca/">Rapports</a>
-                <a href="https://www.canada.ca/">Calcul de Taxes Quebec</a>
-                <a href="https://www.canada.ca/">Calcul Inverse de Taxes Quebec</a>
+    <footer class="py-4 mt-4">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-md-3">
+                    <span class="copyright">&copy; {{ date('Y') }} Developed by RIGCSYSTEMS.COM</span>
+                </div>
+                <div class="col-md-9">
+                    <nav class="navbar navbar-expand-lg navbar-dark justify-content-end">
+                        <ul class="navbar-nav">
+                            @foreach (config('navigation.footer') as $text => $url)
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" href="{{ $url }}">{{ $text }}</a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </nav>
+                </div>
             </div>
         </div>
     </footer>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
+    </script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
 </body>
-
-<script src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
-
 </html>
-
-
-
-
-{{-- 
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>ROASYSTEMS</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body>
-    <header>
-    </header>
-
-
-
-
-
-
-    <footer>
-    </footer>
-
-</body>
-</html> --}}
-
-{{-- <div class ="max-w-4xl mx-auto px-4">
-        <H1>Bienvenido a ROASYSTEMS</H1>
-
-        <div class="p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
-            <span class="font-medium">Info alert!</span> Change a few things up and try submitting again.
-          </div>
-    </div> --}}
