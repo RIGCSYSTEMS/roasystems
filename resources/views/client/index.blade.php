@@ -6,7 +6,10 @@
     <div class="container-fluid">
         <div class="row mb-3">
             <div class="col-md-8">
-                <h1>ASILO ROA</h1>
+                <h1 class="asilo-title">
+                    <span class="asilo-text">ASILO</span>
+                    <span class="roa-text">ROA</span>
+                </h1>
             </div>
             <div class="col-md-4 text-md-end">
                 <a href="{{url('/')}}/client/create" class="btn btn-primary">Crear un nuevo cliente</a>
@@ -74,83 +77,5 @@
 @endpush
 
 @push('scripts')
-<script>
-    $(document).ready(function() {
-        var table = $('#clientes').DataTable({
-            processing: true,
-            serverSide: true,
-            responsive: true,
-            deferLoading: 0,
-            ajax: {
-                url: "{{url('/')}}/client/lista/getDataClientes",
-                type: 'GET',
-                data: function(d) {
-                    d.fechas = $("#fechas").val();
-                    d.search_active = d.search.value.length >= 3 ? 1 : 0;
-                },
-            },
-            columns: [
-                { data: 'id', name: 'id' },
-                { data: 'nombre', name: 'nombre_de_cliente' },
-                { data: 'telefono', name: 'telefono' },
-                { data: 'correo', name: 'email' },
-                { data: 'direccion', name: 'direccion' },
-                { data: 'pais', name: 'pais' },
-                { data: 'fecha_apertura', name: 'fecha_de_apertura' },
-                { data: 'fecha_cierre', name: 'fecha_de_cierre' },
-                { data: 'estatus', name: 'estatus' },
-                { 
-                    data: 'acciones', 
-                    name: 'acciones', 
-                    orderable: false, 
-                    searchable: false 
-                },
-            ],
-            order: [[0, 'desc']],
-            language: {
-                url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json',
-                emptyTable: 'Realice una búsqueda para ver los resultados'
-            },
-            initComplete: function() {
-                var api = this.api();
-                var typingTimer;
-                var doneTypingInterval = 500; // medio segundo
-
-                $('#clientes_filter input')
-                    .off('.DT')
-                    .on('input.DT', function() {
-                        clearTimeout(typingTimer);
-                        var input = this;
-                        typingTimer = setTimeout(function() {
-                            if (input.value.length >= 3) {
-                                api.search(input.value).draw();
-                                $('#logo-background').fadeOut();
-                            } else if (input.value.length === 0) {
-                                api.search('').draw();
-                                $('#logo-background').fadeIn();
-                            }
-                        }, doneTypingInterval);
-                    });
-            },
-            drawCallback: function(settings) {
-                if (settings.json && settings.json.recordsTotal > 0 && settings.json.search_active) {
-                    $('#logo-background').hide();
-                } else {
-                    $('#logo-background').show();
-                }
-            }
-        });
-
-        $('#clientes_filter input').keypress(function(e) {
-            if(e.which == 13) {
-                table.search(this.value).draw();
-                if (this.value.length > 0) {
-                    $('#logo-background').fadeOut();
-                } else {
-                    $('#logo-background').fadeIn();
-                }
-            }
-        });
-    });
-</script>
+<script src="{{ asset('js/dataTables-config.js') }}"></script>
 @endpush

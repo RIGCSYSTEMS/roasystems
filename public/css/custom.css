@@ -1,0 +1,124 @@
+:root {
+    --primary-color: #7d0dee;
+    --secondary-color: #4a0e78;
+    --text-color: #ffffff;
+    --hover-color: #e0e0e0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+@keyframes headerAnimation {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
+
+header {
+    background: linear-gradient(-30deg, #ffffff, var(--primary-color), #ffffff, #9370db);
+    background-size: 400% 400%;
+    animation: headerAnimation 10s ease infinite;
+}
+
+footer {
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    font-size: 14px;
+    height: 80px;
+    font-weight: bold;
+}
+
+header .nav-link {
+    color: var(--secondary-color);
+    font-weight: bold;
+}
+/* Estilos Titulo */
+.asilo-title {
+    font-size: 3rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 1rem;
+    position: relative;
+    display: inline-block;
+}
+
+.asilo-text, .roa-text {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    position: relative;
+    z-index: 1;
+}
+
+.asilo-text {
+    color: #4a0e78;
+    background-color: #ffffff;
+    clip-path: polygon(0 0, 100% 0, 90% 100%, 0 100%);
+    padding-right: 2rem;
+}
+
+.roa-text {
+    color: #ffffff;
+    background-color: #7d0dee;
+    clip-path: polygon(10% 0, 100% 0, 100% 100%, 0 100%);
+    margin-left: -1rem;
+}
+
+.asilo-title::after {
+    content: '';
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    right: -0.5rem;
+    bottom: -0.5rem;
+    background-color: rgba(122, 14, 238, 0.3);
+    z-index: 0;
+}
+
+@media (max-width: 768px) {
+    .asilo-title {
+        font-size: 2rem;
+    }
+}
+footer .nav-link {
+    color: var(--text-color) !important;
+}
+
+footer .navbar-nav .nav-link {
+    color: var(--text-color);
+}
+
+header .nav-link:hover, footer .nav-link:hover {
+    color: var(--hover-color);
+    transition: color 0.3s ease;
+}
+
+.nav-container {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.nav-container .nav-link {
+    padding: 0.5rem 1rem;
+}
+
+.container-fluid {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.logo-container, .copyright {
+    padding-left: 0;
+}
+
+.navbar {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.main-content {
+    flex: 1;
+}
