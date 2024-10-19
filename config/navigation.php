@@ -3,6 +3,7 @@
 return [
     'main' => [
         'Inicio' => '/',
+        'Clientes' => '/client',
         'Asilo' => '/client',
         'Appel' => '/resident',
         'Residencia Permanente' => '/call',
