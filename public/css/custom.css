@@ -87,6 +87,7 @@ footer .nav-link {
     color: var(--text-color) !important;
 }
 
+
 footer .navbar-nav .nav-link {
     color: var(--text-color);
 }
@@ -121,4 +122,15 @@ header .nav-link:hover, footer .nav-link:hover {
 
 .main-content {
     flex: 1;
+}
+.client-link {
+    color: #4a0e78;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.client-link:hover {
+    color: #7d0dee;
+    text-decoration: underline;
 }

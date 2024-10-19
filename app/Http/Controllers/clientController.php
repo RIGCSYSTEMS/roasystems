@@ -53,6 +53,22 @@ class clientController extends Controller
         } else {
             return datatables()->of(collect([]))->with(['search_active' => $search_active])->toJson();
         }
+        {
+            $query = Client::query();
+        
+            if ($request->has('search') && $request->search['value'] != '') {
+                $searchValue = $request->search['value'];
+                $query->where('nombre_de_cliente', 'like', "%{$searchValue}%");
+            }
+        
+            return datatables()->of($query)
+                ->addColumn('acciones', function($row) {
+                    // Aquí puedes generar los botones de acción
+                    return '<button>Editar</button> <button>Eliminar</button>';
+                })
+                ->rawColumns(['acciones'])
+                ->make(true);
+        }
     }
 
     public function create()

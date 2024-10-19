@@ -1,9 +1,14 @@
 $(document).ready(function() {
+    // Verifica si la tabla ya ha sido inicializada
+    if ($.fn.DataTable.isDataTable('#clientes')) {
+        // Si ya está inicializada, destrúyela primero
+        $('#clientes').DataTable().destroy();
+    }
+
     var table = $('#clientes').DataTable({
         processing: true,
         serverSide: true,
         responsive: true,
-        deferLoading: 0,
         pageLength: 25,
         stateSave: true,
         ajax: {
@@ -16,7 +21,13 @@ $(document).ready(function() {
         },
         columns: [
             { data: 'id', name: 'id' },
-            { data: 'nombre', name: 'nombre_de_cliente' },
+            { 
+                data: 'nombre',
+                name: 'nombre_de_cliente',
+                render: function(data, type, row) {
+                    return '<a href="/client/' + row.id + '" class="client-link">' + data + '</a>';
+                }
+            },
             { data: 'telefono', name: 'telefono' },
             { data: 'correo', name: 'email' },
             { data: 'direccion', name: 'direccion' },
@@ -40,10 +51,8 @@ $(document).ready(function() {
         drawCallback: function(settings) {
             $('#logo-background').toggle(!(settings.json && settings.json.recordsTotal > 0 && settings.json.search_active));
         },
-        // Añadir opciones de paginación personalizadas
         pagingType: "full_numbers",
         lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "Todos"]],
-        // Añadir botones de exportación
         dom: 'Bfrtip',
         buttons: [
             'copy', 'csv', 'excel', 'pdf', 'print'
@@ -54,5 +63,30 @@ $(document).ready(function() {
         if (this.value.length >= 3 || this.value.length === 0) {
             table.search(this.value).draw();
         }
+    });
+
+    // Función para limpiar la búsqueda y recargar la tabla
+    function clearSearchAndReloadTable() {
+        table.search('').draw();
+    }
+
+    // Evento para manejar el clic en el botón "Volver a la lista de clientes"
+    $(document).on('click', '#volverListaClientes', function(e) {
+        sessionStorage.setItem('clearSearch', 'true');
+    });
+
+    // Código para ejecutar cuando la página de la lista de clientes se carga
+    if (sessionStorage.getItem('clearSearch') === 'true') {
+        console.log('Limpiando búsqueda...');
+        clearSearchAndReloadTable();
+        sessionStorage.removeItem('clearSearch');
+        console.log('Búsqueda limpiada');
+    }
+
+    // Manejo de clic en los enlaces de clientes
+    $('#clientes').on('click', '.client-link', function(e) {
+        e.preventDefault();
+        var url = $(this).attr('href');
+        window.location.href = url;
     });
 });

@@ -7,7 +7,7 @@
 
 
 
-    <a href="/client">Volver a la lista de clientes</a>
+    <a href="/client" id="volverListaClientes" class="btn btn-secondary">Volver a la lista de clientes</a>
 
     <h1>CLIENTE: {{$client->nombre_de_cliente}}</h1>
     <p>
