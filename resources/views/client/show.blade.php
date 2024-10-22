@@ -23,45 +23,46 @@
         <b>Correo:</b> {{$client->email}}
     </p>
     <p>
+        <b>Pais de origen:</b> {{$client->pais}}
+        
+    </p>
+    <p>
         <b>profesion:</b> {{$client->profesion}}
     </p>
-    <p>
-        <b>Pais de origen:</b> {{$client->pais}}
-    </p>
-    <p>
+    {{-- <p>
         <b>Despacho:</b> {{$client->despacho}}
-    </p>
-    <p>
+    </p> --}}
+    {{-- <p>
         <b>Tipo de expediente:</b> {{$client->tipo_de_expediente}}
-    </p>
+    </p> --}}
     <p>
         <b>Lenguaje:</b> {{$client->lenguaje}}
     </p>
-    <p>
+    {{-- <p>
         <b>Honorarios:</b> {{$client->honorarios}}
     </p>
     <p>
         <b>Fecha de apertura:</b> {{$client->fecha_de_apertura}}
-    </p>
-    <p>
+    </p> --}}
+    {{-- <p>
         <b>Estatus:</b> {{$client->estatus}}
-    </p>
+    </p> --}}
     <p>
         <b>Observaciones:</b> {{$client->observaciones}}
     </p>
-    <p>
+    {{-- <p>
         <b>Numero de expediente:</b> {{$client->numero_de_expediente}}
-    </p>
+    </p> --}}
     <p>
         <b>Permiso de trabajo:</b> {{$client->permiso_de_trabajo}}
     </p>
     <p>
         <b>IUC:</b> {{$client->iuc}}
     </p>
-    <p>
+    {{-- <p>
         <b>Ubicacion del despacho:</b> {{$client->ubicacion_del_despacho}}
-    </p>
-    <p>
+    </p> --}}
+    {{-- <p>
         <b>Fecha de nacimiento:</b> {{$client->fecha_de_nacimiento}}
     </p>
     <p>
@@ -69,7 +70,7 @@
     </p>
     <p>
         <b>Cierre del numero de caja:</b> {{$client->cierre_del_numero_de_caja}}
-    </p>
+    </p> --}}
 
     <a href="/client/{{$client->id}}/edit">Editar</a>
 

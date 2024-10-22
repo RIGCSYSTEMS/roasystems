@@ -14,25 +14,16 @@ return new class extends Migration
         Schema::create('client', function (Blueprint $table) {
             $table->id();
             $table->string('nombre_de_cliente');
-            $table->longText('otros_nombres_de_cliente');
+            $table->string('otros_nombres_de_cliente')->nullable();
             $table->string('direccion');
             $table->string('telefono');
             $table->string('email');
             $table->string('profesion');
             $table->string('pais');
-            $table->string('despacho');
-            $table->string('tipo_de_expediente');
             $table->string('lenguaje');
-            $table->string('honorarios');
-            $table->date('fecha_de_apertura');
-            $table->string('estatus');
-            $table->longText('observaciones');
-            $table->string('numero_de_expediente');
-            $table->string('permiso_de_trabajo');
-            $table->string('iuc');
-            $table->string('ubicacion_del_despacho');
-            $table->date('fecha_de_cierre');
-            $table->string('cierre_del_numero_de_caja');
+            $table->string('permiso_de_trabajo')->nullable();
+            $table->string('iuc')->nullable();
+            $table->text('observaciones')->nullable();
             $table->timestamps();
         });
     }
