@@ -32,8 +32,6 @@ $(document).ready(function() {
             { data: 'correo', name: 'email' },
             { data: 'direccion', name: 'direccion' },
             { data: 'pais', name: 'pais' },
-            { data: 'fecha_apertura', name: 'fecha_de_apertura' },
-            { data: 'fecha_cierre', name: 'fecha_de_cierre' },
             { data: 'estatus', name: 'estatus' },
             { 
                 data: 'acciones', 
@@ -56,7 +54,12 @@ $(document).ready(function() {
         dom: 'Bfrtip',
         buttons: [
             'copy', 'csv', 'excel', 'pdf', 'print'
-        ]
+        ],
+        // Configuración de búsqueda global
+        search: {
+            smart: true,
+            // No especificamos columnas aquí para que busque en todas
+        }
     });
 
     $('#clientes_filter input').on('input', function() {

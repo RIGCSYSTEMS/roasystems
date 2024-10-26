@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('profesion');
             $table->string('pais');
             $table->string('lenguaje');
+            $table->string('estatus');
             $table->string('permiso_de_trabajo')->nullable();
             $table->string('iuc')->nullable();
             $table->text('observaciones')->nullable();

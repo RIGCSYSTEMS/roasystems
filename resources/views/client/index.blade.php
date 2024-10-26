@@ -6,8 +6,8 @@
     <div class="container-fluid">
         <div class="row mb-3">
             <div class="col-md-8">
-                <h1 class="asilo-title">
-                    <span class="asilo-text">CLIENTES</span>
+                <h1 class="clientes-title">
+                    <span class="clientes-text">CLIENTES</span>
                     <span class="roa-text">ROA</span>
                 </h1>
             </div>
@@ -28,8 +28,6 @@
                                 <th>Correo</th>
                                 <th>Dirección</th>
                                 <th>País</th>
-                                <th>Fecha de apertura</th>
-                                <th>Fecha de cierre</th>
                                 <th>Estatus</th>
                                 <th>Acciones</th>
                             </tr>

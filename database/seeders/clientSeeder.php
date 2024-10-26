@@ -27,6 +27,7 @@ class clientSeeder extends Seeder
         $client->profesion = 'Ingeniero';
         $client->pais = 'Mexico';
         $client->lenguaje = 'Español';
+        $client->estatus = 'Activo';
         $client->permiso_de_trabajo = 'Permiso 1';
         $client->iuc = 'IUC 1';
         $client->observaciones = 'Observaciones 1';
