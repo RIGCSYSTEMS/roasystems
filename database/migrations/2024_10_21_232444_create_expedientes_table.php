@@ -13,7 +13,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('client_id')->constrained('client')->onDelete('cascade');
             $table->date('fecha_de_apertura');
-            $table->string('estatus');
+            $table->string('estatus_del_expediente');
             $table->date('fecha_de_cierre')->nullable();
             $table->string('numero_de_dossier');
             $table->string('despacho');
