@@ -35,7 +35,7 @@ class clientSeeder extends Seeder
 
          $client->save();
 
-        client::factory(100)->create();
+        client::factory(1000)->create();
 
     }
 }
