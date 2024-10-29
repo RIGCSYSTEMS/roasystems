@@ -19,6 +19,10 @@ class Expediente extends Model
         'honorarios',
         'tipo'
     ];
+    protected $dates = [
+        'fecha_de_apertura',
+        'fecha_de_cierre',
+    ];
 
     public function client()
     {

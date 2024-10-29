@@ -49,7 +49,8 @@ class ExpedienteController extends Controller
 
     public function edit(Expediente $expediente)
     {
-        return view('expedientes.edit', compact('expediente'));
+        $clients = Client::all();
+        return view('expedientes.edit', compact('expediente', 'clients'));
     }
 
     public function update(Request $request, Expediente $expediente)

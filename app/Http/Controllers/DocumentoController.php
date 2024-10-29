@@ -68,12 +68,14 @@ class DocumentoController extends Controller
 
     public function edit(Documento $documento)
     {
-        return view('documentos.edit', compact('documento'));
+        $clients = Client::all();
+        return view('documentos.edit', compact('documento', 'clients'));
     }
 
     public function update(Request $request, Documento $documento)
     {
         $validatedData = $request->validate([
+            'client_id' => 'required|exists:clients,id',
             'historia' => 'nullable|string',
             'identificacion' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
             'pasaporte' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
@@ -85,6 +87,7 @@ class DocumentoController extends Controller
             'extras' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
         ]);
 
+        $documento->client_id = $validatedData['client_id'];
         $documento->historia = $validatedData['historia'] ?? $documento->historia;
 
         $fileFields = ['identificacion', 'pasaporte', 'permiso_de_trabajo', 'hoja_marron', 'pruebas', 'residencia_permanente', 'caq', 'extras'];
@@ -110,6 +113,14 @@ class DocumentoController extends Controller
 
     public function destroy(Documento $documento)
     {
+        $fileFields = ['identificacion', 'pasaporte', 'permiso_de_trabajo', 'hoja_marron', 'pruebas', 'residencia_permanente', 'caq', 'extras'];
+
+        foreach ($fileFields as $field) {
+            if ($documento->$field) {
+                Storage::disk('public')->delete($documento->$field);
+            }
+        }
+
         $documento->delete();
 
         return redirect()->route('documentos.index')->with('success', 'Documento eliminado correctamente');
