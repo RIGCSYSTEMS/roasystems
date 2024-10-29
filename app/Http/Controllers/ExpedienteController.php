@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Expediente;
+use App\Models\Client;
 use Illuminate\Http\Request;
 
 class ExpedienteController extends Controller
@@ -15,7 +16,9 @@ class ExpedienteController extends Controller
 
     public function create()
     {
-        return view('expedientes.create');
+        // return view('expedientes.create');
+        $clients = Client::all();
+    return view('expedientes.create', compact('clients'));
     }
 
     public function store(Request $request)

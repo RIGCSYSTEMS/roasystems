@@ -75,12 +75,14 @@ class clientController extends Controller
 
     public function create()
     {
-        return view('client.create');
+        // return view('client.create');
+        $tipos = ['asilo', 'appel', 'permanente', 'erar', 'apadrinamiento', 'humanitaria', 'temporal'];
+    return view('client.create', compact('tipos'));
     }
 
     public function store(Request $request)
     {
-
+        //primera version de creacion de cliente
         $client = new client();
         $client->nombre_de_cliente = $request->nombre_de_cliente;
         $client->otros_nombres_de_cliente = $request->otros_nombres_de_cliente;
