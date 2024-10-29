@@ -14,11 +14,14 @@ class ExpedienteController extends Controller
         return view('expedientes.index', compact('expedientes'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
+        $client_id = $request->query('client_id');
+        $client = Client::findOrFail($client_id);
+        return view('expedientes.create', compact('client'));
         // return view('expedientes.create');
-        $clients = Client::all();
-    return view('expedientes.create', compact('clients'));
+    //     $clients = Client::all();
+    // return view('expedientes.create', compact('clients'));
     }
 
     public function store(Request $request)
@@ -34,9 +37,9 @@ class ExpedienteController extends Controller
             'tipo' => 'required|string',
         ]);
 
-        Expediente::create($validatedData);
+        $expediente = Expediente::create($validatedData);
 
-        return redirect()->route('expedientes.index')->with('success', 'Expediente creado correctamente');
+        return redirect()->route('client.show', $expediente->client_id)->with('success', 'Expediente creado correctamente');
     }
 
     public function show(Expediente $expediente)

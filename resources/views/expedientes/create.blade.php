@@ -4,16 +4,13 @@
 
 @section('content')
 <div class="container">
-    <h1>Crear Nuevo Expediente</h1>
+    <h1>Crear Nuevo Expediente para {{ $client->nombre_de_cliente }}</h1>
     <form method="POST" action="{{ route('expedientes.store') }}">
         @csrf
+        <input type="hidden" name="client_id" value="{{ $client->id }}">
         <div class="form-group">
-            <label for="client_id">Cliente</label>
-            <select name="client_id" id="client_id" class="form-control" required>
-                @foreach($clients as $client)
-                    <option value="{{ $client->id }}">{{ $client->nombre_de_cliente }}</option>
-                @endforeach
-            </select>
+            <label for="client_name">Cliente</label>
+            <input type="text" id="client_name" class="form-control" value="{{ $client->nombre_de_cliente }}" readonly>
         </div>
         <div class="form-group">
             <label for="fecha_de_apertura">Fecha de Apertura</label>
