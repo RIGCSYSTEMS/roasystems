@@ -15,13 +15,13 @@ return new class extends Migration
             $table->id();
             $table->string('nombre_de_cliente');
             $table->string('otros_nombres_de_cliente')->nullable();
+            $table->string('estatus');
             $table->string('direccion');
             $table->string('telefono');
             $table->string('email');
             $table->string('profesion');
             $table->string('pais');
             $table->string('lenguaje');
-            $table->string('estatus');
             $table->string('permiso_de_trabajo')->nullable();
             $table->string('iuc')->nullable();
             $table->text('observaciones')->nullable();

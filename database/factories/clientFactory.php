@@ -24,11 +24,9 @@ class clientFactory extends Factory
             'email' => $this->faker->email(),
             'profesion' => $this->faker->word(),
             'pais' => $this->faker->country(),
-            'estatus' => $this->faker->word(),
+            'estatus' => $this->faker->randomElement(['Activo', 'Inactivo']),
             'lenguaje' => $this->faker->word(),
-
             'observaciones' => $this->faker->text(),
-
             'permiso_de_trabajo' => $this->faker->word(),
             'IUC' => $this->faker->word(),
             

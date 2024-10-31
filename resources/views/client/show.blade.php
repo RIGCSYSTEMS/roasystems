@@ -13,6 +13,9 @@
     <p>
         <b>Otros NOMBRES DE CLIENTE:</b> {{$client->otros_nombres_de_cliente}}
     </p>
+    <P>
+        <B>Estatus del cliente:</B> {{$client->estatus}}
+    </P>
     <p>
         <b>Direccion:</b> {{$client->direccion}}
     </p>
@@ -29,48 +32,19 @@
     <p>
         <b>profesion:</b> {{$client->profesion}}
     </p>
-    {{-- <p>
-        <b>Despacho:</b> {{$client->despacho}}
-    </p> --}}
-    {{-- <p>
-        <b>Tipo de expediente:</b> {{$client->tipo_de_expediente}}
-    </p> --}}
     <p>
         <b>Lenguaje:</b> {{$client->lenguaje}}
     </p>
-    {{-- <p>
-        <b>Honorarios:</b> {{$client->honorarios}}
-    </p>
-    <p>
-        <b>Fecha de apertura:</b> {{$client->fecha_de_apertura}}
-    </p> --}}
-    {{-- <p>
-        <b>Estatus:</b> {{$client->estatus}}
-    </p> --}}
-    <p>
-        <b>Observaciones:</b> {{$client->observaciones}}
-    </p>
-    {{-- <p>
-        <b>Numero de expediente:</b> {{$client->numero_de_expediente}}
-    </p> --}}
     <p>
         <b>Permiso de trabajo:</b> {{$client->permiso_de_trabajo}}
     </p>
     <p>
+        <b>Observaciones:</b> {{$client->observaciones}}
+    </p>
+    <p>
         <b>IUC:</b> {{$client->iuc}}
     </p>
-    {{-- <p>
-        <b>Ubicacion del despacho:</b> {{$client->ubicacion_del_despacho}}
-    </p> --}}
-    {{-- <p>
-        <b>Fecha de nacimiento:</b> {{$client->fecha_de_nacimiento}}
-    </p>
-    <p>
-        <b>Fecha de cierre:</b> {{$client->fecha_de_cierre}}
-    </p>
-    <p>
-        <b>Cierre del numero de caja:</b> {{$client->cierre_del_numero_de_caja}}
-    </p> --}}
+
     <div class="row mt-4">
         <div class="col-md-6">
             <a href="{{ route('expedientes.create', ['client_id' => $client->id]) }}" class="btn btn-primary w-100">Crear Expediente</a>

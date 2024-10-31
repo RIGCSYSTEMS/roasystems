@@ -21,7 +21,7 @@ return new class extends Migration
                 $table->date('fecha_de_recepcion');
                 $table->text('observaciones')->nullable();
                 $table->string('tiempo');
-                $table->string('persona_responsible');
+                $table->string('persona_responsable');
                 $table->timestamps();
             });
         }
