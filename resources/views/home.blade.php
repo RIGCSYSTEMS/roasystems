@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>ROASYSTEMS</title>
+    <!-- Bootstrap CSS v5.2.1 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
     <style>
         /* Estilos existentes */
         body {
@@ -17,6 +21,7 @@
             background: linear-gradient(135deg, #4a1d96, #7e22ce, #4338ca);
             color: white;
         }
+
         .container {
             background-color: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
@@ -25,16 +30,19 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             text-align: center;
         }
+
         .logo-container {
             display: inline-block;
             margin-bottom: 2rem;
             position: relative;
         }
+
         .logo {
             max-width: 100%;
             height: auto;
             display: block;
         }
+
         .logo-effect {
             position: absolute;
             top: 0;
@@ -45,17 +53,21 @@
             box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.2);
             animation: pulso 2s infinite;
         }
+
         @keyframes pulso {
             0% {
                 box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
             }
+
             70% {
                 box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
             }
+
             100% {
                 box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
             }
         }
+
         /* Resto de los estilos existentes */
         .buttons-grid {
             display: grid;
@@ -64,6 +76,7 @@
             margin-bottom: 2rem;
             cursor: pointer;
         }
+
         .button {
             background-color: rgba(255, 255, 255, 0.2);
             border: none;
@@ -79,11 +92,13 @@
             justify-content: space-between;
             height: 100px;
         }
+
         .button:hover {
             transform: scale(1.05);
             background-color: rgba(139, 92, 246, 0.5);
             box-shadow: 0 0 15px rgba(139, 92, 246, 0.5);
         }
+
         .button-icon {
             font-size: 2rem;
             margin-bottom: 0.5rem;
@@ -92,45 +107,77 @@
             justify-content: center;
             height: 60px;
         }
+
         @keyframes moveUpDown {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-5px);
+            }
         }
+
         @keyframes moveSideToSide {
-            0%, 100% { transform: translateX(0); }
-            50% { transform: translateX(5px); }
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            50% {
+                transform: translateX(5px);
+            }
         }
+
         @keyframes rotate {
-            0%, 100% { transform: rotate(0deg); }
-            50% { transform: rotate(10deg); }
+
+            0%,
+            100% {
+                transform: rotate(0deg);
+            }
+
+            50% {
+                transform: rotate(10deg);
+            }
         }
+
         .button:nth-child(3n+1) .button-icon {
             animation: moveUpDown 2s ease-in-out infinite;
         }
+
         .button:nth-child(3n+2) .button-icon {
             animation: moveSideToSide 2s ease-in-out infinite;
         }
+
         .button:nth-child(3n) .button-icon {
             animation: rotate 2s ease-in-out infinite;
         }
+
         .button:nth-child(7) {
-    grid-column: 2;
-    grid-row: 3;
-}
+            grid-column: 2;
+            grid-row: 3;
+        }
+
         .footer-buttons {
             display: flex;
             justify-content: center;
             gap: 1rem;
         }
+
         .button-icon img {
-    width: 40px;
-    height: 40px;
-    object-fit: contain;
-}
-.button-0 .button-icon img {
-        width: 80px; 
-        height: 80px;
-    }
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+        }
+
+        .button-0 .button-icon img {
+            width: 80px;
+            height: 80px;
+        }
+
         .footer-button {
             background-color: #8b5cf6;
             color: white;
@@ -143,15 +190,18 @@
             display: flex;
             align-items: center;
         }
+
         .footer-button:hover {
             background-color: #7c3aed;
             transform: scale(1.05);
         }
+
         .footer-button-icon {
             margin-right: 0.5rem;
             display: inline-block;
             animation: moveUpDown 2s ease-in-out infinite;
         }
+
         #particles-js {
             position: fixed;
             top: 0;
@@ -162,6 +212,7 @@
         }
     </style>
 </head>
+
 <body>
     <div id="particles-js"></div>
     <div class="container">
@@ -169,34 +220,40 @@
             <img src="{{ asset('images/logo.png') }}" alt="Logo" class="logo">
             <div class="logo-effect"></div>
         </div>
-        <div class="buttons-grid">
-            @php
+        {{-- <div class="buttons-grid"> --}}
+        @php
             $buttons = [
-                ['name' => 'ASILO', 'icon' => 'images/asilo.png','url' => '/client'],
-                ['name' => 'APPEL', 'icon' => '🏠','url' => '/client'],
-                ['name' => 'RESIDENCIA PERMANENTE', 'icon' => 'images/card.png','url' => '/client'],
-                ['name' => 'ERAR', 'icon' => '🚫','url' => '/client'],
-                ['name' => 'APADRINAMIENTO', 'icon' => '👥','url' => '/client'],
-                ['name' => 'HUMANITARIAS', 'icon' => 'images/humanitario.png','url' => '/client'],
-                ['name' => 'RESIDENCIA TEMPORAL', 'icon' => 'images/visa.png','url' => '/client'],
+                ['name' => 'ASILO', 'icon' => 'images/asilo.png', 'url' => '/client'],
+                ['name' => 'APPEL', 'icon' => '🏠', 'url' => '/client'],
+                ['name' => 'RESIDENCIA PERMANENTE', 'icon' => 'images/card.png', 'url' => '/resident'],
+                ['name' => 'ERAR', 'icon' => '🚫', 'url' => '/client'],
+                ['name' => 'APADRINAMIENTO', 'icon' => '👥', 'url' => '/client'],
+                ['name' => 'HUMANITARIAS', 'icon' => 'images/humanitario.png', 'url' => '/client'],
+                ['name' => 'RESIDENCIA TEMPORAL', 'icon' => 'images/visa.png', 'url' => '/resident'],
             ];
-            @endphp
+        @endphp
 
-
-    @foreach ($buttons as $index => $button)
-    <button class="button button-{{ $index }}" data-url="{{ $button['url'] }}">
-                <div class="button-icon">
-                    @if (strpos($button['icon'], 'images/') === 0)
-                        <img src="{{ asset($button['icon']) }}" alt="{{ $button['name'] }}">
-                    @else
-                        {{ $button['icon'] }}
-                    @endif
+        <div class="row justify-content-between">
+            @foreach ($buttons as $index => $button)
+                <div class="col-md-4 my-2">
+                    <a href="{{ $button['url'] }}">
+                        <button class="button w-100  button-{{ $index }}" data-url="{{ $button['url'] }}">
+                            <div class="button-icon">
+                                @if (strpos($button['icon'], 'images/') === 0)
+                                    <img src="{{ asset($button['icon']) }}" alt="{{ $button['name'] }}">
+                                @else
+                                    {{ $button['icon'] }}
+                                @endif
+                            </div>
+                            <div>{{ $button['name'] }}</div>
+                        </button>
+                    </a>
                 </div>
-                <div>{{ $button['name'] }}</div>
-            </button>
             @endforeach
         </div>
-   
+
+        {{-- </div> --}}
+
         <div class="footer-buttons">
             <a href="#agenda" class="footer-button">
                 <span class="footer-button-icon">📅</span>
@@ -208,6 +265,15 @@
             </a>
         </div>
     </div>
+
+    <!-- Bootstrap JavaScript Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous">
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+        integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous">
+    </script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -221,7 +287,7 @@
                 });
             });
         });
-        </script>
+    </script>
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
@@ -344,4 +410,5 @@
         });
     </script>
 </body>
+
 </html>

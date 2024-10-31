@@ -27,7 +27,7 @@ footer {
     background-color: var(--primary-color);
     color: var(--text-color);
     font-size: 14px;
-    height: 80px;
+    /* height: 80px; */
     font-weight: bold;
 }
 

@@ -7,11 +7,11 @@
         <div class="row mb-3">
             <div class="col-md-8">
                 <h1 class="clientes-title">
-                    <span class="clientes-text">CLIENTES</span>
+                    <span class="clientes-text pe-3 pe-sm-3 pe-md-auto">CLIENTES</span>
                     <span class="roa-text">ROA</span>
                 </h1>
             </div>
-            <div class="col-md-4 text-md-end">
+            <div class="col-md-4 text-center text-sm-center text-md-end my-4 my-4 my-md-auto">
                 <a href="{{url('/')}}/client/create" class="btn btn-primary">Crear un nuevo cliente</a>
             </div>
         </div>
