@@ -5,9 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Documento extends Model
+class Documentos extends Model
 {
     use HasFactory;
+
+    public $incrementing = false;
+
     protected $fillable = [
         'client_id',
         'identificacion',

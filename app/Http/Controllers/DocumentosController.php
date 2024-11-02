@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Documento;
+use App\Models\Documentos;
 use App\Models\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class DocumentoController extends Controller
+class DocumentosController extends Controller
 {
     public function index()
     {
-        $documentos = Documento::with('client')->paginate(30);
+        $documentos = Documentos::with('client')->paginate(30);
         return view('documentos.index', compact('documentos'));
     }
 
@@ -38,7 +38,7 @@ class DocumentoController extends Controller
         'caq' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
         'extras' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
     ]);
-    $documento = new Documento();
+    $documento = new Documentos();
     $documento->client_id = $validatedData['client_id'];
     $documento->historia = $validatedData['historia'] ?? null;
 
@@ -61,18 +61,18 @@ class DocumentoController extends Controller
         // return redirect()->route('documentos.index')->with('success', 'Documento creado correctamente');
     }
 
-    public function show(Documento $documento)
+    public function show(Documentos $documento)
     {
         return view('documentos.show', compact('documento'));
     }
 
-    public function edit(Documento $documento)
+    public function edit(Documentos $documento)
     {
         $clients = Client::all();
         return view('documentos.edit', compact('documento', 'clients'));
     }
 
-    public function update(Request $request, Documento $documento)
+    public function update(Request $request, Documentos $documento)
     {
         $validatedData = $request->validate([
             'client_id' => 'required|exists:clients,id',
@@ -111,7 +111,7 @@ class DocumentoController extends Controller
         return redirect()->route('client.show', $documento->client_id)->with('success', 'Documentos actualizados correctamente');
     }
 
-    public function destroy(Documento $documento)
+    public function destroy(Documentos $documento)
     {
         $fileFields = ['identificacion', 'pasaporte', 'permiso_de_trabajo', 'hoja_marron', 'pruebas', 'residencia_permanente', 'caq', 'extras'];
 

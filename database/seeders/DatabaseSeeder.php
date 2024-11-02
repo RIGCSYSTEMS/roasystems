@@ -20,6 +20,13 @@ class DatabaseSeeder extends Seeder
             followSeeder::class,
             callSeeder::class,
             residentSeeder::class,
+            // ApadrinamientoSeeder::class,
+            // HumanitariaSeeder::class,
+            // AsiloSeeder::class,
+            // TemporalSeeder::class,
+            // ErarSeeder::class,
+            // PermanenteSeeder::class,
+            documentosseeder::class,
         ]);    
        
        

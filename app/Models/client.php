@@ -32,6 +32,6 @@ class client extends Model
 
     public function documentos()
     {
-        return $this->hasMany(Documento::class);
+        return $this->hasMany(Documentos::class);
     }
 }

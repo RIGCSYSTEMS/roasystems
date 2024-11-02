@@ -9,4 +9,11 @@ class ApadrinamientoExpediente extends Model
 {
     use HasFactory;
     protected $table = 'apradinamiento_expedientes';
+    protected $fillable = [
+        'fecha',
+        'fecha_de_recepcion',
+        'observaciones',
+        'tiempo',
+        'persona_responsable',
+    ];
 }

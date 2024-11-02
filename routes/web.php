@@ -6,7 +6,7 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\followController;
 use App\Http\Controllers\ResidentController;
 use App\Http\Controllers\callController;
-use App\Http\Controllers\DocumentoController;
+use App\Http\Controllers\DocumentosController;
 use App\Http\Controllers\ExpedienteController;
 use App\Models\client;
 
@@ -16,6 +16,7 @@ Route::get('/', HomeController::class);
 // Route::get('/client', [ClientController::class, 'index']);
 Route::resource('client', ClientController::class);
 Route::get('/client/lista/getDataClientes', [ClientController::class, 'getDataClientes']);
+Route::get('/client/{id}/documentos', [ClientController::class, 'documentos'])->name('client.documentos');
 // route::get('/client/create',[ClientController::class, 'create']);
 // route::post('/client',[ClientController::class, 'store']);
 // route::get('/client/{id}/edit',[clientController::class, 'edit']);
@@ -42,5 +43,5 @@ route::get('/call/{id}', [callController::class, 'show']);
 Route::resource('expedientes', ExpedienteController::class);
 
 // RUTAS PARA DOCUMENTOS
-Route::resource('documentos', DocumentoController::class);
-Route::get('documentos/create', [DocumentoController::class, 'create'])->name('documentos.create');
+Route::resource('documentos', DocumentosController::class);
+Route::get('documentos/create', [DocumentosController::class, 'create'])->name('documentos.create');

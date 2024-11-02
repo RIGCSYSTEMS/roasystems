@@ -9,4 +9,11 @@ class HumanitariaExpediente extends Model
 {
     use HasFactory;
     protected $table = 'humanitaria_expedientes';
+    protected $fillable = [
+        'fecha',
+        'fecha_de_recepcion',
+        'observaciones',
+        'tiempo',
+        'persona_responsable',
+    ];
 }

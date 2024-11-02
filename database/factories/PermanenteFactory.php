@@ -17,11 +17,11 @@ class PermanenteFactory extends Factory
     public function definition(): array
     {
         return [
-            'fecha' => $this->faker->name(),
-            'fecha_de_recepcion' => $this->faker->text(),
-            'observaciones' => $this->faker->address(),
-            'tiempo' => $this->faker->phoneNumber(),
-            'persona_responsable' => $this->faker->email(),
+            'fecha' => $this->faker->date(),
+            'fecha_de_recepcion' => $this->faker->date(),
+            'observaciones' => $this->faker->text(),
+            'tiempo' => $this->faker->time(),
+            'persona_responsable' => $this->faker->name(),
         ];
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\client;
 use Illuminate\Http\Request;
+use App\Models\Documentos;
 
 class clientController extends Controller
 {
@@ -151,6 +152,12 @@ class clientController extends Controller
         $client->delete();
 
         return redirect('/client');
+    }
+    public function documentos($id)
+    {
+        $client = Client::findOrFail($id);
+        $documentos = Documentos::where('id', $id)->first();
+        return view('client.documentos', compact('client', 'documentos'));
     }
 
 }

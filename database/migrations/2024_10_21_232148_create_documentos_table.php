@@ -12,14 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('documentos', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('client_id')->constrained('client')->onDelete('cascade');
+            $table->unsignedBigInteger('id');
+            $table->primary('id');
+            $table->foreign('id')->references('id')->on('client')->onDelete('cascade');
             $table->string('identificacion')->nullable();
             $table->string('pasaporte')->nullable();
             $table->string('permiso_de_trabajo')->nullable();
             $table->string('hoja_marron')->nullable();
             $table->string('pruebas')->nullable();
-            $table->text('historia')->nullable();
+            $table->string('historia')->nullable();
             $table->string('residencia_permanente')->nullable();
             $table->string('caq')->nullable();
             $table->string('extras')->nullable();

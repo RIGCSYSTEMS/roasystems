@@ -17,7 +17,11 @@ class ExpedienteFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'fecha' => $this->faker->date(),
+            'fecha_de_recepcion' => $this->faker->date(),
+            'observaciones' => $this->faker->text(),
+            'tiempo' => $this->faker->time(),
+            'persona_responsable' => $this->faker->name(),
         ];
     }
 }

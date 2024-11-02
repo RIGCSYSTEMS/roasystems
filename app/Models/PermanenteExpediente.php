@@ -9,4 +9,11 @@ class PermanenteExpediente extends Model
 {
     use HasFactory;
     protected $table = 'permanente_expedientes';
+    protected $fillable = [
+        'fecha',
+        'fecha_de_recepcion',
+        'observaciones',
+        'tiempo',
+        'persona_responsable',
+    ];
 }
