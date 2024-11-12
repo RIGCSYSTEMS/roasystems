@@ -11,7 +11,8 @@ return new class extends Migration
     {
         Schema::create('expedientes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('client_id')->constrained('client')->onDelete('cascade');
+            $table->integer('client_id')->unsigned(); // Relación con la tabla CLIENTES
+            $table->foreign('client_id')->references('id')->on('client')->onDelete('cascade');  //
             $table->date('fecha_de_apertura');
             $table->string('estatus_del_expediente');
             $table->date('fecha_de_cierre')->nullable();

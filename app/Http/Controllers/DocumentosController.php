@@ -26,36 +26,45 @@ class DocumentosController extends Controller
 
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-        'client_id' => 'required|exists:clients,id',
-        'identificacion' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-        'pasaporte' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-        'permiso_de_trabajo' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-        'hoja_marron' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-        'pruebas' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-        'historia' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-        'residencia_permanente' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-        'caq' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-        'extras' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-    ]);
-    $documento = new Documentos();
-    $documento->client_id = $validatedData['client_id'];
-    $documento->historia = $validatedData['historia'] ?? null;
+        $cliente = Client::find($request->client_id);
 
-    $fileFields = ['identificacion', 'pasaporte', 'permiso_de_trabajo', 'hoja_marron', 'pruebas', 'residencia_permanente', 'caq', 'extras'];
-
-    foreach ($fileFields as $field) {
-        if ($request->hasFile($field)) {
-            $file = $request->file($field);
-            $filename = time() . '_' . $field . '.' . $file->getClientOriginalExtension();
-            $path = $file->storeAs('documentos', $filename, 'public');
-            $documento->$field = $path;
+        if (!$cliente) {
+            return 0;
         }
-    }
 
-    $documento->save();
 
-    return redirect()->route('client.show', $documento->client_id)->with('success', 'Documentos subidos correctamente');
+        $validatedData = $request->validate([
+            'client_id' => 'required|exists:clients,id',
+            'identificacion' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'pasaporte' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'permiso_de_trabajo' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'hoja_marron' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'pruebas' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'historia' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'residencia_permanente' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'caq' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'extras' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+        ]);
+        $documento = new Documentos();
+        $documento->client_id = $cliente->id;
+        $documento->historia = $validatedData['historia'] ?? null;
+
+
+
+        $fileFields = ['identificacion', 'pasaporte', 'permiso_de_trabajo', 'hoja_marron', 'pruebas', 'residencia_permanente', 'caq', 'extras'];
+
+        foreach ($fileFields as $field) {
+            if ($request->hasFile($field)) {
+                $file = $request->file($field);
+                $filename = time() . '_' . $field . '.' . $file->getClientOriginalExtension();
+                $path = $file->storeAs('documentos', $filename, 'public');
+                $documento->$field = $path;
+            }
+        }
+
+        $documento->save();
+
+        return redirect()->route('client.show', $documento->client_id)->with('success', 'Documentos subidos correctamente');
         // Documento::create($validatedData);
 
         // return redirect()->route('documentos.index')->with('success', 'Documento creado correctamente');
