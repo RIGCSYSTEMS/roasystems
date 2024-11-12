@@ -157,7 +157,7 @@ class clientController extends Controller
     {
         $client = Client::findOrFail($id);
         $documentos = Documentos::where('client_id', $id)->first();
-        return view('client.documentos', compact('client', 'documents'));
+        return view('client.documentos', compact('client', 'documentos'));
     }
 
 }

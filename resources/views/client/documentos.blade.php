@@ -7,16 +7,16 @@
         <h1>Documentos de {{ $client->nombre_de_cliente }}</h1>
         <a href="{{ route('client.show', $client->id) }}" class="btn btn-secondary mb-3">Volver al perfil del cliente</a>
         
-        @if($documentos->count() > 0)
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Documentos</h5>
-                    <ul class="list-group list-group-flush">
-                        @if($documentos->identificacion)
-                            <li class="list-group-item">
-                                <strong>Identificación:</strong> 
-                                <a href="{{ asset('storage/' . $documentos->identificacion) }}" target="_blank">Ver archivo</a>
-                            </li>
+        @if($documentos)
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Documentos</h5>
+                <ul class="list-group list-group-flush">
+                    @if($documentos->identificacion)
+                        <li class="list-group-item">
+                            <strong>Identificación:</strong> 
+                            <a href="{{ asset('storage/' . $documentos->identificacion) }}" target="_blank">Ver archivo</a>
+                        </li>
                         @endif
                         @if($documentos->pasaporte)
                             <li class="list-group-item">
@@ -71,10 +71,9 @@
                     </ul>
                 </div>
             </div>
-        @else
+            @else
             <div class="alert alert-info" role="alert">
                 Este cliente no tiene documentos asociados.
             </div>
         @endif
-    </div>
 @endsection
