@@ -6,23 +6,29 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Documentos extends Model
+class Documento extends Model
 {
     use HasFactory;
 
     public $incrementing = false;
 
     protected $fillable = [
-        'client_id',
-        'identificacion',
-        'pasaporte',
-        'permiso_de_trabajo',
-        'hoja_marron',
-        'pruebas',
-        'historia',
-        'residencia_permanente',
-        'caq',
-        'extras'
+
+        'nombre_de_documento',
+        'tipo_de_documento',
+ 
+ 
+ 
+ 
+        // 'identificacion',
+        // 'pasaporte',
+        // 'permiso_de_trabajo',
+        // 'hoja_marron',
+        // 'pruebas',
+        // 'historia',
+        // 'residencia_permanente',
+        // 'caq',
+        // 'extras'
     ];
 
     public function client(): BelongsTo

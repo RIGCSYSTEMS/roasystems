@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\Expediente;
+use App\Models\Documento; // Ensure that the Documento class exists in this namespace
 
 class client extends Model
 {
@@ -34,6 +36,6 @@ class client extends Model
     public function documentos(): HasMany
     {
 
-        return $this->hasMany(Documentos::class);
+        return $this->hasMany(Documento::class);
     }
 }
