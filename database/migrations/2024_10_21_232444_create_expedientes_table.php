@@ -9,10 +9,11 @@ return new class extends Migration
 {
     public function up()
     {
+        //Codigo para eliminar completamente la tabla expedientes
+        //if (!Schema::hasTable('expedientes'))
         Schema::create('expedientes', function (Blueprint $table) {
             $table->id();
-            $table->integer('client_id')->unsigned(); // Relación con la tabla CLIENTES
-            $table->foreign('client_id')->references('id')->on('client')->onDelete('cascade');  //
+            $table->unsignedBigInteger('client_id');
             $table->date('fecha_de_apertura');
             $table->string('estatus_del_expediente');
             $table->date('fecha_de_cierre')->nullable();
@@ -22,6 +23,11 @@ return new class extends Migration
             $table->decimal('honorarios', 10, 2);
             $table->string('tipo');
             $table->timestamps();
+
+            $table->foreign('client_id')
+                ->references('id')
+                ->on('client')
+                ->onDelete('cascade');
         });
     }
 

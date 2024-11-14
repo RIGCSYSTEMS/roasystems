@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\documentos;
+use App\Models\documento;
 use App\Models\Client;
 class documentosseeder extends Seeder
 {
@@ -14,8 +14,8 @@ class documentosseeder extends Seeder
     public function run(): void
     {
         Client::all()->each(function ($client) {
-            if (!Documentos::find($client->id)) {
-                Documentos::factory()->create(['id' => $client->id]);
+            if (!Documento::find($client->id)) {
+                Documento::factory()->create(['id' => $client->id]);
             }
         });
     }

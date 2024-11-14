@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
        
         $this->call([
             clientSeeder::class,
+            ExpedienteSeeder::class,
             userSeeder::class,
             followSeeder::class,
             callSeeder::class,
@@ -26,7 +27,7 @@ class DatabaseSeeder extends Seeder
             // TemporalSeeder::class,
             // ErarSeeder::class,
             // PermanenteSeeder::class,
-            documentosseeder::class,
+            // documentosseeder::class,
         ]);    
        
        
