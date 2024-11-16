@@ -24,6 +24,7 @@ class DocumentosFactory extends Factory
 
         return [
            'id' => $client->id,
+        //    'nombre' => $this->faker->word,
             // 'identificacion' => $this->faker->randomElement([null, 'https://picsum.photos/200/300']),
             // 'pasaporte' => $this->faker->randomElement([null, 'https://picsum.photos/200/300']),
             // 'permiso_de_trabajo' => $this->faker->randomElement([null, 'https://picsum.photos/200/300']),

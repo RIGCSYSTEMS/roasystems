@@ -11,7 +11,7 @@
                     <span class="roa-text">ROA</span>
                 </h1>
             </div>
-            <div class="col-md-4 text-center text-sm-center text-md-end my-4 my-4 my-md-auto">
+            <div class="col-md-4 text-center text-sm-center text-md-end my-4 my-md-auto">
                 <a href="{{url('/')}}/client/create" class="btn btn-primary">Crear un nuevo cliente</a>
             </div>
         </div>

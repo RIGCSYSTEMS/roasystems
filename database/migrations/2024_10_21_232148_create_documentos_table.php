@@ -13,12 +13,24 @@ return new class extends Migration
     {
         Schema::create('documentos', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre_de_documento')->nullable();
-            $table->string('tipo_de_documento')->nullable();
+            $table->enum('nombre_de_documento', [
+                'IDENTIFICACION',
+                'PASAPORTE',
+                'PERMISO DE TRABAJO',
+                'HOJA MARRON',
+                'PRUEBAS',
+                'HISTORIA',
+                'RESIDENCIA PERMANENTE',
+                'CAQ',
+                'EXTRAS'
+            ]);
+            $table->enum('tipo_de_documento', ['PDF', 'IMAGEN']);
+            $table->string('imagen_url')->nullable();
+            $table->string('observaciones')->nullable();
             $table->unsignedBigInteger('client_id');
             $table->foreign('client_id')
                 ->references('id')
-                ->on('client')
+                ->on('clients')
                 ->onDelete('cascade');
             $table->timestamps();
         });

@@ -10,13 +10,14 @@ class Documento extends Model
 {
     use HasFactory;
 
-    public $incrementing = false;
 
     protected $fillable = [
 
         'nombre_de_documento',
         'tipo_de_documento',
- 
+        'imagen_url',
+        'client_id',
+        'observaciones',
  
  
  

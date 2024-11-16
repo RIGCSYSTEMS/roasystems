@@ -53,7 +53,7 @@
             <a href="{{ route('documentos.create', ['client_id' => $client->id]) }}" class="btn btn-info w-100">Subir Documentos</a>
         </div>
         <div class="col-md-6 mt-2">
-            <a href="{{ route('client.documentos', $client->id) }}" class="btn btn-success w-100">Ver Documentos</a>
+            <a href="{{ route('documentos.show', $client->id) }}" class="btn btn-success w-100">Ver Documentos</a>
         </div>
     </div>
 
