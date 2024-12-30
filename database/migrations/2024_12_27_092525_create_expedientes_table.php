@@ -9,7 +9,7 @@ return new class extends Migration
     public function up()
     {
         //Codigo para eliminar completamente la tabla expedientes
-        //if (!Schema::hasTable('expedientes'))
+        // if (!Schema::hasTable('expedientes'))
         Schema::create('expedientes', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('client_id');

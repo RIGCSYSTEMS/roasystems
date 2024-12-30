@@ -6,6 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Expediente;
 use App\Models\client;
+use Illuminate\Support\Facades\DB;
 
 class ExpedienteSeeder extends Seeder
 {
@@ -25,7 +26,7 @@ class ExpedienteSeeder extends Seeder
         foreach ($clients as $client) {
             Expediente::create([
                 'client_id' => $client->id,
-                'tipo_expedinete_id' => $this->getRandomStypesexp(),
+                'tipo_expediente_id' => $this->getRandomStypesexp(),
                 'numero_de_dossier' => $this->generateDossierNumber(),
                 'estatus_del_expediente' => $this->getRandomStatus(),
                 'prioridad' => $this->getRandompriority(),
@@ -49,13 +50,14 @@ class ExpedienteSeeder extends Seeder
 
     private function getRandomStypesexp()
     {
-        $tipos_expedientes = ['ASILO', 'APPEL','RESIDENCIA PERMANENTE','ERAR','APADRINAMIENTO','HUMANITARIA','RESIDENCIA TEMPORAL'];
+        // $tipos_expedientes = ['ASILO', 'APPEL','RESIDENCIA PERMANENTE','ERAR','APADRINAMIENTO','HUMANITARIA','RESIDENCIA TEMPORAL'];
+        $tipos_expedientes = DB::table('tipos_expedientes')->pluck('id')->toArray();
         return $tipos_expedientes[array_rand($tipos_expedientes)];
         }
 
     private function getRandomStatus()
     {
-        $statuses = ['Activo', 'En proceso', 'Cerrado', 'Pendiente'];
+        $statuses = ['Abierto', 'Cerrado', 'Pendiente', 'Cancelado'];
         return $statuses[array_rand($statuses)];
     }
 

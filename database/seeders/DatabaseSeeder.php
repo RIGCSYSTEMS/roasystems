@@ -15,9 +15,20 @@ class DatabaseSeeder extends Seeder
     {
        
         $this->call([
-            // clientSeeder::class,
-            // ExpedienteSeeder::class,
-            // userSeeder::class,
+
+
+            TiposDocumentosSeeder::class,
+            TiposExpedientesSeeder::class,
+            clientSeeder::class,
+            ExpedienteSeeder::class,         
+            userSeeder::class,
+            // AgendaSeeder::class,
+            // BitacoraSeeder::class,
+            // documentosseeder::class,
+            EtapasExpedientesSeeder::class,
+            HonorarioSeeder::class,
+
+          
             // followSeeder::class,
             // callSeeder::class,
             // residentSeeder::class,

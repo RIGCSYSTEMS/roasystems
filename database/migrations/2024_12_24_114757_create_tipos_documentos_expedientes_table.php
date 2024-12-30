@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tipos_expedientes', function (Blueprint $table) {
+        Schema::create('tipos_documentos_expedientes', function (Blueprint $table) {
             $table->id();
             $table->string('nombre')->unique(); // Nombre del tipo de documento
-            // $table->string('descripcion')->nullable(); // Descripción opcional
+            $table->string('descripcion')->nullable(); // Descripción opcional
             $table->timestamps();
         });
     }
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tipos_expedientes');
+        Schema::dropIfExists('tipos_documentos_expedientes');
     }
 };

@@ -23,15 +23,15 @@ class clientFactory extends Factory
             'genero' => $this->faker->randomElement(['masculino', 'femenino', 'otro']),
             'estado_civil' => $this->faker->randomElement(['soltero', 'casado', 'divorciado', 'viudo', 'otro']),
             'pais' => $this->faker->country,
-            'pasaporte' => $this->faker->optional()->uuid,
+            'pasaporte' => $this->faker->numerify('A######'),
             'estatus' => $this->faker->randomElement(['activo', 'inactivo']),
             'direccion' => $this->faker->address,
             'telefono' => $this->faker->phoneNumber,
             'email' => $this->faker->unique()->safeEmail,
             'profesion' => $this->faker->jobTitle,
             'lenguaje' => $this->faker->randomElement(['español', 'inglés', 'francés']),
-            'permiso_de_trabajo' => $this->faker->optional()->uuid,
-            'iuc' => $this->faker->optional()->uuid,
+            'permiso_de_trabajo' => $this->faker->numerify('A######'),
+            'iuc' => $this->faker->numerify('A######'),
             'observaciones' => $this->faker->sentence,
         ];
     }

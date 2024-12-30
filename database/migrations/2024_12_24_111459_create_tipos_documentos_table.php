@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('tipos_documentos', function (Blueprint $table) {
             $table->id();
             $table->string('nombre')->unique(); // Nombre del tipo de documento
-            // $table->string('descripcion')->nullable(); // Descripción opcional
+            $table->string('descripcion')->nullable(); // Descripción opcional
             $table->timestamps();
         });
     }

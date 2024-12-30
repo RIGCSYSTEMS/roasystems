@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('nombre_de_cliente');
             $table->string('familia')->nullable()->nullable();
-            $table->string('fecha_de_nacimiento');
-            $table->string('genero',['masculino', 'femenino', 'otro']);
-            $table->string('estado_civil',['soltero', 'casado', 'divorciado', 'viudo', 'otro']);
+            $table->date('fecha_de_nacimiento');
+            $table->enum('genero',['masculino', 'femenino', 'otro']);
+            $table->enum('estado_civil',['soltero', 'casado', 'divorciado', 'viudo', 'otro']);
             $table->string('pais');
             $table->string('pasaporte')->nullable();
             $table->string('estatus');
