@@ -25,19 +25,33 @@ class ExpedienteSeeder extends Seeder
         foreach ($clients as $client) {
             Expediente::create([
                 'client_id' => $client->id,
+                'tipo_expedinete_id' => $this->getRandomStypesexp(),
+                'numero_de_dossier' => $this->generateDossierNumber(),
+                'estatus_del_expediente' => $this->getRandomStatus(),
+                'prioridad' => $this->getRandompriority(),
                 'fecha_de_apertura' => now(),
                 'fecha_de_cierre' => now()->addMonths(rand(1, 12)),
-                'estatus_del_expediente' => $this->getRandomStatus(),
-                'numero_de_dossier' => $this->generateDossierNumber(),
                 'despacho' => 'Despacho ' . rand(1, 5),
                 'abogado' => 'Abogado ' . rand(1, 10),
-                'honorarios' => rand(1000, 10000),
-                'tipo' => $this->getRandomType(),
+                'plazo_fda' => now()->addMonths(rand(1, 12)),
+                'progreso' => rand(0, 100),
             ]);
         }
 
         $this->command->info('Se han creado ' . $clients->count() . ' expedientes, uno para cada cliente.');
     }
+
+    private function getRandompriority()
+    {
+        $priorities = ['Urgente', 'Normal'];
+        return $priorities[array_rand($priorities)];
+    }
+
+    private function getRandomStypesexp()
+    {
+        $tipos_expedientes = ['ASILO', 'APPEL','RESIDENCIA PERMANENTE','ERAR','APADRINAMIENTO','HUMANITARIA','RESIDENCIA TEMPORAL'];
+        return $tipos_expedientes[array_rand($tipos_expedientes)];
+        }
 
     private function getRandomStatus()
     {
@@ -50,10 +64,5 @@ class ExpedienteSeeder extends Seeder
         return 'DOS-' . strtoupper(substr(md5(microtime()), 0, 8));
     }
 
-    private function getRandomType()
-    {
-        $types = ['asilo', 'appel', 'permanente', 'erar', 'apadrinamiento', 'humanitaria', 'temporal'];
-        return $types[array_rand($types)];
-    }
-    
+
 }

@@ -20,14 +20,18 @@ class clientSeeder extends Seeder
         $client = new client();
 
         $client->nombre_de_cliente = 'Ivan';
-        $client->otros_nombres_de_cliente = 'Rigc1234';
+        $client->familia = 'Rigc1234';
+        $client->fecha_de_nacimiento = '2021-09-26';
+        $client->genero = 'Masculino';
+        $client->estado_civil = 'Soltero';
+        $client->pais = 'Mexico';
+        $client->pasaporte = '12345678';
+        $client->estatus = 'Activo';
         $client->direccion = 'Calle 123';
         $client->telefono = '12345678';
         $client->email = 'admin@example.com';
         $client->profesion = 'Ingeniero';
-        $client->pais = 'Mexico';
         $client->lenguaje = 'Español';
-        $client->estatus = 'Activo';
         $client->permiso_de_trabajo = 'Permiso 1';
         $client->iuc = 'IUC 1';
         $client->observaciones = 'Observaciones 1';

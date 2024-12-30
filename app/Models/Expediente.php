@@ -8,24 +8,28 @@ use Illuminate\Database\Eloquent\Model;
 class Expediente extends Model
 {
     use HasFactory;
+
     protected $fillable = [
-        'client_id',
-        'fecha_de_apertura',
-        'estatus_del_expediente',
-        'fecha_de_cierre',
-        'numero_de_dossier',
-        'despacho',
-        'abogado',
-        'honorarios',
-        'tipo'
-    ];
-    protected $dates = [
-        'fecha_de_apertura',
-        'fecha_de_cierre',
+        'cliente_id',
+        'tipo_expediente',
+        'numero_dossier',
+        'estado',
+        'prioridad',
+        'fecha_apertura',
+        'fecha_cierre',
+        'progreso',
     ];
 
-    public function client()
+    public function etapas()
     {
-        return $this->belongsTo(Client::class);
+        return $this->hasMany(EtapaExpediente::class);
+    }
+
+    public function calcularProgreso()
+    {
+        $totalEtapas = $this->etapas()->count();
+        $etapasCompletadas = $this->etapas()->where('completada', true)->count();
+
+        return $totalEtapas === 0 ? 0 : ($etapasCompletadas / $totalEtapas) * 100;
     }
 }

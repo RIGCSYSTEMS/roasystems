@@ -14,18 +14,18 @@ return new class extends Migration
         Schema::create('clients', function (Blueprint $table) {
             $table->id();
             $table->string('nombre_de_cliente');
-            $table->string('familia')->nullable();
+            $table->string('familia')->nullable()->nullable();
             $table->string('fecha_de_nacimiento');
-            $table->string('genero');
-            $table->string('estado_civil');
+            $table->string('genero',['masculino', 'femenino', 'otro']);
+            $table->string('estado_civil',['soltero', 'casado', 'divorciado', 'viudo', 'otro']);
             $table->string('pais');
-            $table->string('pasaporte');
+            $table->string('pasaporte')->nullable();
             $table->string('estatus');
-            $table->string('direccion');
-            $table->string('telefono');
+            $table->string('direccion')->nullable();
+            $table->string('telefono')->nullable();
             $table->string('email');
-            $table->string('profesion');
-            $table->string('lenguaje');
+            $table->string('profesion')->nullable();
+            $table->string('lenguaje')->nullable();
             $table->string('permiso_de_trabajo')->nullable();
             $table->string('iuc')->nullable();
             $table->text('observaciones')->nullable();

@@ -17,19 +17,22 @@ class clientFactory extends Factory
     public function definition(): array
     {
         return [
-            'nombre_de_cliente' => $this->faker->name(),
-            'otros_nombres_de_cliente' => $this->faker->text(),
-            'direccion' => $this->faker->address(),
-            'telefono' => $this->faker->phoneNumber(),
-            'email' => $this->faker->email(),
-            'profesion' => $this->faker->word(),
-            'pais' => $this->faker->country(),
-            'estatus' => $this->faker->randomElement(['Activo', 'Inactivo']),
-            'lenguaje' => $this->faker->word(),
-            'observaciones' => $this->faker->text(),
-            'permiso_de_trabajo' => $this->faker->word(),
-            'IUC' => $this->faker->word(),
-            
+            'nombre_de_cliente' => $this->faker->name,
+            'familia' => $this->faker->lastName,
+            'fecha_de_nacimiento' => $this->faker->date('Y-m-d'),
+            'genero' => $this->faker->randomElement(['masculino', 'femenino', 'otro']),
+            'estado_civil' => $this->faker->randomElement(['soltero', 'casado', 'divorciado', 'viudo', 'otro']),
+            'pais' => $this->faker->country,
+            'pasaporte' => $this->faker->optional()->uuid,
+            'estatus' => $this->faker->randomElement(['activo', 'inactivo']),
+            'direccion' => $this->faker->address,
+            'telefono' => $this->faker->phoneNumber,
+            'email' => $this->faker->unique()->safeEmail,
+            'profesion' => $this->faker->jobTitle,
+            'lenguaje' => $this->faker->randomElement(['español', 'inglés', 'francés']),
+            'permiso_de_trabajo' => $this->faker->optional()->uuid,
+            'iuc' => $this->faker->optional()->uuid,
+            'observaciones' => $this->faker->sentence,
         ];
     }
 }

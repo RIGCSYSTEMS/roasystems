@@ -13,23 +13,12 @@ class Documento extends Model
 
     protected $fillable = [
 
-        'nombre_de_documento',
-        'tipo_de_documento',
-        'imagen_url',
+        'nombre',
+        'tipo_documento_id',
+        'ruta',
         'client_id',
+        'user_id',
         'observaciones',
- 
- 
- 
-        // 'identificacion',
-        // 'pasaporte',
-        // 'permiso_de_trabajo',
-        // 'hoja_marron',
-        // 'pruebas',
-        // 'historia',
-        // 'residencia_permanente',
-        // 'caq',
-        // 'extras'
     ];
 
     public function client(): BelongsTo

@@ -11,15 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('call', function (Blueprint $table) {
+        Schema::create('tipos_expedientes', function (Blueprint $table) {
             $table->id();
-            $table->string('fecha');
-            $table->string('nombre');
-            $table->string('telefono');
-            $table->string('aboagado');
-            $table->string('motivo');
-            $table->string('nota');
-            $table->string('requiere_accion');
+            $table->string('nombre')->unique(); // Nombre del tipo de documento
+            // $table->string('descripcion')->nullable(); // Descripción opcional
             $table->timestamps();
         });
     }
@@ -29,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('call');
+        Schema::dropIfExists('tipos_expedientes');
     }
 };
