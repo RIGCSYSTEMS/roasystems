@@ -3,14 +3,12 @@
 return [
     'main' => [
         'Inicio' => '/',
+        'Panel de Control' => '/dashboard',
         'Clientes' => '/client',
-        'Asilo' => '/client',
-        'Appel' => '/resident',
-        'Residencia Permanente' => '/call',
-        'Erar' => '/call',
-        'Apadrinamiento' => '/call',
-        'Humanitaria' => '/call',
-        'Residencia Temporal' => '/call',
+        'Expedientes' => '/client',
+        'Agenda' => '/resident',
+        'Bitacora' => '/call',
+        'Tareas' => '/call',
     ],
     'footer' => [
         'Formularie Web d\'IRCC' => 'https://www.canada.ca/',
