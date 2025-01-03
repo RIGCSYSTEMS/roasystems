@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Expediente;
 use App\Models\Client;
 use Illuminate\Http\Request;
-
+use App\Models\Bitacora;
+use Illuminate\Support\Facades\Auth;
 class ExpedienteController extends Controller
 {
     public function index()
@@ -38,13 +39,25 @@ class ExpedienteController extends Controller
         ]);
 
         $expediente = Expediente::create($validatedData);
+        // Crear entrada en la bitácora
+        Bitacora::create([
+            'usuario_id' => Auth::id(),
+            'expediente_id' => $expediente->id,
+            'categoria' => 'Creación de expediente',
+            'descripcion' => 'Se creó un nuevo expediente',
+            'fecha_y_hora_del_evento' => now(),
+        ]);
 
         return redirect()->route('client.show', $expediente->client_id)->with('success', 'Expediente creado correctamente');
     }
 
     public function show(Expediente $expediente)
     {
-        return view('expedientes.show', compact('expediente'));
+        $bitacoras = $expediente->bitacoras()->with('usuario')->latest()->get();
+        $audiencias = $expediente->audiencias()
+        ->orderBy('fecha_hora')
+        ->get();
+        return view('expedientes.show', compact('expediente', 'bitacoras', 'audiencias'));
     }
 
     public function edit(Expediente $expediente)
@@ -68,14 +81,34 @@ class ExpedienteController extends Controller
         ]);
 
         $expediente->update($validatedData);
+        
+        // Crear entrada en la bitácora
+        Bitacora::create([
+            'usuario_id' => Auth::id(),
+            'expediente_id' => $expediente->id,
+            'categoria' => 'Actualización de expediente',
+            'descripcion' => 'Se actualizó la información del expediente',
+            'fecha_y_hora_del_evento' => now(),
+        ]);
 
         return redirect()->route('expedientes.index')->with('success', 'Expediente actualizado correctamente');
     }
 
     public function destroy(Expediente $expediente)
     {
+        
+        // Crear entrada en la bitácora antes de eliminar el expediente
+        Bitacora::create([
+            'usuario_id' => Auth::id(),
+            'expediente_id' => $expediente->id,
+            'categoria' => 'Eliminación de expediente',
+            'descripcion' => 'Se eliminó el expediente',
+            'fecha_y_hora_del_evento' => now(),
+        ]);
+        
         $expediente->delete();
 
         return redirect()->route('expedientes.index')->with('success', 'Expediente eliminado correctamente');
     }
+    
 }

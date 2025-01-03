@@ -32,4 +32,15 @@ class Expediente extends Model
 
         return $totalEtapas === 0 ? 0 : ($etapasCompletadas / $totalEtapas) * 100;
     }
+    
+    public function bitacoras()
+    {
+    return $this->hasMany(Bitacora::class);
+    }
+ 
+    public function audiencias()
+{
+    return $this->hasMany(Audiencia::class);
+}
+
 }

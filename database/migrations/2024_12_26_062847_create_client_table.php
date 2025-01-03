@@ -19,16 +19,18 @@ return new class extends Migration
             $table->enum('genero',['masculino', 'femenino', 'otro']);
             $table->enum('estado_civil',['soltero', 'casado', 'divorciado', 'viudo', 'otro']);
             $table->string('pais');
+            $table->date('llegada a canada')->nullable();
+            $table->enum('punto de acceso', ['aerpuerto', 'terrestre', 'maritimo', 'otro']);
             $table->string('pasaporte')->nullable();
             $table->string('estatus');
             $table->string('direccion')->nullable();
             $table->string('telefono')->nullable();
-            $table->string('email');
+            $table->string('email')->nullable();
             $table->string('profesion')->nullable();
             $table->string('lenguaje')->nullable();
             $table->string('permiso_de_trabajo')->nullable();
             $table->string('iuc')->nullable();
-            $table->text('observaciones')->nullable();
+            $table->text('observaciones');
             $table->timestamps();
         });
     }

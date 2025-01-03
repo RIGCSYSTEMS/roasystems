@@ -11,8 +11,15 @@ return new class extends Migration
         Schema::create('bitacora', function (Blueprint $table) {
             $table->id();
             $table->foreignId('usuario_id')->constrained('users')->onDelete('cascade');
-            $table->unsignedBigInteger('entidad_id');
-            $table->string('entidad_tipo'); // Ejemplo: 'expediente', 'documento', etc.
+            $table->foreignId('expediente_id')->constrained('expedientes')->onDelete('cascade');
+            $table->enum('categoria', [
+                'Actualizacion de informacion',
+                'Carga de documento',
+                'Comunicacion con el cliente',
+                'Audiencia',
+                'Revision',
+                'Otro'
+            ]);
             $table->text('descripcion');
             $table->time('tiempo_empleado')->nullable();
             $table->timestamp('fecha_y_hora_del_evento')->nullable();
