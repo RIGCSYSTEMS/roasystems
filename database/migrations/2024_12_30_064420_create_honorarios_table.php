@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('honorarios', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('expediente_id')->constrained('expedientes')->onDelete('cascade');
+            $table->foreignId('expediente_id')->constrained()->onDelete('cascade');
             $table->decimal('monto_total_expediente', 10, 2);
             $table->decimal('monto_adicional', 10, 2)->default(0);
             $table->decimal('monto_total_a_pagar', 10, 2);

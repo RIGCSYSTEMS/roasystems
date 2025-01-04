@@ -39,8 +39,12 @@ class Expediente extends Model
     }
  
     public function audiencias()
-{
-    return $this->hasMany(Audiencia::class);
-}
+    {
+        return $this->hasMany(Audiencia::class);
+    }
+    public function honorario()
+    {
+        return $this->hasOne(Honorario::class);
+    }
 
 }

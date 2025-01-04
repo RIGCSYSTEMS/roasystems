@@ -40,7 +40,7 @@ class Honorario extends Model
         return $this->belongsTo(Expediente::class);
     }
 
-    public function abono()
+    public function abonos()
     {
         return $this->hasMany(Abono::class);
     }

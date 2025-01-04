@@ -53,11 +53,12 @@ class ExpedienteController extends Controller
 
     public function show(Expediente $expediente)
     {
+
         $bitacoras = $expediente->bitacoras()->with('usuario')->latest()->get();
-        $audiencias = $expediente->audiencias()
-        ->orderBy('fecha_hora')
-        ->get();
-        return view('expedientes.show', compact('expediente', 'bitacoras', 'audiencias'));
+        $audiencias = $expediente->audiencias()->orderBy('fecha_hora')->get();
+        $honorario = $expediente->honorario;
+
+        return view('expedientes.show', compact('expediente', 'bitacoras', 'audiencias', 'honorario'));
     }
 
     public function edit(Expediente $expediente)

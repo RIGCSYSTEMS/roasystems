@@ -2,28 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreAudienciasRequest;
 use App\Models\Audiencia;
 use App\Models\Expediente;
 use App\Models\Bitacora;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class AudienciaController extends Controller
 {
-    public function store(Request $request, Expediente $expediente)
+    public function store(StoreAudienciasRequest $request, Expediente $expediente)
     {
-        $validatedData = $request->validate([
-            'fecha_hora' => 'required|date',
-            'tipo_audiencia' => 'required|string',
-            'descripcion' => 'nullable|string',
-            'lugar' => 'required|string',
-            'responsable' => 'nullable|string',
-            'notas_internas' => 'nullable|string',
-        ]);
+try {
+        $validatedData = $request->validated();
 
         $audiencia = $expediente->audiencias()->create($validatedData);
 
-        // Registrar en bitácora
         Bitacora::create([
             'usuario_id' => Auth::id(),
             'expediente_id' => $expediente->id,
@@ -34,7 +29,14 @@ class AudienciaController extends Controller
 
         return redirect()->route('expedientes.show', $expediente)
             ->with('success', 'Audiencia programada correctamente');
+    } catch (\Exception $e) {
+        Log::error('Error al crear audiencia: ' . $e->getMessage());
+
+        return redirect()->route('expedientes.show', $expediente)
+            ->with('error', 'Hubo un problema al programar la audiencia. Por favor, inténtelo de nuevo.');
     }
+}
+
 
     public function update(Request $request, Expediente $expediente, Audiencia $audiencia)
     {
@@ -80,4 +82,8 @@ class AudienciaController extends Controller
         return redirect()->route('expedientes.show', $expediente)
             ->with('success', 'Audiencia eliminada correctamente');
     }
+    public function show(Expediente $expediente, Audiencia $audiencia)
+{
+    return view('audiencias.show', compact('expediente', 'audiencia'));
+}
 }
