@@ -31,6 +31,7 @@ class ExpedienteFactory extends Factory
             'abogado' => $this->faker->optional()->name,
             'plazo_fda' => $this->faker->optional()->date,
             'progreso' => $this->faker->numberBetween(0, 100),
+            'boite' => $this->faker->randomElement(['Boite 1', 'Boite 2', 'Boite 3', 'Boite 4', 'Boite 5']),
 
             // 'fecha_de apertura' => $this->faker->date(),
             // 'fecha_de cierre' => $this->faker->date(),

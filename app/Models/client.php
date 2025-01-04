@@ -5,37 +5,44 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use App\Models\Expediente;
-use App\Models\Documento; // Ensure that the Documento class exists in this namespace
 
-class client extends Model
+class Client extends Model
 {
     use HasFactory;
 
-    // protected $table = 'client';
     protected $fillable = [
-        'nombre_del_cliente',
-        'otros_nombre_de_familia',
+        'nombre_de_cliente',
+        'familia',
+        'fecha_de_nacimiento',
+        'genero',
+        'estado_civil',
+        'pais',
+        'llegada_a_canada',
+        'punto_de_acceso',
+        'pasaporte',
+        'estatus',
         'direccion',
         'telefono',
         'email',
-        'pais',
-        'lenguaje',
         'profesion',
+        'lenguaje',
         'permiso_de_trabajo',
         'iuc',
-        'estatus',
         'observaciones'
     ];
 
-    public function expedientes()
+    protected $casts = [
+        'fecha_de_nacimiento' => 'date',
+        'llegada_a_canada' => 'date',
+    ];
+
+    public function expedientes(): HasMany
     {
         return $this->hasMany(Expediente::class);
     }
 
     public function documentos(): HasMany
     {
-
         return $this->hasMany(Documento::class);
     }
 }

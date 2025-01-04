@@ -15,7 +15,7 @@ Route::get('/', HomeController::class);
 // RUTAS CLIENTES
 // Route::get('/client', [ClientController::class, 'index']);
 Route::resource('client', ClientController::class);
-Route::get('/client/lista/getDataClientes', [ClientController::class, 'getDataClientes']);
+Route::get('/client/lista/getDataClientes', [ClientController::class, 'getDataClientes'])->name('client.getDataClientes');
 // Route::get('/client/{id}/documentos', [ClientController::class, 'documentos'])->name('client.documentos');
 // route::get('/client/create',[ClientController::class, 'create']);
 // route::post('/client',[ClientController::class, 'store']);

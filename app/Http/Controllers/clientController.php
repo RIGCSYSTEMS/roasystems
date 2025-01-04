@@ -20,58 +20,33 @@ class clientController extends Controller
 
     public function getDataClientes(Request $request)
     {
-        $search_active = $request->input('search_active', 0);
+        $show_all = $request->input('show_all', 0);
+        $search = $request->input('search.value');
     
-        $clientes = client::select('id', 'nombre_de_cliente', 'telefono', 'email', 'direccion', 'pais', 'estatus');
+        $query = Client::select('id', 'nombre_de_cliente', 'telefono', 'email', 'direccion', 'pais', 'estatus');
     
-        if ($search_active) {
-            return datatables()->of($clientes)
-                ->filter(function ($query) use ($request) {
-                    if ($request->has('search') && $request->search['value']) {
-                        $query->where('nombre_de_cliente', 'like', "%{$request->search['value']}%");
-                    }
-                })
-                ->addColumn('nombre', function(client $cliente) {
-                    return $cliente->nombre_de_cliente;
-                })
-                ->addColumn('correo', function(client $cliente) {
-                    return $cliente->email;
-                })
-
-                ->addColumn('acciones', function(client $cliente) {
-                    $action = '<button type="button" class="btn btn-info btn-sm" title="Editar Cliente" onclick="editarCliente('.$cliente->id.')"><i class="fa fa-edit"></i> Editar</button>';
-                    $action .= ' <button type="button" class="btn btn-danger btn-sm" title="Eliminar" onclick="eliminarCliente('.$cliente->id.')"><i class="fa fa-trash"></i> Eliminar</button>';
-                    return $action;
-                })
-                ->rawColumns(['acciones'])
-                ->with(['search_active' => $search_active])
-                ->toJson();
-        } else {
-            return datatables()->of(collect([]))->with(['search_active' => $search_active])->toJson();
+        if (!$show_all && !$search) {
+            $query->whereRaw('1 = 0'); // No mostrar nada si show_all es falso y no hay búsqueda
         }
-        {
-            $query = Client::query();
-        
-            if ($request->has('search') && $request->search['value'] != '') {
-                $searchValue = $request->search['value'];
-                $query->where(function($q) use ($searchValue) {
-                    $q->where('nombre_de_cliente', 'like', "%{$searchValue}%")
-                      ->orWhere('telefono', 'like', "%{$searchValue}%")
-                      ->orWhere('email', 'like', "%{$searchValue}%")
-                      ->orWhere('direccion', 'like', "%{$searchValue}%")
-                      ->orWhere('pais', 'like', "%{$searchValue}%")
-                      ->orWhere('estatus', 'like', "%{$searchValue}%");
+    
+        return datatables()->of($query)
+            ->filter(function ($query) use ($search) {
+                if ($search) {
+                    $query->where(function($q) use ($search) {
+                        $q->where('nombre_de_cliente', 'like', "%{$search}%")
+                          ->orWhere('telefono', 'like', "%{$search}%")
+                          ->orWhere('email', 'like', "%{$search}%")
+                          ->orWhere('direccion', 'like', "%{$search}%")
+                          ->orWhere('pais', 'like', "%{$search}%")
+                          ->orWhere('estatus', 'like', "%{$search}%");
                     });
                 }
-        
-            return datatables()->of($query)
-                ->addColumn('acciones', function($row) {
-                    // Aquí puedes generar los botones de acción
-                    return '<button>Editar</button> <button>Eliminar</button>';
-                })
-                ->rawColumns(['acciones'])
-                ->make(true);
-        }
+            })
+            ->addColumn('acciones', function(Client $cliente) {
+                return view('client.actions', compact('cliente'))->render();
+            })
+            ->rawColumns(['acciones'])
+            ->toJson();
     }
 
     public function create()

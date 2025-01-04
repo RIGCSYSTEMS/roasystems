@@ -36,6 +36,7 @@ class ExpedienteSeeder extends Seeder
                 'abogado' => 'Abogado ' . rand(1, 10),
                 'plazo_fda' => now()->addMonths(rand(1, 12)),
                 'progreso' => rand(0, 100),
+                'boite' => 'Boite ' . rand(1, 5),
             ]);
         }
 

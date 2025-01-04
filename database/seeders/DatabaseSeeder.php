@@ -23,11 +23,12 @@ class DatabaseSeeder extends Seeder
             ExpedienteSeeder::class,         
             userSeeder::class,
             // AgendaSeeder::class,
-            // BitacoraSeeder::class,
+            AudienciasSeeder::class,
+            
             // documentosseeder::class,
             EtapasExpedientesSeeder::class,
-            HonorarioSeeder::class,
-
+            HonorariosSeeder::class,
+            BitacorasSeeder::class,
           
             // followSeeder::class,
             // callSeeder::class,

@@ -4,21 +4,29 @@ namespace Database\Factories;
 
 use App\Models\Bitacora;
 use App\Models\User;
+use App\Models\Expediente;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class BitacoraFactory extends Factory
 {
     protected $model = Bitacora::class;
 
-    public function definition(): array
+    public function definition()
     {
         return [
             'usuario_id' => User::factory(),
-            'entidad_id' => $this->faker->randomNumber(),
-            'entidad_tipo' => $this->faker->randomElement(['expediente', 'documento', 'agenda']),
+            'expediente_id' => Expediente::factory(),
+            'categoria' => $this->faker->randomElement([
+                'Actualizacion de informacion',
+                'Carga de documento',
+                'Comunicacion con el cliente',
+                'Audiencia',
+                'Revision',
+                'Otro'
+            ]),
             'descripcion' => $this->faker->paragraph(),
             'tiempo_empleado' => $this->faker->time(),
-            'fecha_y_hora_del_evento' => $this->faker->dateTime(),
+            'fecha_y_hora_del_evento' => $this->faker->dateTimeThisYear(),
         ];
     }
 }
