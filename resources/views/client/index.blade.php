@@ -57,10 +57,10 @@
         font-weight: bold;
     }
     .clientes-text {
-        color: #000000;
+        color: #0d6efd;
     }
     .roa-text {
-        color: #ffffff;
+        color: #dc3545;
     }
     .logo-background {
         position: absolute;
@@ -117,7 +117,21 @@
         padding: 15px !important;
         border-radius: 5px !important;
     }
-    </style>
+    #clientes tbody tr {
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    #clientes tbody tr:hover {
+        background-color: #f0f0f0;
+    }
+    #clientes tbody tr td a {
+        color: #007bff;
+        text-decoration: none;
+    }
+    #clientes tbody tr td a:hover {
+        text-decoration: underline;
+    }
+</style>
 @endpush
 
 @push('scripts')
@@ -140,11 +154,20 @@ $(document).ready(function() {
                 url: "{{ route('client.getDataClientes') }}",
                 data: function (d) {
                     d.show_all = showAll ? 1 : 0;
+                },
+                complete: function() {
+                    $('.dataTables_processing').hide();
                 }
             },
             columns: [
                 {data: 'id', name: 'id'},
-                {data: 'nombre_de_cliente', name: 'nombre_de_cliente'},
+                {
+                    data: 'nombre_de_cliente', 
+                    name: 'nombre_de_cliente',
+                    render: function(data, type, row) {
+                        return '<a href="/client/' + row.id + '">' + data + '</a>';
+                    }
+                },
                 {data: 'telefono', name: 'telefono'},
                 {data: 'email', name: 'email'},
                 {data: 'direccion', name: 'direccion'},
@@ -153,11 +176,21 @@ $(document).ready(function() {
                 {data: 'acciones', name: 'acciones', orderable: false, searchable: false}
             ],
             language: {
-                url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+                url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json',
+                processing: '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Cargando...</span></div>'
             },
             drawCallback: function(settings) {
                 if (settings.aoData.length === 0) {
                     $('.dataTables_scrollBody').css('height', '300px');
+                }
+            }
+        });
+
+        $('#clientes tbody').on('click', 'tr', function(e) {
+            if (!$(e.target).is('a') && !$(e.target).is('button')) {
+                var data = table.row(this).data();
+                if (data) {
+                    window.location.href = '/client/' + data.id;
                 }
             }
         });
