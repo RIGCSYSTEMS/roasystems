@@ -1,4 +1,27 @@
-body {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
@@ -26,10 +49,10 @@ footer {
     width: 90%;
     max-width: 1200px;
     margin: 0 auto;
-}
-main {
-    padding: 100px 0; /* Añade suficiente espacio para el encabezado y pie de página */
-    margin-bottom: 50px; /* Espacio para el pie de página */
+} */
+/* main {
+    padding: 100px 0; Añade suficiente espacio para el encabezado y pie de página
+    margin-bottom: 50px; Espacio para el pie de página
 }
 .content-area {
     background-color: white;
@@ -109,4 +132,4 @@ nav ul li a:hover {
     .footer-links {
         margin-top: 1rem;
     }
-}
+} */

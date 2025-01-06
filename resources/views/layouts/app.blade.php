@@ -12,6 +12,7 @@
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
     <script src="{{ asset('js/dataTables-config.js') }}"></script>
+    <script src="{{ asset('js/loading-indicator.js') }}"></script>
     <style>
         .v-line {
             border-left: thick solid #00ff77;
@@ -23,6 +24,7 @@
 </head>
 
 <body>
+    @include('partials.loading-indicator')
     <header class="py-3 mb-4">
         <div class="container-fluid">
             <div class="row align-items-center">

@@ -51,87 +51,7 @@
 
 @push('styles')
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
-<style>
-    .clientes-title {
-        font-size: 2.5rem;
-        font-weight: bold;
-    }
-    .clientes-text {
-        color: #0d6efd;
-    }
-    .roa-text {
-        color: #dc3545;
-    }
-    .logo-background {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-image: url('{{ asset('images/logo.png') }}');
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: contain;
-        opacity: 0.1;
-        pointer-events: none;
-        z-index: 0;
-    }
-    .table-responsive {
-        position: relative;
-        z-index: 1;
-        min-height: 400px;
-    }
-    #clientes {
-        position: relative;
-        z-index: 2;
-    }
-    .dataTables_wrapper {
-        position: relative;
-        min-height: 400px;
-    }
-    .dataTables_wrapper .dataTables_filter {
-        float: none;
-        text-align: center;
-        margin-bottom: 1rem;
-    }
-    .dataTables_wrapper .dataTables_filter input {
-        width: 300px;
-    }
-    .form-switch .form-check-input {
-        width: 3em;
-        height: 1.5em;
-    }
-    .form-check-label {
-        padding-left: 0.5em;
-        font-size: 1.1em;
-    }
-    .dataTables_processing {
-        position: fixed !important;
-        top: 50% !important;
-        left: 50% !important;
-        transform: translate(-50%, -50%) !important;
-        z-index: 9999 !important;
-        border: none !important;
-        background: rgba(255, 255, 255, 0.9) !important;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1) !important;
-        padding: 15px !important;
-        border-radius: 5px !important;
-    }
-    #clientes tbody tr {
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
-    #clientes tbody tr:hover {
-        background-color: #f0f0f0;
-    }
-    #clientes tbody tr td a {
-        color: #007bff;
-        text-decoration: none;
-    }
-    #clientes tbody tr td a:hover {
-        text-decoration: underline;
-    }
-</style>
+<link rel="stylesheet" href="{{ asset('css/client_index.css') }}">
 @endpush
 
 @push('scripts')
@@ -155,9 +75,6 @@ $(document).ready(function() {
                 data: function (d) {
                     d.show_all = showAll ? 1 : 0;
                 },
-                complete: function() {
-                    $('.dataTables_processing').hide();
-                }
             },
             columns: [
                 {data: 'id', name: 'id'},
@@ -176,9 +93,9 @@ $(document).ready(function() {
                 {data: 'acciones', name: 'acciones', orderable: false, searchable: false}
             ],
             language: {
-                url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json',
-                processing: '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Cargando...</span></div>'
-            },
+            url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json',
+        },
+
             drawCallback: function(settings) {
                 if (settings.aoData.length === 0) {
                     $('.dataTables_scrollBody').css('height', '300px');
