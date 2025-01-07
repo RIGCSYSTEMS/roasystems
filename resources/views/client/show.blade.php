@@ -206,7 +206,7 @@
                             </div>
                         @empty
                             <div class="list-group-item">
-                                <p class="text-muted mb-0">No hay actividades registradas</p>
+                               <p class="text-muted mb-0">No hay actividades registradas</p>
                             </div>
                         @endforelse
                     </div>

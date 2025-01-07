@@ -95,7 +95,7 @@ color: white !important;
 }
 
 .btn-ver:hover {
-background-color: #2563eb !important;
+background-color: #7697dd !important;
 color: white !important;
 transform: translateY(-2px);
 box-shadow: 0 6px 20px rgba(59,130,246,0.2);
@@ -107,19 +107,19 @@ color: white !important;
 }
 
 .btn-editar:hover {
-background-color: #7c3aed !important;
+background-color: #ab88e9 !important;
 color: white !important;
 transform: translateY(-2px);
 box-shadow: 0 6px 20px rgba(139,92,246,0.2);
 }
 
 .btn-eliminar {
-background-color: #ef4444 !important;
+background-color: #a70707 !important;
 color: white !important;
 }
 
 .btn-eliminar:hover {
-background-color: #dc2626 !important;
+background-color: #f06363 !important;
 color: white !important;
 transform: translateY(-2px);
 box-shadow: 0 6px 20px rgba(239,68,68,0.2);
