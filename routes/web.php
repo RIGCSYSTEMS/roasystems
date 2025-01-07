@@ -7,7 +7,7 @@ use App\Http\Controllers\DocumentosController;
 use App\Http\Controllers\ExpedienteController;
 use App\Http\Controllers\HonorariosController;
 use App\Http\Controllers\AudienciaController;
-use App\Http\Controllers\BitacoraController;
+use App\Http\Controllers\BitacorasController;
 use App\Models\client;
 
 // RUTA PRINCIPAL
@@ -46,7 +46,16 @@ Route::delete('/expedientes/{expediente}/audiencias/{audiencia}', [AudienciaCont
 Route::get('/expedientes/{expediente}/audiencias/{audiencia}', [AudienciaController::class, 'show'])->name('audiencias.show');
 
 // RUTAS PARA BITACORAS
-Route::resource('expedientes.bitacoras', BitacoraController::class);
+Route::resource('expedientes.bitacoras', BitacorasController::class);
+Route::get('/bitacoras/{client}', [BitacorasController::class, 'index'])->name('bitacoras.index');
+// Agrega esta ruta en routes/web.php
+Route::get('/client/{client}/bitacoras', [BitacorasController::class, 'index'])->name('client.bitacoras.index');
+
+// RUTAS PARA HONORARIOS
+Route::post('/expedientes/{expediente}/honorarios', [HonorariosController::class, 'store'])->name('honorarios.store');
+Route::put('/honorarios/{honorario}', [HonorariosController::class, 'update'])->name('honorarios.update');
+Route::post('/honorarios/{honorario}/abonos', [HonorariosController::class, 'registrarAbono'])->name('honorarios.abono');
+Route::get('/honorarios/{client}', [HonorariosController::class, 'show'])->name('honorarios.show'); // Nueva ruta
 
 
 

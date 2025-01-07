@@ -2,21 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\client;
+use App\Models\Client;
 use Illuminate\Http\Request;
 use App\Models\Documento;
+use App\Models\Expediente;
 
-class clientController extends Controller
+class ClientController extends Controller
 {
+    protected $attributes = [];
     public function index()
     {
-
-        $clients = client::orderBy('id', 'desc')
-                        ->paginate(30);
-
-        return view('client.index',compact('clients'));
+        $clients = Client::orderBy('id', 'desc')->paginate(30);
+        return view('client.index', compact('clients'));
     }
-
 
     public function getDataClientes(Request $request)
     {
@@ -26,7 +24,7 @@ class clientController extends Controller
         $query = Client::select('id', 'nombre_de_cliente', 'telefono', 'email', 'direccion', 'pais', 'estatus');
     
         if (!$show_all && !$search) {
-            $query->whereRaw('1 = 0'); // No mostrar nada si show_all es falso y no hay búsqueda
+            $query->whereRaw('1 = 0');
         }
     
         return datatables()->of($query)
@@ -51,15 +49,13 @@ class clientController extends Controller
 
     public function create()
     {
-        // return view('client.create');
         $tipos = ['asilo', 'appel', 'permanente', 'erar', 'apadrinamiento', 'humanitaria', 'temporal'];
-    return view('client.create', compact('tipos'));
+        return view('client.create', compact('tipos'));
     }
 
     public function store(Request $request)
     {
-        //primera version de creacion de cliente
-        $client = new client();
+        $client = new Client();
         $client->nombre_de_cliente = $request->nombre_de_cliente;
         $client->otros_nombres_de_cliente = $request->otros_nombres_de_cliente;
         $client->direccion = $request->direccion;
@@ -71,38 +67,51 @@ class clientController extends Controller
         $client->estatus = $request->estatus;
         $client->observaciones = $request->observaciones;
         $client->iuc = $request->iuc;
-
         $client->save();
 
-      //  return redirect('/client');
-      return redirect("client/".$client->id."/edit")->with('guardadoCorrectamente', 'El cliente fue guardado corrrectamente');
-
-
-    }
-    // public function edicion()
-    // {
-    //     return view('clientes.edicion');
-    // }
-
-    public function show($client)
-    {
-        $client = client::find($client);
-
-        return view('client.show', ['client' => $client]);
+        return redirect("client/".$client->id."/edit")->with('guardadoCorrectamente', 'El cliente fue guardado correctamente');
     }
 
-    public function edit($client)
+    public function show($clientId)
     {
-        $client = client::find($client);
+        $client = Client::with([
+            'expedientes.tipoExpediente',
+            'expedientes.honorarios',
+            'documentos.tipoDocumento',
+            'bitacoras' => function($query) {
+                $query->latest()->take(5);
+            },
+            'documentos' => function($query) {
+                $query->latest()->take(5);
+            }
+        ])->findOrFail($clientId);
 
+        $expedientesActivos = $client->expedientes()
+            ->where('estatus_del_expediente', 'Abierto')
+            ->get();
+
+        $totalHonorarios = $client->total_honorarios;
+        $totalPagado = $client->total_pagado;
+        $saldoPendiente = $client->saldo_pendiente;
+
+        return view('client.show', compact(
+            'client',
+            'expedientesActivos',
+            'totalHonorarios',
+            'totalPagado',
+            'saldoPendiente'
+        ));
+    }
+
+    public function edit($clientId)
+    {
+        $client = Client::findOrFail($clientId);
         return view('client.edit', compact('client'));
     }
 
-    public function update(Request $request, $client)
+    public function update(Request $request, $clientId)
     {
-
-        
-        $client = client::find($client);
+        $client = Client::findOrFail($clientId);
 
         $client->nombre_de_cliente = $request->nombre_de_cliente;
         $client->otros_nombres_de_cliente = $request->otros_nombres_de_cliente;
@@ -120,13 +129,37 @@ class clientController extends Controller
         return redirect("/client/{$client->id}");
     }
 
-    public function destroy($client)
+    public function destroy($clientId)
     {
-        $client = client::find($client);
-
+        $client = Client::findOrFail($clientId);
         $client->delete();
-
         return redirect('/client');
     }
+
+    public function getFamiliaAttribute($value)
+{
+    return $value ? json_decode($value, true) : [];
+}
+
+public function setFamiliaAttribute($value)
+{
+    $this->attributes['familia'] = json_encode($value);
+}
+
+public function addFamiliar(Request $request, Client $client)
+{
+    $familiar = $request->validate([
+        'nombre' => 'required|string',
+        'apellido' => 'required|string',
+        'parentesco' => 'required|string',
+    ]);
+
+    $familia = $client->familia;
+    $familia[] = $familiar;
+    $client->familia = $familia;
+    $client->save();
+
+    return redirect()->back()->with('success', 'Familiar agregado con éxito');
+}
 
 }

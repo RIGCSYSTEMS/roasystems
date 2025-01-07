@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('clients', function (Blueprint $table) {
             $table->id();
             $table->string('nombre_de_cliente');
-            $table->string('familia')->nullable()->nullable();
+            $table->text('familia')->nullable()->nullable();
             $table->date('fecha_de_nacimiento');
             $table->enum('genero',['masculino', 'femenino', 'otro']);
             $table->enum('estado_civil',['soltero', 'casado', 'divorciado', 'viudo', 'otro']);

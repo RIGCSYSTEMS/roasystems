@@ -8,6 +8,7 @@ use App\Models\Expediente;
 use App\Models\Bitacora;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Client;
 
 class HonorariosController extends Controller
 {
@@ -74,4 +75,25 @@ class HonorariosController extends Controller
 
         return redirect()->back()->with('success', 'Abono registrado correctamente');
     }
+
+    public function show(Client $client)
+    {
+        $expedientes = $client->expedientes()->with(['honorarios', 'honorarios.abonos'])->get();
+        
+        $totalHonorarios = $expedientes->sum(function($expediente) {
+            return $expediente->honorarios ? $expediente->honorarios->monto_total_expediente : 0;
+        });
+        
+        $totalPagado = $expedientes->sum(function($expediente) {
+            return $expediente->honorarios ? $expediente->honorarios->total_abonos : 0;
+        });
+        
+        $saldoPendiente = $totalHonorarios - $totalPagado;
+    
+        return view('honorarios.show', compact('client', 'expedientes', 'totalHonorarios', 'totalPagado', 'saldoPendiente'));
+    }
+
+
+
 }
+
