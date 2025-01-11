@@ -3,6 +3,9 @@
 @section('title', 'ROASYSTEMS - Perfil del Cliente')
 
 @section('content')
+<div id="app">
+    <home></home>
+</div>
 <div class="container-fluid mt-4">
     <!-- Encabezado con botones de acción -->
     <div class="row mb-4">
