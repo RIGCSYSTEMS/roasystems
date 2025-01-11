@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Client;
 
-class HonorariosController extends Controller
+class HonorarioController extends Controller
 {
     public function store(Request $request, Expediente $expediente)
     {

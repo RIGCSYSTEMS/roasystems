@@ -8,7 +8,7 @@ use App\Models\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class BitacorasController extends Controller
+class BitacoraController extends Controller
 {
     // Lista las bitácoras de un expediente específico
     public function index(Expediente $expediente = null, Client $client = null)

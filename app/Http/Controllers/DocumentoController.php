@@ -7,7 +7,7 @@ use App\Models\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class DocumentosController extends Controller
+class DocumentoController extends Controller
 {
     // public function index()
     // {

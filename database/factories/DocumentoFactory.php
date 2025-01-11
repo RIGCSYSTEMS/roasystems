@@ -10,7 +10,7 @@ use App\Models\client;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Model>
  */
-class DocumentosFactory extends Factory
+class DocumentoFactory extends Factory
 {
     protected $model = Documento::class;
     /**

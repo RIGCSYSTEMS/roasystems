@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class TiposDocumentosExpedientes extends Model
+class TipoDocumentoExpediente extends Model
 {
     // Nombre de la tabla
     protected $table = 'tipos_documentos_expedientes';
