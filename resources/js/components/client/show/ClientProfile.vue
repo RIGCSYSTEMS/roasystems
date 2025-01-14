@@ -33,7 +33,15 @@
       
       <!-- Familia -->
       <h3>Familia</h3>
-      <p>{{ clientData.familia || 'No hay información familiar registrada' }}</p>
+      <div v-if="familiaArray && familiaArray.length > 0">
+        <div v-for="(familiar, index) in familiaArray" :key="index" class="mb-2">
+          <p class="mb-1">
+            <strong>Nombre:</strong> {{ familiar.nombre }} {{ familiar.apellido }}
+            <span v-if="familiar.parentesco">, <strong>Parentesco:</strong> {{ familiar.parentesco }}</span>
+          </p>
+        </div>
+      </div>
+      <p v-else>No hay información familiar registrada</p>
       
       <!-- Observaciones -->
       <h3>Observaciones</h3>
@@ -50,24 +58,54 @@ export default {
       required: true
     }
   },
+  computed: {
+    familiaArray() {
+      try {
+        if (!this.clientData.familia) return null;
+        // Si ya es un array, lo devolvemos tal cual
+        if (Array.isArray(this.clientData.familia)) {
+          return this.clientData.familia;
+        }
+        // Si es una cadena JSON, la parseamos
+        if (typeof this.clientData.familia === 'string') {
+          return JSON.parse(this.clientData.familia);
+        }
+        return null;
+      } catch (error) {
+        console.error('Error al procesar familia:', error);
+        return null;
+      }
+    }
+  },
   methods: {
     formatDate(date) {
-      if (!date) return 'No registrado'
-      // Creamos un objeto Date con la fecha UTC
-      const utcDate = new Date(date + 'T00:00:00Z');
-      // Formateamos la fecha en la zona horaria local
-      return utcDate.toLocaleDateString('es-ES', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        timeZone: 'UTC'
-      })
+      if (!date) return 'No registrado';
+      try {
+        const [year, month, day] = date.split('-');
+        const fecha = new Date(year, month - 1, day);
+        return fecha.toLocaleDateString('es-ES', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+      } catch (error) {
+        console.error('Error al formatear la fecha:', error);
+        return 'Fecha inválida';
+      }
     },
     capitalizeFirstLetter(string) {
-      if (!string) return ''
-      return string.charAt(0).toUpperCase() + string.slice(1)
+      if (!string) return '';
+      return string.charAt(0).toUpperCase() + string.slice(1);
     }
   }
 }
 </script>
 
+<style scoped>
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+.mb-1 {
+  margin-bottom: 0.25rem;
+}
+</style>
