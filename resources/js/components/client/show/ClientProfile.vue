@@ -53,10 +53,14 @@ export default {
   methods: {
     formatDate(date) {
       if (!date) return 'No registrado'
-      return new Date(date).toLocaleDateString('es-ES', {
+      // Creamos un objeto Date con la fecha UTC
+      const utcDate = new Date(date + 'T00:00:00Z');
+      // Formateamos la fecha en la zona horaria local
+      return utcDate.toLocaleDateString('es-ES', {
         year: 'numeric',
         month: 'long',
-        day: 'numeric'
+        day: 'numeric',
+        timeZone: 'UTC'
       })
     },
     capitalizeFirstLetter(string) {
