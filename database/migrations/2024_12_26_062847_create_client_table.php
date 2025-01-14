@@ -19,8 +19,8 @@ return new class extends Migration
             $table->enum('genero',['masculino', 'femenino', 'otro']);
             $table->enum('estado_civil',['soltero', 'casado', 'divorciado', 'viudo', 'otro']);
             $table->string('pais');
-            $table->date('llegada a canada')->nullable();
-            $table->enum('punto de acceso', ['aerpuerto', 'terrestre', 'maritimo', 'otro']);
+            $table->date('llegada_a_canada')->nullable();
+            $table->enum('punto_de_acceso', ['aeropuerto', 'terrestre', 'maritimo', 'otro']);
             $table->string('pasaporte')->nullable();
             $table->string('estatus');
             $table->string('direccion')->nullable();

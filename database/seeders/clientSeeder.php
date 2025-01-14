@@ -20,11 +20,13 @@ class clientSeeder extends Seeder
         $client = new client();
 
         $client->nombre_de_cliente = 'Ivan';
-        $client->familia = 'Rigc1234';
+        $client->familia = 'hermana, sobrino, sobrina';
         $client->fecha_de_nacimiento = '2021-09-26';
         $client->genero = 'Masculino';
         $client->estado_civil = 'Soltero';
         $client->pais = 'Mexico';
+        $client->llegada_a_canada = '2020-01-23';
+        $client->punto_de_acceso = 'Aeropuerto';
         $client->pasaporte = '12345678';
         $client->estatus = 'Activo';
         $client->direccion = 'Calle 123';
@@ -39,7 +41,7 @@ class clientSeeder extends Seeder
 
          $client->save();
 
-        client::factory(1000)->create();
+        client::factory(10000)->create();
 
     }
 }

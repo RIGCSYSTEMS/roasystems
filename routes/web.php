@@ -3,11 +3,11 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ClientController;
-use App\Http\Controllers\DocumentosController;
+use App\Http\Controllers\DocumentoController;
 use App\Http\Controllers\ExpedienteController;
-use App\Http\Controllers\HonorariosController;
+use App\Http\Controllers\HonorarioController;
 use App\Http\Controllers\AudienciaController;
-use App\Http\Controllers\BitacorasController;
+use App\Http\Controllers\BitacoraController;
 use App\Models\client;
 
 // RUTA PRINCIPAL
@@ -16,6 +16,7 @@ Route::get('/', HomeController::class);
 // Route::get('/client', [ClientController::class, 'index']);
 Route::resource('client', ClientController::class);
 Route::get('/client/lista/getDataClientes', [ClientController::class, 'getDataClientes'])->name('client.getDataClientes');
+Route::put('/client/{client}', [ClientController::class, 'update'])->name('client.update');
 // Route::get('/client/{id}/documentos', [ClientController::class, 'documentos'])->name('client.documentos');
 // route::get('/client/create',[ClientController::class, 'create']);
 // route::post('/client',[ClientController::class, 'store']);
@@ -29,15 +30,15 @@ Route::get('/client/lista/getDataClientes', [ClientController::class, 'getDataCl
 Route::resource('expedientes', ExpedienteController::class);
 
 // RUTAS PARA DOCUMENTOS
-Route::resource('documentos', DocumentosController::class);
-Route::get('/client/{id}/documentos', [DocumentosController::class, 'show'])->name('client.documentos');
-Route::post('/client/{id}/documentos/subir', [DocumentosController::class, 'subirDocumento'])->name('documentos.subir');
-Route::get('/documentos/{id}/view', [DocumentosController::class, 'view'])->name('documentos.view');
+Route::resource('documentos', DocumentoController::class);
+Route::get('/client/{id}/documentos', [DocumentoController::class, 'show'])->name('client.documentos');
+Route::post('/client/{id}/documentos/subir', [DocumentoController::class, 'subirDocumento'])->name('documentos.subir');
+Route::get('/documentos/{id}/view', [DocumentoController::class, 'view'])->name('documentos.view');
 
 // RUTAS PARA HONORARIOS
-Route::post('/expedientes/{expediente}/honorarios', [HonorariosController::class, 'store'])->name('honorarios.store');
-Route::put('/honorarios/{honorario}', [HonorariosController::class, 'update'])->name('honorarios.update');
-Route::post('/honorarios/{honorario}/abonos', [HonorariosController::class, 'registrarAbono'])->name('honorarios.abono');
+Route::post('/expedientes/{expediente}/honorarios', [HonorarioController::class, 'store'])->name('honorarios.store');
+Route::put('/honorarios/{honorario}', [HonorarioController::class, 'update'])->name('honorarios.update');
+Route::post('/honorarios/{honorario}/abonos', [HonorarioController::class, 'registrarAbono'])->name('honorarios.abono');
 
 //RUTAS AUDIENCIAS
 Route::post('/expedientes/{expediente}/audiencias', [AudienciaController::class, 'store'])->name('audiencias.store');
@@ -46,16 +47,16 @@ Route::delete('/expedientes/{expediente}/audiencias/{audiencia}', [AudienciaCont
 Route::get('/expedientes/{expediente}/audiencias/{audiencia}', [AudienciaController::class, 'show'])->name('audiencias.show');
 
 // RUTAS PARA BITACORAS
-Route::resource('expedientes.bitacoras', BitacorasController::class);
-Route::get('/bitacoras/{client}', [BitacorasController::class, 'index'])->name('bitacoras.index');
+Route::resource('expedientes.bitacoras', BitacoraController::class);
+Route::get('/bitacoras/{client}', [BitacoraController::class, 'index'])->name('bitacoras.index');
 // Agrega esta ruta en routes/web.php
-Route::get('/client/{client}/bitacoras', [BitacorasController::class, 'index'])->name('client.bitacoras.index');
+Route::get('/client/{client}/bitacoras', [BitacoraController::class, 'index'])->name('client.bitacoras.index');
 
 // RUTAS PARA HONORARIOS
-Route::post('/expedientes/{expediente}/honorarios', [HonorariosController::class, 'store'])->name('honorarios.store');
-Route::put('/honorarios/{honorario}', [HonorariosController::class, 'update'])->name('honorarios.update');
-Route::post('/honorarios/{honorario}/abonos', [HonorariosController::class, 'registrarAbono'])->name('honorarios.abono');
-Route::get('/honorarios/{client}', [HonorariosController::class, 'show'])->name('honorarios.show'); // Nueva ruta
+Route::post('/expedientes/{expediente}/honorarios', [HonorarioController::class, 'store'])->name('honorarios.store');
+Route::put('/honorarios/{honorario}', [HonorarioController::class, 'update'])->name('honorarios.update');
+Route::post('/honorarios/{honorario}/abonos', [HonorarioController::class, 'registrarAbono'])->name('honorarios.abono');
+Route::get('/honorarios/{client}', [HonorarioController::class, 'show'])->name('honorarios.show'); // Nueva ruta
 
 
 

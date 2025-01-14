@@ -18,11 +18,13 @@ class clientFactory extends Factory
     {
         return [
             'nombre_de_cliente' => $this->faker->name,
-            'familia' => $this->faker->lastName,
+            'familia' => implode(', ', array_map(fn() => $this->faker->name, range(1, rand(2, 5)))),
             'fecha_de_nacimiento' => $this->faker->date('Y-m-d'),
             'genero' => $this->faker->randomElement(['masculino', 'femenino', 'otro']),
             'estado_civil' => $this->faker->randomElement(['soltero', 'casado', 'divorciado', 'viudo', 'otro']),
             'pais' => $this->faker->country,
+            'llegada_a_canada' => $this->faker->date('Y-m-d'),
+            'punto_de_acceso' => $this->faker->randomElement(['aeropuerto', 'terrestre', 'maritimo', 'otro']),
             'pasaporte' => $this->faker->numerify('A######'),
             'estatus' => $this->faker->randomElement(['activo', 'inactivo']),
             'direccion' => $this->faker->address,
