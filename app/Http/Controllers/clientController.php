@@ -21,13 +21,13 @@ class ClientController extends Controller
     {
         $show_all = $request->input('show_all', 0);
         $search = $request->input('search.value');
-    
+
         $query = Client::select('id', 'nombre_de_cliente', 'telefono', 'email', 'direccion', 'pais', 'estatus');
-    
+
         if (!$show_all && !$search) {
             $query->whereRaw('1 = 0');
         }
-    
+
         return datatables()->of($query)
             ->filter(function ($query) use ($search) {
                 if ($search) {
@@ -91,20 +91,20 @@ class ClientController extends Controller
                 $query->latest()->take(5);
             }
         ])->findOrFail($clientId);
-    
+
         $clientData = $client->toArray();
-    
+
         // Manejo correcto de las fechas
         $clientData['fecha_de_nacimiento'] = $client->fecha_de_nacimiento ? date('Y-m-d', strtotime($client->fecha_de_nacimiento)) : null;
         $clientData['llegada_a_canada'] = $client->llegada_a_canada ? date('Y-m-d', strtotime($client->llegada_a_canada)) : null;
-    
+
         // Asegúrate de que 'familia' siempre sea un array
         if (is_string($clientData['familia'])) {
             $clientData['familia'] = json_decode($clientData['familia'], true) ?? [];
         } elseif (!is_array($clientData['familia'])) {
             $clientData['familia'] = [];
         }
-        
+    
         $clientData['expedientes'] = $client->expedientes->map(function ($expediente) {
             return [
                 'id' => $expediente->id,
@@ -126,7 +126,7 @@ class ClientController extends Controller
                 'tiempo_empleado' => $bitacora->tiempo_empleado,
             ];
         });
-    
+
         return view('client.show', compact('clientData'));
     }
 
@@ -196,15 +196,39 @@ class ClientController extends Controller
     {
         $familiar = $request->validate([
             'nombre' => 'required|string',
-            'apellido' => 'required|string',
             'parentesco' => 'required|string',
         ]);
-
-        $familia = $client->familia ?? [];
+    
+        $familia = is_array($client->familia) ? $client->familia : [];
         $familia[] = $familiar;
+        
         $client->familia = $familia;
         $client->save();
-
-        return redirect()->back()->with('success', 'Familiar agregado con éxito');
+    
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Familiar agregado con éxito'
+        ]);
+    }
+    
+    public function removeFamiliar(Client $client, $index)
+    {
+        $familia = is_array($client->familia) ? $client->familia : [];
+        
+        if (isset($familia[$index])) {
+            array_splice($familia, $index, 1);
+            $client->familia = $familia;
+            $client->save();
+            
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Familiar eliminado con éxito'
+            ]);
+        }
+    
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Familiar no encontrado'
+        ], 404);
     }
 }

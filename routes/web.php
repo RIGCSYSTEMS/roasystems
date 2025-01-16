@@ -17,6 +17,8 @@ Route::get('/', HomeController::class);
 Route::resource('client', ClientController::class);
 Route::get('/client/lista/getDataClientes', [ClientController::class, 'getDataClientes'])->name('client.getDataClientes');
 Route::put('/client/{client}', [ClientController::class, 'update'])->name('client.update');
+Route::post('/client/{client}/familia', [ClientController::class, 'addFamiliar'])->name('client.addFamiliar');
+Route::delete('/client/{client}/familia/{index}', [ClientController::class, 'removeFamiliar'])->name('client.removeFamiliar');
 // Route::get('/client/{id}/documentos', [ClientController::class, 'documentos'])->name('client.documentos');
 // route::get('/client/create',[ClientController::class, 'create']);
 // route::post('/client',[ClientController::class, 'store']);

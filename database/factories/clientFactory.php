@@ -18,7 +18,18 @@ class clientFactory extends Factory
     {
         return [
             'nombre_de_cliente' => $this->faker->name,
-            'familia' => implode(', ', array_map(fn() => $this->faker->name, range(1, rand(2, 5)))),
+            'familia' => $this->faker->randomElements([
+    ['nombre' => $this->faker->firstName(), 'parentesco' => 'hermana'],
+    ['nombre' => $this->faker->firstName(), 'parentesco' => 'hermano'],
+    ['nombre' => $this->faker->firstName(), 'parentesco' => 'sobrino'],
+    ['nombre' => $this->faker->firstName(), 'parentesco' => 'sobrina'],
+    ['nombre' => $this->faker->firstName(), 'parentesco' => 'padre'],
+    ['nombre' => $this->faker->firstName(), 'parentesco' => 'madre'],
+    ['nombre' => $this->faker->firstName(), 'parentesco' => 'abuelo'],
+    ['nombre' => $this->faker->firstName(), 'parentesco' => 'abuela'],
+    ['nombre' => $this->faker->firstName(), 'parentesco' => 'tío'],
+    ['nombre' => $this->faker->firstName(), 'parentesco' => 'tía'],
+], $this->faker->numberBetween(0, 5)),
             'fecha_de_nacimiento' => $this->faker->date('Y-m-d'),
             'genero' => $this->faker->randomElement(['masculino', 'femenino', 'otro']),
             'estado_civil' => $this->faker->randomElement(['soltero', 'casado', 'divorciado', 'viudo', 'otro']),

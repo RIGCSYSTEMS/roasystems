@@ -20,7 +20,11 @@ class clientSeeder extends Seeder
         $client = new client();
 
         $client->nombre_de_cliente = 'Ivan';
-        $client->familia = 'hermana, sobrino, sobrina';
+        $client->familia = [
+            ['nombre' => 'diana', 'parentesco' => 'hermana'],
+            ['nombre' => 'santiago', 'parentesco' => 'sobrino'],
+            ['nombre' => 'camila', 'parentesco' => 'sobrina']
+        ];
         $client->fecha_de_nacimiento = '2021-09-26';
         $client->genero = 'Masculino';
         $client->estado_civil = 'Soltero';

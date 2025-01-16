@@ -34,32 +34,10 @@ class Client extends Model
     ];
 
     protected $casts = [
-        'fecha_de_nacimiento' => 'datetime:Y-m-d',
-        'llegada_a_canada' => 'datetime:Y-m-d',
+        'fecha_de_nacimiento' => 'date:Y-m-d',
+        'llegada_a_canada' => 'date:Y-m-d',
         'familia' => 'array',
     ];
-
-    // Mutadores para asegurar el formato correcto de las fechas
-    public function setFechaDeNacimientoAttribute($value)
-    {
-        $this->attributes['fecha_de_nacimiento'] = $value ? Carbon::parse($value)->format('Y-m-d') : null;
-    }
-
-    public function setLlegadaACanadaAttribute($value)
-    {
-        $this->attributes['llegada_a_canada'] = $value ? Carbon::parse($value)->format('Y-m-d') : null;
-    }
-
-    // Accessors para obtener las fechas en el formato correcto
-    public function getFechaDeNacimientoAttribute($value)
-    {
-        return $value ? Carbon::parse($value)->format('Y-m-d') : null;
-    }
-
-    public function getLlegadaACanadaAttribute($value)
-    {
-        return $value ? Carbon::parse($value)->format('Y-m-d') : null;
-    }
 
     public function expedientes(): HasMany
     {
@@ -73,12 +51,7 @@ class Client extends Model
 
     public function bitacoras(): HasManyThrough
     {
-        return $this->hasManyThrough(
-            Bitacora::class,
-            Expediente::class,
-            'client_id',
-            'expediente_id'
-        );
+        return $this->hasManyThrough(Bitacora::class, Expediente::class);
     }
 
     public function getTotalHonorariosAttribute()

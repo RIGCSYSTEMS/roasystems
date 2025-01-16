@@ -32,8 +32,8 @@
   <script>
   import { ref } from 'vue'
   import ClientProfile from './ClientProfile.vue'
-  import Expedientes from './Expedientes.vue'
-  import Bitacoras from './Bitacoras.vue'
+  import Expedientes from '../../../layouts/Expedientes.vue'
+  import Bitacoras from '../../../layouts/Bitacoras.vue'
   import edicion from './edicion.vue'
   
   export default {
