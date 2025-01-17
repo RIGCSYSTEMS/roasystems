@@ -50,37 +50,70 @@ class ClientController extends Controller
 
     public function create()
     {
-        $tipos = ['asilo', 'appel', 'permanente', 'erar', 'apadrinamiento', 'humanitaria', 'temporal'];
-        return view('client.create', compact('tipos'));
+        
+        return view('client.create');
     }
 
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'nombre_de_cliente' => 'required|string',
-            'otros_nombres_de_cliente' => 'nullable|string',
-            'direccion' => 'required|string',
-            'telefono' => 'required|string',
-            'email' => 'required|email',
-            'profesion' => 'nullable|string',
-            'pais' => 'required|string',
-            'lenguaje' => 'required|string',
-            'estatus' => 'required|string',
-            'observaciones' => 'nullable|string',
-            'iuc' => 'nullable|string',
-            'fecha_de_nacimiento' => 'required|date',
-            'genero' => 'required|string',
-            'estado_civil' => 'required|string',
-            'llegada_a_canada' => 'required|date',
-            'punto_de_acceso' => 'required|string',
-            'pasaporte' => 'nullable|string',
-            'permiso_de_trabajo' => 'nullable|string',
-            'familia' => 'nullable|array',
-        ]);
+        try {
+            $validatedData = $request->validate([
+                'nombre_de_cliente' => 'required|string',
+                'familia' => 'nullable|array',
+                'fecha_de_nacimiento' => 'required|date',
+                'genero' => 'required|in:masculino,femenino,otro',
+                'estado_civil' => 'required|in:soltero,casado,divorciado,viudo,otro',
+                'pais' => 'required|string',
+                'llegada_a_canada' => 'nullable|date',
+                'punto_de_acceso' => 'required|in:aeropuerto,terrestre,maritimo,otro',
+                'pasaporte' => 'nullable|string',
+                'estatus' => 'required|string',
+                'direccion' => 'nullable|string',
+                'telefono' => 'nullable|string',
+                'email' => 'nullable|email',
+                'profesion' => 'nullable|string',
+                'lenguaje' => 'nullable|string',
+                'permiso_de_trabajo' => 'nullable|string',
+                'iuc' => 'nullable|string',
+                'observaciones' => 'nullable|string',
+            ]);
 
-        $client = Client::create($validatedData);
+            // Asegurarse de que las fechas estén en UTC
+            if (isset($validatedData['fecha_de_nacimiento'])) {
+                $validatedData['fecha_de_nacimiento'] = Carbon::parse($validatedData['fecha_de_nacimiento'])->utc();
+            }
+            if (isset($validatedData['llegada_a_canada'])) {
+                $validatedData['llegada_a_canada'] = Carbon::parse($validatedData['llegada_a_canada'])->utc();
+            }
 
-        return redirect()->route('client.edit', $client->id)->with('success', 'El cliente fue guardado correctamente');
+            // Convertir el array de familia a JSON
+            if (isset($validatedData['familia'])) {
+                $validatedData['familia'] = json_encode($validatedData['familia']);
+            }
+
+            $client = Client::create($validatedData);
+
+            if ($request->wantsJson()) {
+                return response()->json([
+                    'message' => 'Cliente creado exitosamente',
+                    'id' => $client->id,
+                    'redirect' => route('client.edit', $client->id)
+                ], 201);
+            }
+
+            return redirect()
+                ->route('client.edit', $client->id)
+                ->with('success', 'El cliente fue guardado correctamente');
+        } catch (\Exception $e) {
+            if ($request->wantsJson()) {
+                return response()->json([
+                    'message' => 'Error al crear el cliente',
+                    'error' => $e->getMessage()
+                ], 500);
+            }
+
+            return back()->withInput()->withErrors(['error' => 'Error al crear el cliente: ' . $e->getMessage()]);
+        }
     }
 
     public function show($clientId)
