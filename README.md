@@ -66,7 +66,8 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
 
-
+Instalaciones de paqueterias vue
+Para instalar las paqueterías de Vue, debes ejecutar el siguiente comando en tu terminal
 npm install --save-dev @vitejs/plugin-vue
 npm install
 npm install vue

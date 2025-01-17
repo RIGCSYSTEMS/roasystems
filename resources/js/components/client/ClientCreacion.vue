@@ -299,7 +299,7 @@
         </div>
   
         <div class="acciones-formulario">
-          <button type="button" class="btn btn-secundario" @click="resetForm">
+          <button type="button" class="btn btn-secundario" @click="cancelar">
             <i class="bi bi-x"></i>
             Cancelar
           </button>
@@ -366,6 +366,10 @@
         formData.value.familia.splice(index, 1)
       }
   
+      const cancelar = () => {
+        window.location.href = '/client'
+      }
+  
       const handleSubmit = async () => {
         try {
           isLoading.value = true
@@ -398,7 +402,7 @@
   
           const result = await response.json()
           alert('Cliente creado exitosamente')
-          window.location.href = `/client/${result.id}`
+          window.location.href = `/client/${result.id}/edit`
         } catch (error) {
           console.error('Error:', error)
           alert(error.message || 'Error al crear el cliente')
@@ -414,7 +418,8 @@
         getCurrentDate,
         resetForm,
         addFamiliar,
-        removeFamiliar
+        removeFamiliar,
+        cancelar
       }
     }
   }
