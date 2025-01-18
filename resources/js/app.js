@@ -17,6 +17,11 @@ import vista from './components/client/Vista.vue';
 import edicion from './components/client/edicion.vue';
 import creacion from './components/client/ClientCreacion.vue';
 
+//importaciones documentos client
+import documentolist from './components/client/DocumentoList.vue';
+import documentosview from './components/client/DocumentosViewer.vue';
+
+
 const app = createApp({});
 
 // app.component('home', home);
@@ -32,5 +37,10 @@ app.component('client-profile', ClientProfile);
 app.component('vista-cliente', vista);
 app.component('edicion', edicion);
 app.component('creacion', creacion);
+
+//app documentos client
+app.component('documento-list', documentolist);
+app.component('documentos-viewer', documentosview);
+
 app.mount('#app');
 

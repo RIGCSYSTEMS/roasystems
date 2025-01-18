@@ -260,12 +260,25 @@
                 />
                 <select v-model="familiar.parentesco" class="control-formulario">
                   <option value="">Seleccione un parentesco</option>
-                  <option value="padre">Padre</option>
-                  <option value="madre">Madre</option>
-                  <option value="hijo">Hijo/a</option>
-                  <option value="hermano">Hermano/a</option>
-                  <option value="conyuge">Cónyuge</option>
-                  <option value="otro">Otro</option>
+                  <optgroup label="Familia Directa">
+                    <option value="padre">Padre</option>
+                    <option value="madre">Madre</option>
+                    <option value="hijo">Hijo/a</option>
+                    <option value="hermano">Hermano/a</option>
+                    <option value="abuelo">Abuelo/a</option>
+                    <option value="sobrino">Sobrino/a</option>
+                    <option value="nieto">Nieto/a</option>
+                  </optgroup>
+                  <optgroup label="Familia Política">
+                    <option value="esposo">Esposo/a</option>
+                    <option value="suegro">Suegro/a</option>
+                    <option value="cuñado">Cuñado/a</option>
+                  </optgroup>
+                  <optgroup label="Otros Familiares">
+                    <option value="tio">Tío/a</option>
+                    <option value="primo">Primo/a</option>
+                    <option value="otro">Otro</option>
+                  </optgroup>
                 </select>
                 <button type="button" @click="removeFamiliar(index)" class="btn-eliminar">
                   <i class="bi bi-trash"></i>

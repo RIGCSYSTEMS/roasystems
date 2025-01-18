@@ -4,161 +4,228 @@ namespace App\Http\Controllers;
 
 use App\Models\Documento;
 use App\Models\Client;
+use App\Models\TipoDocumento;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class DocumentoController extends Controller
 {
-    // public function index()
-    // {
-    //     $documentos = Documento::with('client')->paginate(30);
-    //     return view('documentos.index', compact('documentos'));
-    // }
+    public function index($clientId)
+    {
+        try {
+            $documentos = Documento::where('client_id', $clientId)
+                ->with('tipoDocumento')
+                ->get()
+                ->map(function ($documento) {
+                    return [
+                        'id' => $documento->id,
+                        'tipo_documento_id' => $documento->tipo_documento_id,
+                        'formato' => $documento->formato,
+                        'estado' => $documento->estado,
+                        'created_at' => $documento->created_at,
+                        'ruta' => asset($documento->ruta),
+                        'observaciones' => $documento->observaciones
+                    ];
+                });
+
+            return response()->json($documentos);
+        } catch (\Exception $e) {
+            Log::error('Error al cargar documentos:', ['error' => $e->getMessage()]);
+            return response()->json(['error' => 'Error al cargar los documentos'], 500);
+        }
+    }
 
     public function create(Request $request)
     {
-        // return view('documentos.create');
-        $client_id = $request->query('client_id');
-        $client = Client::findOrFail($client_id);
-        $clients = Client::all();
-        return view('documentos.create', compact('client', 'clients'));
+        try {
+            $client_id = $request->query('client_id');
+            $client = Client::findOrFail($client_id);
+            $tiposDocumento = TipoDocumento::all();
+            return view('documentos.create', compact('client', 'tiposDocumento'));
+        } catch (\Exception $e) {
+            Log::error('Error en create:', ['error' => $e->getMessage()]);
+            return back()->with('error', 'Error al cargar el formulario de creación');
+        }
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            'client_id' => 'required|exists:clients,id',
-            'documentos' => 'required|array',
-            'documentos.*.nombre_de_documento' => 'required|in:IDENTIFICACION,PASAPORTE,PERMISO DE TRABAJO,HOJA MARRON,PRUEBAS,HISTORIA,RESIDENCIA PERMANENTE,CAQ,EXTRAS',
-            'documentos.*.tipo_de_documento' => 'required|in:PDF,IMAGEN',
-            'documentos.*.archivo' => 'required|file|mimes:pdf,jpg,jpeg,png|max:10240',
-            'documentos.*.observaciones' => 'nullable|string'
-        ]);
-    
-        $client = Client::findOrFail($request->client_id);
-    
-        foreach ($request->documentos as $doc) {
-            if (isset($doc['archivo'])) {
-                $archivo = $doc['archivo'];
-                $nombreArchivo = time() . '_' . $archivo->getClientOriginalName();
-                $path = $archivo->storeAs('public/documentos/' . $client->id, $nombreArchivo);
-                $urlArchivo = 'storage/documentos/' . $client->id . '/' . $nombreArchivo;
-    
-                Documento::create([
-                    'client_id' => $client->id,
-                    'nombre_de_documento' => $doc['nombre_de_documento'],
-                    'tipo_de_documento' => $doc['tipo_de_documento'],
-                    'imagen_url' => $urlArchivo,
-                    'observaciones' => $doc['observaciones'] ?? null
-                ]);
+        try {
+            $request->validate([
+                'client_id' => 'required|exists:clients,id',
+                'tipo_documento_id' => 'required|exists:tipos_documentos,id',
+                'formato' => 'required|in:PDF,IMAGEN',
+                'archivo' => 'required|file|mimes:pdf,jpg,jpeg,png|max:10240',
+                'observaciones' => 'nullable|string'
+            ]);
+
+            $documento = new Documento();
+            $documento->client_id = $request->client_id;
+            $documento->tipo_documento_id = $request->tipo_documento_id;
+            $documento->user_id = Auth::id();
+            $documento->formato = $request->formato;
+            $documento->estado = 'Pendiente';
+            $documento->observaciones = $request->observaciones;
+
+            if ($request->hasFile('archivo')) {
+                $path = $request->file('archivo')->store('documentos/' . $request->client_id, 'public');
+                $documento->ruta = 'storage/' . $path;
             }
+
+            $documento->save();
+
+            return redirect()->route('client.documentos', $request->client_id)
+                           ->with('success', 'Documento subido correctamente');
+        } catch (\Exception $e) {
+            Log::error('Error en store:', ['error' => $e->getMessage()]);
+            return back()->with('error', 'Error al guardar el documento');
         }
-    
-        return redirect()->route('client.documentos', $client->id)->with('success', 'Documentos subidos correctamente');
     }
 
     public function show($id)
     {
-        $client = Client::findOrFail($id);
-        $documentos = Documento::where('client_id', $id)
-            ->orderBy('nombre_de_documento')
-            ->get();
-
-        // Para almacenamiento local
-        $documentos = $documentos->map(function ($documento) {
-            if ($documento->imagen_url) {
-                $documento->imagen_url = asset($documento->imagen_url);
-            }
-            return $documento;
-        });
-
-        return view('documentos.show', compact('client', 'documentos'));
+        try {
+            $client = Client::findOrFail($id);
+            $documentos = Documento::where('client_id', $id)
+                ->with('tipoDocumento')
+                ->get();
+                
+            return view('documentos.show', compact('client', 'documentos'));
+        } catch (\Exception $e) {
+            Log::error('Error en show:', ['error' => $e->getMessage()]);
+            return back()->with('error', 'Error al mostrar los documentos del cliente');
+        }
     }
 
     public function edit(Documento $documento)
     {
-        $clients = Client::all();
-        return view('documentos.edit', compact('documento', 'clients'));
+        try {
+            $tiposDocumento = TipoDocumento::all();
+            return view('documentos.edit', compact('documento', 'tiposDocumento'));
+        } catch (\Exception $e) {
+            Log::error('Error en edit:', ['error' => $e->getMessage()]);
+            return back()->with('error', 'Error al cargar el formulario de edición');
+        }
     }
 
     public function update(Request $request, Documento $documento)
     {
-        $request->validate([
-            'nombre_de_documento' => 'required|in:IDENTIFICACION,PASAPORTE,PERMISO DE TRABAJO,HOJA MARRON,PRUEBAS,HISTORIA,RESIDENCIA PERMANENTE,CAQ,EXTRAS',
-            'tipo_de_documento' => 'required|in:PDF,IMAGEN',
-            'archivo' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
-            'observaciones' => 'nullable|string'
-        ]);
+        try {
+            $request->validate([
+                'tipo_documento_id' => 'required|exists:tipos_documentos,id',
+                'formato' => 'required|in:PDF,IMAGEN',
+                'archivo' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
+                'observaciones' => 'nullable|string'
+            ]);
 
-        $documento->nombre_de_documento = $request->nombre_de_documento;
-        $documento->tipo_de_documento = $request->tipo_de_documento;
-        $documento->observaciones = $request->observaciones;
+            $documento->tipo_documento_id = $request->tipo_documento_id;
+            $documento->formato = $request->formato;
+            $documento->observaciones = $request->observaciones;
 
-        if ($request->hasFile('archivo')) {
-            // Eliminar archivo antiguo
-            if ($documento->imagen_url) {
-                Storage::delete('public/' . str_replace('storage/', '', $documento->imagen_url));
+            if ($request->hasFile('archivo')) {
+                if ($documento->ruta) {
+                    Storage::disk('public')->delete(str_replace('storage/', '', $documento->ruta));
+                }
+
+                $path = $request->file('archivo')->store('documentos/' . $documento->client_id, 'public');
+                $documento->ruta = 'storage/' . $path;
             }
 
-            // Subir nuevo archivo
-            $archivo = $request->file('archivo');
-            $nombreArchivo = time() . '_' . $archivo->getClientOriginalName();
-            $path = $archivo->storeAs('public/documentos/' . $documento->client_id, $nombreArchivo);
-            $documento->imagen_url = 'storage/documentos/' . $documento->client_id . '/' . $nombreArchivo;
+            $documento->save();
+
+            return redirect()->route('client.documentos', $documento->client_id)
+                           ->with('success', 'Documento actualizado correctamente');
+        } catch (\Exception $e) {
+            Log::error('Error en update:', ['error' => $e->getMessage()]);
+            return back()->with('error', 'Error al actualizar el documento');
         }
-
-        $documento->save();
-
-        return redirect()->route('client.documentos', $documento->client_id)->with('success', 'Documento actualizado correctamente');
     }
 
-    public function destroy(Documento $documento)
+    public function destroy($id)
     {
-        $clientId = $documento->client_id;
-
-        if ($documento->imagen_url) {
-            Storage::delete('public/' . str_replace('storage/', '', $documento->imagen_url));
+        try {
+            $documento = Documento::findOrFail($id);
+            
+            if ($documento->ruta) {
+                Storage::disk('public')->delete(str_replace('storage/', '', $documento->ruta));
+            }
+            
+            $documento->delete();
+            return response()->json(['message' => 'Documento eliminado correctamente']);
+        } catch (\Exception $e) {
+            Log::error('Error al eliminar documento:', ['error' => $e->getMessage()]);
+            return response()->json(['error' => 'Error al eliminar el documento'], 500);
         }
-
-        $documento->delete();
-
-        return redirect()->route('client.documentos', $clientId)->with('success', 'Documento eliminado correctamente');
     }
+
     public function subirDocumento(Request $request, $clientId)
     {
-        $request->validate([
-            'nombre_de_documento' => 'required|in:IDENTIFICACION,PASAPORTE,PERMISO DE TRABAJO,HOJA MARRON,PRUEBAS,HISTORIA,RESIDENCIA PERMANENTE,CAQ,EXTRAS',
-            'tipo_de_documento' => 'required|in:PDF,IMAGEN',
-            'archivo' => 'required|file|mimes:pdf,jpg,jpeg,png|max:10240'
-        ]);
-    
-        $client = Client::findOrFail($clientId);
-        
-        if ($request->hasFile('archivo')) {
-            $archivo = $request->file('archivo');
-            $nombreArchivo = time() . '_' . $archivo->getClientOriginalName();
+        try {
+            Log::info('Recibiendo solicitud de documento:', $request->all());
             
-            // Guardar el archivo en el directorio correcto
-            $path = $archivo->storeAs('documentos/' . $clientId, $nombreArchivo, 'public');
-            
-            // Generar la URL correcta para el archivo
-            $urlArchivo = 'storage/' . $path;
-            
-            Documento::create([
-                'client_id' => $clientId,
-                'nombre_de_documento' => $request->nombre_de_documento,
-                'tipo_de_documento' => $request->tipo_de_documento,
-                'imagen_url' => $urlArchivo
+            $request->validate([
+                'tipo_documento_id' => 'required|exists:tipos_documentos,id',
+                'formato' => 'required|in:PDF,IMAGEN',
+                'archivo' => 'required|file|mimes:pdf,jpg,jpeg,png|max:10240',
+                'observaciones' => 'nullable|string'
             ]);
     
-            return redirect()->route('client.documentos', $clientId)->with('success', 'Documento subido correctamente');
-        }
+            $documento = new Documento();
+            $documento->client_id = $clientId;
+            $documento->tipo_documento_id = $request->tipo_documento_id;
+            $documento->user_id = Auth::id() ?? 1;
+            $documento->formato = $request->formato;
+            $documento->estado = 'Pendiente';
+            $documento->observaciones = $request->observaciones;
     
-        return redirect()->route('client.documentos', $clientId)->with('error', 'Error al subir el documento');
+            if ($request->hasFile('archivo')) {
+                $path = $request->file('archivo')->store('documentos/' . $clientId, 'public');
+                $documento->ruta = 'storage/' . $path;
+            }
+    
+            Log::info('Intentando guardar documento:', $documento->toArray());
+            
+            $documento->save();
+    
+            return response()->json([
+                'message' => 'Documento guardado exitosamente',
+                'documento' => [
+                    'id' => $documento->id,
+                    'tipo_documento_id' => $documento->tipo_documento_id,
+                    'formato' => $documento->formato,
+                    'estado' => $documento->estado,
+                    'created_at' => $documento->created_at,
+                    'ruta' => asset($documento->ruta),
+                    'observaciones' => $documento->observaciones
+                ]
+            ], 201);
+    
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            Log::error('Error de validación:', $e->errors());
+            return response()->json([
+                'message' => 'Error de validación',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            Log::error('Error al guardar documento:', ['error' => $e->getMessage()]);
+            return response()->json([
+                'message' => 'Error al guardar el documento',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
-    public function view($id)
-{
-    $documento = Documento::findOrFail($id);
-    return view('documentos.view', compact('documento'));
-}
+
+    public function getTiposDocumento()
+    {
+        try {
+            $tipos = TipoDocumento::all();
+            Log::info('Tipos de documentos recuperados:', $tipos->toArray());
+            return response()->json($tipos);
+        } catch (\Exception $e) {
+            Log::error('Error al obtener tipos de documentos:', ['error' => $e->getMessage()]);
+            return response()->json(['error' => 'Error al obtener tipos de documentos'], 500);
+        }
+    }
 }

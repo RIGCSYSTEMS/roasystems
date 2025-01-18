@@ -12,17 +12,27 @@ class Documento extends Model
 
 
     protected $fillable = [
-
-        'nombre',
-        'tipo_documento_id',
-        'ruta',
         'client_id',
+        'tipo_documento_id',
         'user_id',
-        'observaciones',
+        'formato',
+        'estado',
+        'ruta',
+        'observaciones'
     ];
 
-    public function client(): BelongsTo
+    public function client()
     {
-        return $this->belongsTo(Client::class, 'client_id');
+        return $this->belongsTo(Client::class);
+    }
+
+    public function tipoDocumento()
+    {
+        return $this->belongsTo(TipoDocumento::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }
