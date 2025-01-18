@@ -1,4 +1,4 @@
-@extends('layouts.app')
+{{-- @extends('layouts.app')
 
 @section('title', 'ROASYSTEMS - Editar Documento')
 
@@ -75,4 +75,4 @@
 <script>
     // Aquí puedes agregar cualquier JavaScript necesario para la funcionalidad de la página
 </script>
-@endpush
+@endpush --}}

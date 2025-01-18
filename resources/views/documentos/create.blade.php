@@ -1,4 +1,4 @@
-@extends('layouts.app')
+{{-- @extends('layouts.app')
 
 @section('title', 'Subir Documentos')
 
@@ -158,4 +158,4 @@
         }
     });
 </script>
-@endsection
+@endsection --}}

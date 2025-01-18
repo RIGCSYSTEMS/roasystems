@@ -37,8 +37,8 @@ Route::resource('expedientes', ExpedienteController::class);
 
 // RUTAS PARA DOCUMENTOS
 Route::resource('documentos', DocumentoController::class);
-Route::get('/client/{id}/documentos', [DocumentoController::class, 'show'])->name('client.documentos');
-Route::post('/client/{id}/documentos/subir', [DocumentoController::class, 'subirDocumento'])->name('documentos.subir');
+Route::get('/client/{clientId}/documentos', [DocumentoController::class, 'index'])->name('client.documentos');
+Route::post('/client/{clientId}/documentos/subir', [DocumentoController::class, 'subirDocumento'])->name('documentos.subir');
 Route::get('/documentos/{id}/view', [DocumentoController::class, 'view'])->name('documentos.view');
 Route::get('/tipos-documentos', [DocumentoController::class, 'getTiposDocumento'])->name('tipos-documentos.index');
 
