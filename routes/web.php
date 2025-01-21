@@ -36,11 +36,11 @@ Route::get('/client/{client}/edit', [ClientController::class, 'edit'])->name('cl
 Route::resource('expedientes', ExpedienteController::class);
 
 // RUTAS PARA DOCUMENTOS
-Route::resource('documentos', DocumentoController::class);
 Route::get('/client/{clientId}/documentos', [DocumentoController::class, 'index'])->name('client.documentos');
-Route::post('/client/{clientId}/documentos/subir', [DocumentoController::class, 'subirDocumento'])->name('documentos.subir');
-Route::get('/documentos/{id}/view', [DocumentoController::class, 'view'])->name('documentos.view');
-Route::get('/tipos-documentos', [DocumentoController::class, 'getTiposDocumento'])->name('tipos-documentos.index');
+Route::get('/client/{clientId}/documentos/list', [DocumentoController::class, 'getDocumentos'])->name('documentos.list');
+Route::post('/documentos', [DocumentoController::class, 'store'])->name('documentos.store');
+Route::put('/documentos/{id}', [DocumentoController::class, 'update'])->name('documentos.update');
+Route::delete('/documentos/{id}', [DocumentoController::class, 'destroy'])->name('documentos.destroy');
 
 // RUTAS PARA HONORARIOS
 Route::post('/expedientes/{expediente}/honorarios', [HonorarioController::class, 'store'])->name('honorarios.store');

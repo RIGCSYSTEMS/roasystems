@@ -19,7 +19,10 @@ import creacion from './components/client/ClientCreacion.vue';
 
 //importaciones documentos client
 import documentolist from './components/client/DocumentoList.vue';
-import documentosview from './components/client/DocumentosViewer.vue';
+import documentoview from './components/client/DocumentoView.vue';
+import documentoedit from './components/client/DocumentoEdit.vue';
+import documentocreate from './components/client/DocumentoCreate.vue';
+import DocumentoIndex from './components/client/DocumentoIndex.vue';
 
 
 const app = createApp({});
@@ -40,7 +43,11 @@ app.component('creacion', creacion);
 
 //app documentos client
 app.component('documento-list', documentolist);
-app.component('documentos-viewer', documentosview);
+app.component('documento-viewer', documentoview);
+app.component('documento-edit', documentoedit);
+app.component('documento-create', documentocreate);
+app.component('documento-index', DocumentoIndex);
+
 
 app.mount('#app');
 
