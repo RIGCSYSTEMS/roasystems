@@ -11,6 +11,11 @@ use Carbon\Carbon;
 
 class ClientController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+  
     public function index()
     {
         $clients = Client::orderBy('id', 'desc')->paginate(30);

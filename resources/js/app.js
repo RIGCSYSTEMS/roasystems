@@ -50,4 +50,3 @@ app.component('documento-index', DocumentoIndex);
 
 
 app.mount('#app');
-
