@@ -1,55 +1,78 @@
 <template>
-  <div class="mt-4">
-    <h2>Subir Nuevo Documento</h2>
-    <form @submit.prevent="subirDocumento" enctype="multipart/form-data">
-      <div class="mb-3">
-        <label for="tipo_documento_id" class="form-label">Tipo de Documento</label>
-        <select v-model="nuevoDocumento.tipo_documento_id" class="form-select" required>
-          <option value="">Seleccione un tipo</option>
-          <option v-for="tipo in tiposDocumento" 
-                  :key="tipo.id" 
-                  :value="tipo.id">
-            {{ tipo.nombre }}
-          </option>
-        </select>
-        <div v-if="debug">
-          <small class="text-muted">Tipos cargados: {{ tiposDocumento.length }}</small>
+  <div class="card custom-card">
+    <div class="card-header bg-gradient">
+      <h2 class="card-title mb-0 text-white">
+        <i class="bi bi-plus-circle me-2"></i>Subir Nuevo Documento
+      </h2>
+    </div>
+    <div class="card-body">
+      <form @submit.prevent="subirDocumento" enctype="multipart/form-data">
+        <div class="mb-3">
+          <label for="tipo_documento_id" class="form-label">
+            <i class="bi bi-tag me-2"></i>Tipo de Documento
+          </label>
+          <select 
+            v-model="nuevoDocumento.tipo_documento_id" 
+            class="form-select custom-select" 
+            required
+          >
+            <option value="">Seleccione un tipo</option>
+            <option 
+              v-for="tipo in tiposDocumento" 
+              :key="tipo.id" 
+              :value="tipo.id"
+            >
+              {{ tipo.nombre }}
+            </option>
+          </select>
         </div>
-      </div>
-      
-      <div class="mb-3">
-        <label for="formato" class="form-label">Formato del Documento</label>
-        <select v-model="nuevoDocumento.formato" class="form-select" required>
-          <option value="">Seleccione un formato</option>
-          <option value="PDF">PDF</option>
-          <option value="IMAGEN">Imagen</option>
-        </select>
-      </div>
-      
-      <div class="mb-3">
-        <label for="archivo" class="form-label">Archivo</label>
-        <input 
-          type="file" 
-          @change="onFileChange" 
-          class="form-control" 
-          required 
-          accept=".pdf,.jpg,.jpeg,.png"
-        >
-      </div>
-      
-      <div class="mb-3">
-        <label for="observaciones" class="form-label">Observaciones</label>
-        <textarea 
-          v-model="nuevoDocumento.observaciones" 
-          class="form-control" 
-          rows="3"
-        ></textarea>
-      </div>
-      
-      <button type="submit" class="btn btn-primary" :disabled="procesando">
-        {{ procesando ? 'Subiendo...' : 'Subir Documento' }}
-      </button>
-    </form>
+        
+        <div class="mb-3">
+          <label for="formato" class="form-label">
+            <i class="bi bi-file-earmark me-2"></i>Formato del Documento
+          </label>
+          <select 
+            v-model="nuevoDocumento.formato" 
+            class="form-select custom-select" 
+            required
+          >
+            <option value="">Seleccione un formato</option>
+            <option value="PDF">PDF</option>
+            <option value="IMAGEN">Imagen</option>
+          </select>
+        </div>
+        
+        <div class="mb-3">
+          <label for="archivo" class="form-label">
+            <i class="bi bi-upload me-2"></i>Archivo
+          </label>
+          <input 
+            type="file" 
+            @change="onFileChange" 
+            class="form-control custom-file-input" 
+            required 
+            accept=".pdf,.jpg,.jpeg,.png"
+          >
+        </div>
+        
+        <div class="mb-3">
+          <label for="observaciones" class="form-label">
+            <i class="bi bi-chat-text me-2"></i>Observaciones
+          </label>
+          <textarea 
+            v-model="nuevoDocumento.observaciones" 
+            class="form-control custom-textarea" 
+            rows="3"
+          ></textarea>
+        </div>
+        
+        <button type="submit" class="btn btn-primary w-100" :disabled="procesando">
+          <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true" v-if="procesando"></span>
+          <i class="bi bi-cloud-upload me-2" v-else></i>
+          {{ procesando ? 'Subiendo...' : 'Subir Documento' }}
+        </button>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -71,7 +94,7 @@ export default {
         archivo: null
       },
       procesando: false,
-      debug: true // Activar para depuración
+      debug: true
     }
   },
   mounted() {
@@ -79,10 +102,10 @@ export default {
   },
   methods: {
     cargarTiposDocumento() {
-      console.log('Cargando tipos de documento...'); // Debug
+      console.log('Cargando tipos de documento...');
       axios.get('/tipos-documentos')
         .then(response => {
-          console.log('Tipos de documento recibidos:', response.data); // Debug
+          console.log('Tipos de documento recibidos:', response.data);
           this.tiposDocumento = response.data;
         })
         .catch(error => {
@@ -116,7 +139,6 @@ export default {
             observaciones: '',
             archivo: null
           };
-          // Limpiar el input de archivo
           const fileInput = this.$el.querySelector('input[type="file"]');
           if (fileInput) fileInput.value = '';
           alert('Documento subido correctamente');
@@ -131,3 +153,69 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.custom-card {
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.bg-gradient {
+  background: linear-gradient(90deg, #1e3c72 0%, #2a5298 100%);
+  padding: 1.5rem;
+}
+
+.form-label {
+  font-weight: 500;
+  color: #495057;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.custom-select,
+.custom-file-input,
+.custom-textarea {
+  border-radius: 8px;
+  border: 1px solid #ced4da;
+  padding: 0.75rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.custom-select:focus,
+.custom-file-input:focus,
+.custom-textarea:focus {
+  border-color: #2a5298;
+  box-shadow: 0 0 0 0.2rem rgba(42, 82, 152, 0.25);
+}
+
+.btn-primary {
+  background: linear-gradient(90deg, #1e3c72 0%, #2a5298 100%);
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(42, 82, 152, 0.35);
+}
+
+.btn-primary:disabled {
+  background: #6c757d;
+  transform: none;
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.bi {
+  font-size: 1.1rem;
+}
+</style>

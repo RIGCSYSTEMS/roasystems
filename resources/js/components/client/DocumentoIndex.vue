@@ -1,18 +1,29 @@
 <template>
-  <div class="container">
-    <h1 class="mb-4">Documentos de {{ clientName }}</h1>
+  <div class="container-fluid py-4">
+    <div class="custom-header mb-4">
+      <h1 class="text-white mb-0">
+        <i class="bi bi-folder me-2"></i>
+        Documentos de {{ clientName }}
+      </h1>
+    </div>
     
-    <documento-create 
-      :client-id="clientId"
-      @documento-creado="cargarDocumentos"
-    ></documento-create>
-    
-    <documento-list 
-      :documentos="documentos" 
-      @editar-documento="editarDocumento"
-      @eliminar-documento="eliminarDocumento"
-      @ver-documento="verDocumento"
-    ></documento-list>
+    <div class="row g-4">
+      <div class="col-md-6">
+        <documento-create 
+          :client-id="clientId"
+          @documento-creado="cargarDocumentos"
+        ></documento-create>
+      </div>
+      
+      <div class="col-md-6">
+        <documento-list 
+          :documentos="documentos" 
+          @editar-documento="editarDocumento"
+          @eliminar-documento="eliminarDocumento"
+          @ver-documento="verDocumento"
+        ></documento-list>
+      </div>
+    </div>
     
     <documento-edit 
       v-if="documentoEditando"
@@ -91,3 +102,37 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.custom-header {
+  background: linear-gradient(90deg, #1e3c72 0%, #2a5298 100%);
+  padding: 2rem;
+  border-radius: 15px;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.container-fluid {
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.row {
+  margin-right: -0.5rem;
+  margin-left: -0.5rem;
+}
+
+.col-md-6 {
+  padding-right: 0.5rem;
+  padding-left: 0.5rem;
+}
+
+.bi {
+  font-size: 1.5rem;
+}
+</style>
