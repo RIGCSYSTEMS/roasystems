@@ -28,11 +28,12 @@ class Documento extends Model
 
     public function tipoDocumento()
     {
-        return $this->belongsTo(TipoDocumento::class);
+        return $this->belongsTo(TipoDocumento::class, 'tipo_documento_id');
     }
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
+    
 }

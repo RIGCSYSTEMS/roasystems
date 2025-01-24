@@ -337,11 +337,11 @@ export default {
 }
 
 .profile-header {
-  background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+  background: linear-gradient(135deg, #3b0866 0%, #964ad4 100%);
   padding: 2rem;
-  border-radius: 1rem;
+  border-radius: 15px;
   margin-bottom: 2rem;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .header-content {

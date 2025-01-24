@@ -29,8 +29,8 @@ return new class extends Migration
                 ->on('users')
                 ->onDelete('cascade');        
             $table->enum('formato', ['PDF', 'IMAGEN']);
-            $table->enum('estado', ['Pendiente', 'En Revisión', 'Aceptado', 'Rechazado', 'Obsoleto'])
-            ->default('Pendiente'); // Estado inicial por defecto
+            $table->enum('estado', ['En Revisión', 'Aceptado', 'Rechazado'])
+            ->default('En revision'); // Estado inicial por defecto
             $table->string('ruta')->nullable();
             $table->string('observaciones')->nullable();
 

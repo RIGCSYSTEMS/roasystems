@@ -6,12 +6,13 @@ use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvid
 use Illuminate\Support\Facades\Gate;
 use App\Models\Documento;
 use App\Models\User;
+use App\Policies\DocumentoPolicy;
 
 
 class AppServiceProvider extends ServiceProvider
 {
     protected $policies = [
-        //
+        Documento::class => DocumentoPolicy::class,
     ];
     /**
      * Register any application services.

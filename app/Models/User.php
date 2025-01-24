@@ -20,6 +20,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -43,5 +44,14 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    public function canManageAcceptedDocuments(): bool
+    {
+        return in_array($this->role, ['ADMIN', 'DIRECTOR', 'ABOGADO']);
+    }
+
+    public function isCliente(): bool
+    {
+        return $this->role === 'CLIENTE';
     }
 }

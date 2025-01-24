@@ -1,10 +1,20 @@
 <template>
   <div class="container-fluid py-4">
     <div class="custom-header mb-4">
-      <h1 class="text-white mb-0">
-        <i class="bi bi-folder me-2"></i>
-        Documentos de {{ clientName }}
-      </h1>
+      <div class="d-flex justify-content-between align-items-center">
+        <h1 class="text-white mb-0">
+          <i class="bi bi-folder me-2"></i>
+          Documentos de {{ clientName }}
+        </h1>
+        <div>
+          <a :href="`/client/${clientId}`" class="btn btn-light me-2">
+            <i class="bi bi-person me-2"></i>Volver al Cliente
+          </a>
+          <a href="/client" class="btn btn-light">
+            <i class="bi bi-people me-2"></i>Lista de Clientes
+          </a>
+        </div>
+      </div>
     </div>
     
     <div class="row g-4">
@@ -36,6 +46,7 @@
       v-if="documentoVisualizando"
       :documento="documentoVisualizando"
       @cerrar-vista="cerrarVistaDocumento"
+      @estado-actualizado="actualizarEstadoDocumento"
     ></documento-viewer>
   </div>
 </template>
@@ -98,6 +109,12 @@ export default {
     },
     cerrarVistaDocumento() {
       this.documentoVisualizando = null;
+    },
+    actualizarEstadoDocumento(documentoActualizado) {
+      const index = this.documentos.findIndex(doc => doc.id === documentoActualizado.id);
+      if (index !== -1) {
+        this.documentos[index].estado = documentoActualizado.estado;
+      }
     }
   }
 }
@@ -105,7 +122,7 @@ export default {
 
 <style scoped>
 .custom-header {
-  background: linear-gradient(90deg, #1e3c72 0%, #2a5298 100%);
+  background: linear-gradient(135deg, #3b0866 0%, #964ad4 100%);
   padding: 2rem;
   border-radius: 15px;
   margin-bottom: 2rem;
@@ -134,5 +151,18 @@ h1 {
 
 .bi {
   font-size: 1.5rem;
+}
+
+.btn-light {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.btn-light:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
 }
 </style>

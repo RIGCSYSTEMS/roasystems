@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\File;
 use Illuminate\Routing\Controller;
 
-
 class DocumentoController extends Controller
 {
     public function __construct()
@@ -51,8 +50,6 @@ class DocumentoController extends Controller
     public function store(Request $request)
     {
         try {
-            Log::info('Iniciando proceso de almacenamiento de documento');
-            
             $validated = $request->validate([
                 'tipo_documento_id' => 'required|exists:tipos_documentos,id',
                 'formato' => 'required|in:PDF,IMAGEN',
@@ -61,32 +58,20 @@ class DocumentoController extends Controller
                 'client_id' => 'required|exists:clients,id'
             ]);
     
-            if (!$request->hasFile('archivo')) {
-                throw new \Exception('No se encontró el archivo en la solicitud');
-            }
-    
             $path = $request->file('archivo')->store(
                 'documentos/' . $request->client_id,
                 'local'
             );
     
-            if (!$path) {
-                throw new \Exception('No se pudo guardar el archivo');
-            }
-    
             $documento = new Documento();
             $documento->tipo_documento_id = $request->tipo_documento_id;
             $documento->client_id = $request->client_id;
-            $documento->user_id = Auth::id() ?? 1;
+            $documento->user_id = Auth::id();
             $documento->formato = $request->formato;
-            $documento->estado = 'Pendiente';
+            $documento->estado = 'En Revisión';
             $documento->ruta = $path;
             $documento->observaciones = $request->observaciones;
-            
-            if (!$documento->save()) {
-                Storage::disk('local')->delete($path);
-                throw new \Exception('No se pudo guardar la información del documento en la base de datos');
-            }
+            $documento->save();
     
             return response()->json([
                 'success' => true,
@@ -96,7 +81,6 @@ class DocumentoController extends Controller
     
         } catch (\Exception $e) {
             Log::error('Error al procesar documento: ' . $e->getMessage());
-            Log::error('Stack trace: ' . $e->getTraceAsString());
             return response()->json([
                 'success' => false,
                 'mensaje' => 'Error al procesar el documento: ' . $e->getMessage()
@@ -106,6 +90,23 @@ class DocumentoController extends Controller
     
     public function update(Request $request, $id)
     {
+        $documento = Documento::findOrFail($id);
+        $user = Auth::user();
+
+        if ($documento->estado === 'Aceptado' && !in_array($user->role, ['ADMIN', 'DIRECTOR', 'ABOGADO'])) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No tiene permiso para modificar documentos aceptados'
+            ], 403);
+        }
+
+        if ($user->role === 'CLIENTE' && $documento->estado === 'Aceptado') {
+            return response()->json([
+                'success' => false,
+                'message' => 'No puede modificar documentos aceptados'
+            ], 403);
+        }
+
         $request->validate([
             'tipo_documento_id' => 'required|exists:tipos_documentos,id',
             'formato' => 'required|in:PDF,IMAGEN',
@@ -114,8 +115,6 @@ class DocumentoController extends Controller
         ]);
 
         try {
-            $documento = Documento::findOrFail($id);
-
             if ($request->hasFile('archivo')) {
                 if ($documento->ruta) {
                     Storage::disk('local')->delete($documento->ruta);
@@ -148,6 +147,14 @@ class DocumentoController extends Controller
     {
         try {
             $documento = Documento::findOrFail($id);
+            $user = Auth::user();
+
+            if ($documento->estado === 'Aceptado' && !in_array($user->role, ['ADMIN', 'DIRECTOR', 'ABOGADO'])) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No tiene permiso para eliminar documentos aceptados'
+                ], 403);
+            }
             
             if ($documento->ruta) {
                 Storage::disk('local')->delete($documento->ruta);
@@ -163,6 +170,24 @@ class DocumentoController extends Controller
                 'message' => 'Error al eliminar el documento'
             ], 500);
         }
+    }
+
+    public function actualizarEstado(Request $request, $id)
+    {
+        if (!Auth::check()) {
+            return response()->json(['error' => 'No autenticado'], 401);
+        }
+
+        $user = Auth::user();
+        if (!$user || !in_array($user->role, ['ADMIN', 'DIRECTOR', 'ABOGADO'])) {
+            return response()->json(['error' => 'No autorizado'], 403);
+        }
+
+        $documento = Documento::findOrFail($id);
+        $documento->estado = $request->estado;
+        $documento->save();
+
+        return response()->json(['success' => true]);
     }
 
     public function getTiposDocumento()

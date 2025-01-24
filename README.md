@@ -71,3 +71,10 @@ Para instalar las paqueterías de Vue, debes ejecutar el siguiente comando en tu
 npm install --save-dev @vitejs/plugin-vue
 npm install
 npm install vue
+
+
+instalacion de autenticacion.
+composer require laravel/ui
+php artisan ui vue --auth
+npm install
+npm run dev

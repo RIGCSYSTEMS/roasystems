@@ -46,6 +46,25 @@
             </h6>
             <p class="bg-light p-3 rounded">{{ documento.observaciones }}</p>
           </div>
+
+          <div class="mt-4">
+            <h6 class="mb-2">
+              <i class="bi bi-check-circle me-2"></i>Estado del Documento:
+            </h6>
+            <select 
+              v-if="puedeValidarDocumentos"
+              v-model="documentoEstado" 
+              class="form-select" 
+              @change="actualizarEstado"
+            >
+              <option value="Pendiente">Pendiente</option>
+              <option value="En Revisión">En Revisión</option>
+              <option value="Aceptado">Aceptado</option>
+              <option value="Rechazado">Rechazado</option>
+              <option value="Obsoleto">Obsoleto</option>
+            </select>
+            <p v-else class="form-control-plaintext">{{ documentoEstado }}</p>
+          </div>
         </div>
         <div class="modal-footer">
           <a 
@@ -75,9 +94,46 @@ export default {
       required: true
     }
   },
+  data() {
+    return {
+      documentoEstado: this.documento.estado,
+      userRole: null
+    }
+  },
+  computed: {
+    puedeValidarDocumentos() {
+      return ['ADMIN', 'DIRECTOR', 'ABOGADO'].includes(this.userRole);
+    }
+  },
+  mounted() {
+    this.getUserRole();
+  },
   methods: {
     formatDate(date) {
       return new Date(date).toLocaleString();
+    },
+    getUserRole() {
+      axios.get('/user/role').then(response => {
+        this.userRole = response.data.role;
+      });
+    },
+    actualizarEstado() {
+      if (!this.puedeValidarDocumentos) return;
+      
+      axios.put(`/documentos/${this.documento.id}/estado`, {
+        estado: this.documentoEstado
+      })
+      .then(response => {
+        this.$emit('estado-actualizado', {
+          id: this.documento.id,
+          estado: this.documentoEstado
+        });
+      })
+      .catch(error => {
+        console.error('Error al actualizar el estado:', error);
+        // Revertir el cambio si hay error
+        this.documentoEstado = this.documento.estado;
+      });
     }
   }
 }

@@ -93,8 +93,7 @@ export default {
         observaciones: '',
         archivo: null
       },
-      procesando: false,
-      debug: true
+      procesando: false
     }
   },
   mounted() {
@@ -102,10 +101,8 @@ export default {
   },
   methods: {
     cargarTiposDocumento() {
-      console.log('Cargando tipos de documento...');
       axios.get('/tipos-documentos')
         .then(response => {
-          console.log('Tipos de documento recibidos:', response.data);
           this.tiposDocumento = response.data;
         })
         .catch(error => {
@@ -192,7 +189,7 @@ export default {
 }
 
 .btn-primary {
-  background: linear-gradient(90deg, #1e3c72 0%, #2a5298 100%);
+  background: linear-gradient(135deg, #3b0866 0%, #964ad4 100%);
   border: none;
   border-radius: 8px;
   padding: 0.75rem 1.5rem;
@@ -211,8 +208,11 @@ export default {
 }
 
 .card-title {
-  font-size: 1.25rem;
-  font-weight: 600;
+  background: linear-gradient(135deg, #3b0866 0%, #964ad4 100%);
+  padding: 1.5rem;
+  border-radius: 15px;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .bi {

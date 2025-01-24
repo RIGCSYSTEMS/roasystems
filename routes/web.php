@@ -38,6 +38,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/tipos-documentos', [TipoDocumentoController::class, 'index'])->name('tipos-documentos.index');
     Route::get('/documentos/{id}/descargar', [DocumentoController::class, 'descargar'])->name('documentos.descargar');
     Route::get('/documentos/{id}/visualizar', [DocumentoController::class, 'visualizar'])->name('documentos.visualizar');
+    Route::put('/documentos/{id}/estado', [DocumentoController::class, 'actualizarEstado']);
+    Route::get('/user/role', function () {
+        return response()->json(['role' => Auth::user()->role]);
+    })->middleware('auth');
+    
 
     // Rutas para honorarios
     Route::post('/expedientes/{expediente}/honorarios', [HonorarioController::class, 'store'])->name('honorarios.store');
