@@ -33,6 +33,12 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    // Constantes para los roles
+    const ROLE_ADMIN = 'ADMIN';
+    const ROLE_DIRECTOR = 'DIRECTOR';
+    const ROLE_ABOGADO = 'ABOGADO';
+    const ROLE_CLIENTE = 'CLIENTE';
+
     /**
      * Get the attributes that should be cast.
      *
@@ -50,8 +56,31 @@ class User extends Authenticatable
         return in_array($this->role, ['ADMIN', 'DIRECTOR', 'ABOGADO']);
     }
 
-    public function isCliente(): bool
+    public function isAdmin()
+    {
+        return $this->role === 'ADMIN';
+    }
+
+    public function isDirector()
+    {
+        return $this->role === 'DIRECTOR';
+    }
+
+    public function isAbogado()
+    {
+        return $this->role === 'ABOGADO';
+    }
+
+    public function isCliente()
     {
         return $this->role === 'CLIENTE';
     }
+    /**
+     * Verificar si el usuario tiene un rol específico
+     */
+    public function hasRole($role)
+    {
+        return $this->role === $role;
+    }
+
 }
