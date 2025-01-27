@@ -56,7 +56,8 @@ protected $middlewareGroups = [
         'signed' => \App\Http\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'role' => \App\Http\Middleware\CheckRole::class, 
+        'role' => \App\Http\Middleware\CheckUserRole::class,
+        'roleGlobal' => \App\Http\Middleware\CheckUserRoleGlobal::class,
         
     ];
 }

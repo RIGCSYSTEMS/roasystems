@@ -14,8 +14,15 @@ use App\Http\Controllers\TipoDocumentoController;
 // Ruta principal
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
+
+
+
 // Rutas de autenticación
 Auth::routes();
+Route::get('prueba', function(){
+    return"hola";
+});
+
 
 // Rutas protegidas por autenticación
 Route::middleware(['auth'])->group(function () {
@@ -27,7 +34,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // Rutas para clientes y personal del despacho
-    Route::middleware(['role:CLIENTE,ABOGADO,DIRECTOR,ADMIN'])->group(function () {
+    Route::middleware(['roleGlobal'])->group(function () {
         Route::resource('client', ClientController::class);
         Route::get('/client/lista/getDataClientes', [ClientController::class, 'getDataClientes'])->name('client.getDataClientes');
         Route::post('/client/{client}/familia', [ClientController::class, 'addFamiliar'])->name('client.addFamiliar');
@@ -37,7 +44,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // Rutas solo para abogados, directores y administradores
-    Route::middleware(['role:ABOGADO,DIRECTOR,ADMIN'])->group(function () {
+    Route::middleware(['role'])->group(function () {
         Route::resource('expedientes', ExpedienteController::class);
 
         Route::post('/documentos/{id}/validar', [DocumentoController::class, 'validarDocumento'])->name('documentos.validar');
@@ -62,3 +69,12 @@ Route::middleware(['auth'])->group(function () {
 
 // Ruta de inicio después de autenticación
 Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+
+
+Route::middleware('role:ADMIN')->group(function () {
+    Route::get('/admin', function () {
+        return view('client.index');
+    });
+});
+

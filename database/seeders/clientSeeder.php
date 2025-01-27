@@ -35,7 +35,7 @@ class clientSeeder extends Seeder
         $client->estatus = 'Activo';
         $client->direccion = 'Calle 123';
         $client->telefono = '12345678';
-        $client->email = 'admin@example.com';
+        $client->email = 'rigc.ivan@gmail.com';
         $client->profesion = 'Ingeniero';
         $client->lenguaje = 'Español';
         $client->permiso_de_trabajo = 'Permiso 1';
@@ -44,6 +44,90 @@ class clientSeeder extends Seeder
         
 
          $client->save();
+
+         $client = new client();
+
+         $client->nombre_de_cliente = 'Ivan director';
+         $client->familia = [
+             ['nombre' => 'diana', 'parentesco' => 'hermana'],
+             ['nombre' => 'santiago', 'parentesco' => 'sobrino'],
+             ['nombre' => 'camila', 'parentesco' => 'sobrina']
+         ];
+         $client->fecha_de_nacimiento = '2021-09-26';
+         $client->genero = 'Masculino';
+         $client->estado_civil = 'Soltero';
+         $client->pais = 'Mexico';
+         $client->llegada_a_canada = '2020-01-23';
+         $client->punto_de_acceso = 'Aeropuerto';
+         $client->pasaporte = '12345678';
+         $client->estatus = 'Activo';
+         $client->direccion = 'Calle 123';
+         $client->telefono = '12345678';
+         $client->email = 'rigc.ivan@director.com';
+         $client->profesion = 'Ingeniero';
+         $client->lenguaje = 'Español';
+         $client->permiso_de_trabajo = 'Permiso 1';
+         $client->iuc = 'IUC 1';
+         $client->observaciones = 'Observaciones 1';
+         
+ 
+          $client->save();
+
+          $client = new client();
+
+          $client->nombre_de_cliente = 'Ivan abogado';
+          $client->familia = [
+              ['nombre' => 'diana', 'parentesco' => 'hermana'],
+              ['nombre' => 'santiago', 'parentesco' => 'sobrino'],
+              ['nombre' => 'camila', 'parentesco' => 'sobrina']
+          ];
+          $client->fecha_de_nacimiento = '2021-09-26';
+          $client->genero = 'Masculino';
+          $client->estado_civil = 'Soltero';
+          $client->pais = 'Mexico';
+          $client->llegada_a_canada = '2020-01-23';
+          $client->punto_de_acceso = 'Aeropuerto';
+          $client->pasaporte = '12345678';
+          $client->estatus = 'Activo';
+          $client->direccion = 'Calle 123';
+          $client->telefono = '12345678';
+          $client->email = 'rigc.ivan@abogado.com';
+          $client->profesion = 'Ingeniero';
+          $client->lenguaje = 'Español';
+          $client->permiso_de_trabajo = 'Permiso 1';
+          $client->iuc = 'IUC 1';
+          $client->observaciones = 'Observaciones 1';
+          
+  
+           $client->save();
+
+           $client = new client();
+
+           $client->nombre_de_cliente = 'Ivan cliente';
+           $client->familia = [
+               ['nombre' => 'diana', 'parentesco' => 'hermana'],
+               ['nombre' => 'santiago', 'parentesco' => 'sobrino'],
+               ['nombre' => 'camila', 'parentesco' => 'sobrina']
+           ];
+           $client->fecha_de_nacimiento = '2021-09-26';
+           $client->genero = 'Masculino';
+           $client->estado_civil = 'Soltero';
+           $client->pais = 'Mexico';
+           $client->llegada_a_canada = '2020-01-23';
+           $client->punto_de_acceso = 'Aeropuerto';
+           $client->pasaporte = '12345678';
+           $client->estatus = 'Activo';
+           $client->direccion = 'Calle 123';
+           $client->telefono = '12345678';
+           $client->email = 'rigc.ivan@cliente.com';
+           $client->profesion = 'Ingeniero';
+           $client->lenguaje = 'Español';
+           $client->permiso_de_trabajo = 'Permiso 1';
+           $client->iuc = 'IUC 1';
+           $client->observaciones = 'Observaciones 1';
+           
+   
+            $client->save();
 
         client::factory(10000)->create();
 
