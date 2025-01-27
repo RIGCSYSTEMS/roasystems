@@ -5,7 +5,7 @@ return [
         'Inicio' => '/',
         'Panel de Control' => '/dashboard',
         'Clientes' => '/client',
-        'Expedientes' => '/client',
+        'Expedientes' => '/searchClient',
         'Agenda' => '/resident',
         'Bitacora' => '/call',
         'Tareas' => '/call',

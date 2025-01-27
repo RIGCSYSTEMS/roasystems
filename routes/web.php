@@ -40,11 +40,20 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/client/{client}/familia', [ClientController::class, 'addFamiliar'])->name('client.addFamiliar');
         Route::delete('/client/{client}/familia/{index}', [ClientController::class, 'removeFamiliar'])->name('client.removeFamiliar');
 
+
         Route::resource('documentos', DocumentoController::class);
     });
 
     // Rutas solo para abogados, directores y administradores
     Route::middleware(['role'])->group(function () {
+
+        //personal del despacho
+        route::get('searchClient', [ClientController::class, 'index'])->name('searchClient');
+        
+
+
+
+
         Route::resource('expedientes', ExpedienteController::class);
 
         Route::post('/documentos/{id}/validar', [DocumentoController::class, 'validarDocumento'])->name('documentos.validar');

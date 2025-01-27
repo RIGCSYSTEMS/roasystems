@@ -19,7 +19,7 @@ class ClientController extends Controller
     public function index()
     {
         $clients = Client::orderBy('id', 'desc')->paginate(30);
-        return view('client.index', compact('clients'));
+        return view('search.searchClient', compact('clients'));
     }
 
     public function getDataClientes(Request $request)
@@ -227,7 +227,7 @@ class ClientController extends Controller
     {
         $client = Client::findOrFail($clientId);
         $client->delete();
-        return redirect()->route('client.index')->with('success', 'Cliente eliminado correctamente');
+        return redirect()->route('search.searchClient')->with('success', 'Cliente eliminado correctamente');
     }
 
     public function addFamiliar(Request $request, Client $client)
