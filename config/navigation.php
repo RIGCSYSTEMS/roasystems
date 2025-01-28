@@ -4,8 +4,8 @@ return [
     'main' => [
         'Inicio' => '/',
         'Panel de Control' => '/dashboard',
-        'Clientes' => '/client',
-        'Expedientes' => '/searchClient',
+        'Clientes' => '/searchClient',
+        'Expedientes' => '/Client',
         'Agenda' => '/resident',
         'Bitacora' => '/call',
         'Tareas' => '/call',
