@@ -10,6 +10,8 @@ use App\Http\Controllers\HonorarioController;
 use App\Http\Controllers\AudienciaController;
 use App\Http\Controllers\BitacoraController;
 use App\Http\Controllers\TipoDocumentoController;
+use App\Http\Controllers\SearchClientController;
+
 
 // Ruta principal
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -27,8 +29,7 @@ Route::get('prueba', function(){
 // Rutas protegidas por autenticación
 Route::middleware(['auth'])->group(function () {
     // Rutas accesibles para todos los usuarios autenticados
-    Route::get('/documentos/{id}/descargar', [DocumentoController::class, 'descargar'])->name('documentos.descargar');
-    Route::get('/documentos/{id}/visualizar', [DocumentoController::class, 'visualizar'])->name('documentos.visualizar');
+
     Route::get('/user/role', function () {
         return response()->json(['role' => Auth::user()->role]);
     });
@@ -36,11 +37,16 @@ Route::middleware(['auth'])->group(function () {
     // Rutas para clientes y personal del despacho
     Route::middleware(['roleGlobal'])->group(function () {
         Route::resource('client', ClientController::class);
-        Route::get('/client/lista/getDataClientes', [ClientController::class, 'getDataClientes'])->name('client.getDataClientes');
+    
         Route::post('/client/{client}/familia', [ClientController::class, 'addFamiliar'])->name('client.addFamiliar');
         Route::delete('/client/{client}/familia/{index}', [ClientController::class, 'removeFamiliar'])->name('client.removeFamiliar');
+        Route::post('/documentos/{id}/validar', [DocumentoController::class, 'validarDocumento'])->name('documentos.validar');
+        Route::put('/documentos/{id}/estado', [DocumentoController::class, 'actualizarEstado'])->name('documentos.actualizarEstado');
+        Route::get('/tipos-documentos', [TipoDocumentoController::class, 'index'])->name('tipos-documentos.index');
+        Route::get('/documentos/{id}/descargar', [DocumentoController::class, 'descargar'])->name('documentos.descargar');
+        Route::get('/documentos/{id}/visualizar', [DocumentoController::class, 'visualizar'])->name('documentos.visualizar');
 
-
+ 
         Route::resource('documentos', DocumentoController::class);
     });
 
@@ -48,7 +54,8 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['role'])->group(function () {
 
         //personal del despacho
-        route::get('searchClient', [ClientController::class, 'index'])->name('searchClient');
+        Route::get('searchClient',[SearchClientController::class, 'index'])->name('searchClient.index');
+        Route::get('/searchClient/lista/getDataClientes', [SearchClientController::class, 'getDataClientes'])->name('searchClient.getDataClientes');
         
 
 
@@ -56,9 +63,7 @@ Route::middleware(['auth'])->group(function () {
 
         Route::resource('expedientes', ExpedienteController::class);
 
-        Route::post('/documentos/{id}/validar', [DocumentoController::class, 'validarDocumento'])->name('documentos.validar');
-        Route::put('/documentos/{id}/estado', [DocumentoController::class, 'actualizarEstado'])->name('documentos.actualizarEstado');
-        Route::get('/tipos-documentos', [TipoDocumentoController::class, 'index'])->name('tipos-documentos.index');
+
 
         Route::post('/expedientes/{expediente}/honorarios', [HonorarioController::class, 'store'])->name('honorarios.store');
         Route::put('/honorarios/{honorario}', [HonorarioController::class, 'update'])->name('honorarios.update');
@@ -83,7 +88,7 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Route::middleware('role:ADMIN')->group(function () {
     Route::get('/admin', function () {
-        return view('client.index');
+        return view('search.searchClient');
     });
 });
 

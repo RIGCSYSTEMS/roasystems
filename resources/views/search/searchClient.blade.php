@@ -29,7 +29,7 @@
         <div class="col-12">
             <div class="table-responsive position-relative">
                 <div id="logo-background" class="logo-background"></div>
-                <table id="clientes" class="table table-bordered table-striped w-100">
+                <table id="searchClient" class="table table-bordered table-striped w-100">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -63,15 +63,15 @@ $(document).ready(function() {
     let table;
 
     function initDataTable() {
-        if ($.fn.DataTable.isDataTable('#clientes')) {
-            $('#clientes').DataTable().destroy();
+        if ($.fn.DataTable.isDataTable('#searchClient')) {
+            $('#searchClient').DataTable().destroy();
         }
         
-        table = $('#clientes').DataTable({
+        table = $('#searchClient').DataTable({
             processing: true,
             serverSide: true,
             ajax: {
-                url: "{{ route('client.getDataClientes') }}",
+                url: "{{ route('searchClient.getDataClientes') }}",
                 data: function (d) {
                     d.show_all = showAll ? 1 : 0;
                 },
@@ -107,7 +107,7 @@ $(document).ready(function() {
             if (!$(e.target).is('a') && !$(e.target).is('button')) {
                 var data = table.row(this).data();
                 if (data) {
-                    window.location.href = '/client/' + data.id;
+                    window.location.href = '/searchClient/' + data.id;
                 }
             }
         });

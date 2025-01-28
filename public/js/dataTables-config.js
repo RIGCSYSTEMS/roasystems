@@ -1,18 +1,18 @@
 $(document).ready(function() {
     // Verifica si la tabla ya ha sido inicializada
-    if ($.fn.DataTable.isDataTable('#clientes')) {
+    if ($.fn.DataTable.isDataTable('#searchClient')) {
         // Si ya está inicializada, destrúyela primero
-        $('#clientes').DataTable().destroy();
+        $('#searchClient').DataTable().destroy();
     }
 
-    var table = $('#clientes').DataTable({
+    var table = $('#searchClient').DataTable({
         processing: true,
         serverSide: true,
         responsive: true,
         pageLength: 25,
         stateSave: true,
         ajax: {
-            url: "/client/lista/getDataClientes",
+            url: "/searchClient/lista/getDataClientes",
             type: 'GET',
             data: function(d) {
                 d.fechas = $("#fechas").val();
@@ -29,7 +29,7 @@ $(document).ready(function() {
                 }
             },
             { data: 'telefono', name: 'telefono' },
-            { data: 'correo', name: 'email' },
+            { data: 'email', name: 'email' },
             { data: 'direccion', name: 'direccion' },
             { data: 'pais', name: 'pais' },
             { data: 'estatus', name: 'estatus' },
