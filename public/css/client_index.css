@@ -101,7 +101,7 @@ transform: translateY(-2px);
 box-shadow: 0 6px 20px rgba(59,130,246,0.2);
 }
 
-.btn-editar {
+/* .btn-editar {
 background-color: #8b5cf6 !important;
 color: white !important;
 }
@@ -111,7 +111,7 @@ background-color: #ab88e9 !important;
 color: white !important;
 transform: translateY(-2px);
 box-shadow: 0 6px 20px rgba(139,92,246,0.2);
-}
+} */
 
 .btn-eliminar {
 background-color: #a70707 !important;

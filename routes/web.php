@@ -36,15 +36,24 @@ Route::middleware(['auth'])->group(function () {
 
     // Rutas para clientes y personal del despacho
     Route::middleware(['roleGlobal'])->group(function () {
+        
+        //clientes
         Route::resource('client', ClientController::class);
-    
         Route::post('/client/{client}/familia', [ClientController::class, 'addFamiliar'])->name('client.addFamiliar');
         Route::delete('/client/{client}/familia/{index}', [ClientController::class, 'removeFamiliar'])->name('client.removeFamiliar');
+
+        //documentos
         Route::post('/documentos/{id}/validar', [DocumentoController::class, 'validarDocumento'])->name('documentos.validar');
         Route::put('/documentos/{id}/estado', [DocumentoController::class, 'actualizarEstado'])->name('documentos.actualizarEstado');
         Route::get('/tipos-documentos', [TipoDocumentoController::class, 'index'])->name('tipos-documentos.index');
         Route::get('/documentos/{id}/descargar', [DocumentoController::class, 'descargar'])->name('documentos.descargar');
         Route::get('/documentos/{id}/visualizar', [DocumentoController::class, 'visualizar'])->name('documentos.visualizar');
+        Route::get('/client/{clientId}/documentos', [DocumentoController::class, 'index'])->name('client.documentos');
+        Route::get('/client/{clientId}/documentos/list', [DocumentoController::class, 'getDocumentos'])->name('documentos.list');
+        Route::post('/documentos', [DocumentoController::class, 'store'])->name('documentos.store');
+        Route::put('/documentos/{id}', [DocumentoController::class, 'update'])->name('documentos.update');
+        Route::delete('/documentos/{id}', [DocumentoController::class, 'destroy'])->name('documentos.destroy');
+        Route::put('/documentos/{id}/estado', [DocumentoController::class, 'actualizarEstado']);
 
  
         Route::resource('documentos', DocumentoController::class);
@@ -53,9 +62,10 @@ Route::middleware(['auth'])->group(function () {
     // Rutas solo para abogados, directores y administradores
     Route::middleware(['role'])->group(function () {
 
-        //personal del despacho
+        //busquedas
         Route::get('searchClient',[SearchClientController::class, 'index'])->name('searchClient.index');
         Route::get('/searchClient/lista/getDataClientes', [SearchClientController::class, 'getDataClientes'])->name('searchClient.getDataClientes');
+        Route::delete('/client/{clientId}', [SearchClientController::class, 'destroy'])->name('client.destroy');
         
 
 

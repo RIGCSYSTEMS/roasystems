@@ -7,16 +7,21 @@
           Documentos de {{ clientName }}
         </h1>
         <div>
+          <!-- Botón "Volver al Cliente" -->
           <a :href="`/client/${clientId}`" class="btn btn-light me-2">
             <i class="bi bi-person me-2"></i>Volver al Cliente
           </a>
-          <a href="/client" class="btn btn-light">
+          <!-- Botón "Lista de Clientes", controlado por el rol -->
+          <a 
+            v-if="userRole !== 'CLIENTE'" 
+            href="/searchClient" 
+            class="btn btn-light">
             <i class="bi bi-people me-2"></i>Lista de Clientes
           </a>
         </div>
       </div>
     </div>
-    
+
     <div class="row g-4">
       <div class="col-md-6">
         <documento-create 
@@ -61,6 +66,10 @@ export default {
     clientName: {
       type: String,
       required: true
+    },
+    userRole: { // Recibe el rol del usuario como una prop
+      type: String,
+      required: true
     }
   },
   data() {
@@ -68,7 +77,7 @@ export default {
       documentos: [],
       documentoEditando: null,
       documentoVisualizando: null
-    }
+    };
   },
   mounted() {
     this.cargarDocumentos();
@@ -117,7 +126,7 @@ export default {
       }
     }
   }
-}
+};
 </script>
 
 <style scoped>

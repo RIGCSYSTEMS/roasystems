@@ -7,6 +7,7 @@
     <documento-index 
         :client-id="{{ $client->id }}" 
         :client-name="'{{ $client->nombre_de_cliente }}'"
+        user-role="{{ auth()->user()->role }}" 
     ></documento-index>
 </div>
 @endsection

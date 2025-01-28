@@ -107,7 +107,7 @@ $(document).ready(function() {
             if (!$(e.target).is('a') && !$(e.target).is('button')) {
                 var data = table.row(this).data();
                 if (data) {
-                    window.location.href = '/searchClient/' + data.id;
+                    window.location.href = '/client/' + data.id;
                 }
             }
         });
@@ -120,5 +120,58 @@ $(document).ready(function() {
         table.ajax.reload();
     });
 });
+function confirmarEliminarCliente(clienteId) {
+    if (confirm('¿Estás seguro de que quieres eliminar este cliente?')) {
+        $.ajax({
+            url: `/client/${clienteId}`,
+            type: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response) {
+                if (response.success) {
+                    // Recargar la tabla
+                    var table = $('#searchClient').DataTable();
+                    table.ajax.reload();
+                    
+                    // Mostrar mensaje de éxito
+                    alert('Cliente eliminado correctamente');
+                } else {
+                    alert(response.message || 'Error al eliminar el cliente');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', error);
+                // Recargar la tabla de todos modos
+                var table = $('#searchClient').DataTable();
+                table.ajax.reload();
+            },
+            complete: function() {
+                // Esto se ejecutará sin importar si la petición fue exitosa o no
+                var table = $('#searchClient').DataTable();
+                table.ajax.reload();
+            }
+        });
+    }
+}
+function eliminarCliente(clienteId) {
+    $.ajax({
+        url: '/client/' + clienteId,
+        type: 'DELETE',
+        data: {
+            "_token": "{{ csrf_token() }}",
+        },
+        success: function(result) {
+            // Recargar la tabla
+            $('#searchClient').DataTable().ajax.reload();
+            // Mostrar mensaje de éxito
+            alert('Cliente eliminado correctamente');
+        },
+        error: function(xhr) {
+            // Mostrar mensaje de error
+            alert('Error al eliminar el cliente');
+        }
+    });
+}
 </script>
 @endpush

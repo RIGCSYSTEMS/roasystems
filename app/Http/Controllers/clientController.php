@@ -198,7 +198,7 @@ class ClientController extends Controller
     {
         $client = Client::findOrFail($clientId);
         $client->delete();
-        return redirect()->route('search.searchClient')->with('success', 'Cliente eliminado correctamente');
+        return redirect()->route('searchClient')->with('success', 'Cliente eliminado correctamente');
     }
 
     public function addFamiliar(Request $request, Client $client)
