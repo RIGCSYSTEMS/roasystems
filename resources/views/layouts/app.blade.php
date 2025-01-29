@@ -25,6 +25,7 @@
     <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
     <script src="{{ asset('js/dataTables-config.js') }}"></script>
     <script src="{{ asset('js/loading-indicator.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 
     @stack('styles')
     @vite(['resources/css/app.css', 'resources/js/app.js'])

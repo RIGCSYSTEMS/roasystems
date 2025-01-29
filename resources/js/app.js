@@ -3,7 +3,7 @@ import '../css/app.css';
 
 import { createApp } from 'vue';
 
-// import home from './components/home.vue';
+import home from './components/home.vue';
 
 //layouts
 import bitacoras from '@/layouts/Bitacoras.vue';
@@ -27,7 +27,7 @@ import DocumentoIndex from './components/client/DocumentoIndex.vue';
 
 const app = createApp({});
 
-// app.component('home', home);
+app.component('home', home);
 
 //layouts
 app.component('bitacoras', bitacoras);

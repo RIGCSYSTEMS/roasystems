@@ -38,7 +38,7 @@ class CheckUserRole
             if (in_array($user->role, ['ADMIN', 'DIRECTOR', 'ABOGADO'])) {
                 return $next($request);
             }
-            return redirect('no-autorizado'); // Redirige si no tiene acceso
+            return redirect()->route('acceso-denegado'); // Redirige si no tiene acceso
         }
 
          // Permite la solicitud si cumple los requisitos

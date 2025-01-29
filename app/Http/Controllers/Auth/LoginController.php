@@ -67,7 +67,7 @@ class LoginController extends Controller
         case 'CLIENTE':
             return redirect('/');
         default:
-            return redirect('/no-autorizado'); // Si el rol no es válido
+            return redirect('accesso-denegado'); // Si el rol no es válido
     }
 }
 }

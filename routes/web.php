@@ -34,8 +34,14 @@ Route::middleware(['auth'])->group(function () {
         return response()->json(['role' => Auth::user()->role]);
     });
 
+    // acceso denegado
+    Route::get('/acceso-denegado', function () {
+        return view('NoAccess.index');
+    })->name('acceso-denegado');
+
+
     // Rutas para clientes y personal del despacho
-    Route::middleware(['roleGlobal'])->group(function () {
+    Route::middleware(['roleGlobal', 'NoAccess'])->group(function () {
         
         //clientes
         Route::resource('client', ClientController::class);

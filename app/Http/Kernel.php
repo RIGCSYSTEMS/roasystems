@@ -58,6 +58,7 @@ protected $middlewareGroups = [
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'role' => \App\Http\Middleware\CheckUserRole::class,
         'roleGlobal' => \App\Http\Middleware\CheckUserRoleGlobal::class,
+        'client.access' => \App\Http\Middleware\CheckClientAccess::class,
         
     ];
 }
