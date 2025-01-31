@@ -40,34 +40,33 @@ class LoginController extends Controller
     }
 
     protected function authenticated(Request $request, $user)
-{
-        // Verificar si el rol es 'CLIENTE'
-        if ($user->role === 'CLIENTE') {
-            // Comprobar si el correo del cliente existe en la base de datos
-            $clienteExistente = User::where('email', $user->email)->where('role', 'CLIENTE')->first();
-    
-            if (!$clienteExistente) {
-                // Si no existe, redirigir a una página de error o acceso no autorizado
-                return redirect('/no-autorizado')->with('error', 'Este cliente no está registrado.');
-            }
-    
-            // Si existe, redirigir al perfil del cliente
-            return redirect('/client/' . $user->id);
-        }
-    
+    {
+        $redirectUrl = $this->getRedirectUrl($user);
 
-    // Redirige al usuario según su rol
-    switch ($user->role) {
-        case 'ADMIN':
-            return redirect('/');
-        case 'DIRECTOR':
-            return redirect('/');
-        case 'ABOGADO':
-            return redirect('/');
-        case 'CLIENTE':
-            return redirect('/');
-        default:
-            return redirect('accesso-denegado'); // Si el rol no es válido
+        if ($request->expectsJson()) {
+            return response()->json(['redirect' => $redirectUrl]);
+        }
+
+        return redirect($redirectUrl);
     }
-}
+
+    private function getRedirectUrl($user)
+    {
+        if ($user->role === 'CLIENTE') {
+            $clienteExistente = User::where('email', $user->email)->where('role', 'CLIENTE')->first();
+            if (!$clienteExistente) {
+                return '/no-autorizado';
+            }
+            return '/client/' . $user->id;
+        }
+
+        switch ($user->role) {
+            case 'ADMIN':
+            case 'DIRECTOR':
+            case 'ABOGADO':
+                return '/';
+            default:
+                return '/acceso-denegado';
+        }
+    }
 }
