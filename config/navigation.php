@@ -5,8 +5,8 @@ return [
         'Inicio' => '/',
         'Panel de Control' => '/dashboard',
         'Clientes' => '/searchClient',
-        'Expedientes' => '/Client',
-        'Agenda' => '/resident',
+        'Expedientes' => '/expedientes',
+        'Agenda' => '/expedientes',
         'llamadas' => '/call',
 
     ],

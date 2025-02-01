@@ -30,6 +30,14 @@ import documentoedit from './components/client/DocumentoEdit.vue';
 import documentocreate from './components/client/DocumentoCreate.vue';
 import DocumentoIndex from './components/client/DocumentoIndex.vue';
 
+//importaciones expedientes
+import Expedientes from './components/expedients/Expedientes.vue';
+import ExpedientesEdicion from './components/expedients/ExpedientesEdicion.vue';
+import AudienciasExpediente from './components/expedients/AudienciasExpediente.vue';
+import BitacoraExpediente from './components/expedients/BitacoraExpediente.vue';
+import HonorariosExpediente from './components/expedients/HonorariosExpediente.vue';
+import LineaTiempoExpediente from './components/expedients/LineaTiempoExpediente.vue';
+
 
 const app = createApp({});
 
@@ -57,5 +65,12 @@ app.component('documento-edit', documentoedit);
 app.component('documento-create', documentocreate);
 app.component('documento-index', DocumentoIndex);
 
+//app expedientes
+app.component('expediente-index', Expedientes);
+app.component('expediente-Edicion', ExpedientesEdicion);
+app.component('audiencias-expediente', AudienciasExpediente);
+app.component('bitacora-expediente', BitacoraExpediente);
+app.component('honorarios-expediente', HonorariosExpediente);
+app.component('linea-tiempo-expediente', LineaTiempoExpediente);
 
 app.mount('#app');

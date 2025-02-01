@@ -80,6 +80,7 @@ Route::middleware(['auth'])->group(function () {
 
 
         Route::resource('expedientes', ExpedienteController::class);
+        // Route::get('/expedientes/{id}', [ExpedienteController::class, 'show'])->name('expedientes.show');
 
 
 

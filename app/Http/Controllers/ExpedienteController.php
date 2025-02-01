@@ -11,105 +11,43 @@ class ExpedienteController extends Controller
 {
     public function index()
     {
-        $expedientes = Expediente::with('client')->paginate(30);
-        return view('expedientes.index', compact('expedientes'));
+//
     }
 
     public function create(Request $request)
     {
-        $client_id = $request->query('client_id');
-        $client = Client::findOrFail($client_id);
-        return view('expedientes.create', compact('client'));
-        // return view('expedientes.create');
-    //     $clients = Client::all();
-    // return view('expedientes.create', compact('clients'));
+//
     }
 
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'client_id' => 'required|exists:clients,id',
-            'fecha_de_apertura' => 'required|date',
-            'estatus_del_expediente' => 'required|string',
-            'numero_de_dossier' => 'required|string',
-            'despacho' => 'required|string',
-            'abogado' => 'required|string',
-            'honorarios' => 'required|numeric',
-            'tipo' => 'required|string',
-        ]);
-
-        $expediente = Expediente::create($validatedData);
-        // Crear entrada en la bitácora
-        Bitacora::create([
-            'usuario_id' => Auth::id(),
-            'expediente_id' => $expediente->id,
-            'categoria' => 'Creación de expediente',
-            'descripcion' => 'Se creó un nuevo expediente',
-            'fecha_y_hora_del_evento' => now(),
-        ]);
-
-        return redirect()->route('client.show', $expediente->client_id)->with('success', 'Expediente creado correctamente');
+//
     }
 
-    public function show(Expediente $expediente)
+    // public function show(Expediente $expediente)
+    public function show($id)
     {
+        $expediente = Expediente::findOrFail($id);
+        return view('expedientes.show', [
+            'expedienteId' => $id,
+            'expediente' => $expediente
+        ]);
 
-        $bitacoras = $expediente->bitacoras()->with('usuario')->latest()->get();
-        $audiencias = $expediente->audiencias()->orderBy('fecha_hora')->get();
-        $honorario = $expediente->honorario;
-
-        return view('expedientes.show', compact('expediente', 'bitacoras', 'audiencias', 'honorario'));
     }
 
     public function edit(Expediente $expediente)
     {
-        $clients = Client::all();
-        return view('expedientes.edit', compact('expediente', 'clients'));
+//
     }
 
     public function update(Request $request, Expediente $expediente)
     {
-        $validatedData = $request->validate([
-            'client_id' => 'required|exists:clients,id',
-            'fecha_de_apertura' => 'required|date',
-            'estatus_del_expediente' => 'required|string',
-            'fecha_de_cierre' => 'nullable|date',
-            'numero_de_dossier' => 'required|string',
-            'despacho' => 'required|string',
-            'abogado' => 'required|string',
-            'honorarios' => 'required|numeric',
-            'tipo' => 'required|string',
-        ]);
-
-        $expediente->update($validatedData);
-        
-        // Crear entrada en la bitácora
-        Bitacora::create([
-            'usuario_id' => Auth::id(),
-            'expediente_id' => $expediente->id,
-            'categoria' => 'Actualización de expediente',
-            'descripcion' => 'Se actualizó la información del expediente',
-            'fecha_y_hora_del_evento' => now(),
-        ]);
-
-        return redirect()->route('expedientes.index')->with('success', 'Expediente actualizado correctamente');
+//
     }
 
     public function destroy(Expediente $expediente)
     {
-        
-        // Crear entrada en la bitácora antes de eliminar el expediente
-        Bitacora::create([
-            'usuario_id' => Auth::id(),
-            'expediente_id' => $expediente->id,
-            'categoria' => 'Eliminación de expediente',
-            'descripcion' => 'Se eliminó el expediente',
-            'fecha_y_hora_del_evento' => now(),
-        ]);
-        
-        $expediente->delete();
-
-        return redirect()->route('expedientes.index')->with('success', 'Expediente eliminado correctamente');
+//
     }
     
 }
