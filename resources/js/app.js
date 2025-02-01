@@ -6,7 +6,7 @@ window.axios = axios;
 
 import { createApp } from 'vue';
 
-// import home from './components/home.vue';
+import home from './components/home.vue';
 
 //login
 import LoginForm from './components/auth/LoginForm.vue';
@@ -33,7 +33,7 @@ import DocumentoIndex from './components/client/DocumentoIndex.vue';
 
 const app = createApp({});
 
-// app.component('home', home);
+app.component('home', home);
 
 //login
 app.component('login-form', LoginForm);

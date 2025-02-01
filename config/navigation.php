@@ -7,8 +7,8 @@ return [
         'Clientes' => '/searchClient',
         'Expedientes' => '/Client',
         'Agenda' => '/resident',
-        'Bitacora' => '/call',
-        'Tareas' => '/call',
+        'llamadas' => '/call',
+
     ],
     'footer' => [
         'Formularie Web d\'IRCC' => 'https://www.canada.ca/',

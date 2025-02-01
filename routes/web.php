@@ -16,6 +16,11 @@ use App\Http\Controllers\SearchClientController;
 // Ruta principal
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
+    // acceso denegado
+    Route::get('/acceso-denegado', function () {
+        return view('NoAccess.index');
+    })->name('acceso-denegado');
+
 
 
 
@@ -30,14 +35,11 @@ Route::get('prueba', function(){
 Route::middleware(['auth'])->group(function () {
     // Rutas accesibles para todos los usuarios autenticados
 
-    Route::get('/user/role', function () {
-        return response()->json(['role' => Auth::user()->role]);
-    });
+    // Route::get('/user/role', function () {
+    //     return response()->json(['role' => Auth::user()->role]);
+    // });
 
-    // acceso denegado
-    Route::get('/acceso-denegado', function () {
-        return view('NoAccess.index');
-    })->name('acceso-denegado');
+
 
 
     // Rutas para clientes y personal del despacho
@@ -98,13 +100,13 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // Ruta de inicio después de autenticación
-Route::get('/home', [HomeController::class, 'index'])->name('home');
+// Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 
 
-Route::middleware('role:ADMIN')->group(function () {
-    Route::get('/admin', function () {
-        return view('search.searchClient');
-    });
-});
+// Route::middleware('role:ADMIN')->group(function () {
+//     Route::get('/admin', function () {
+//         return view('search.searchClient');
+//     });
+// });
 

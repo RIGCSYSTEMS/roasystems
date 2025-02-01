@@ -129,19 +129,19 @@
               <i class="bi bi-globe2"></i>
               <h4>Información Migratoria</h4>
             </div>
+
             <div class="form-grid">
               <div class="form-group">
                 <label for="pais">
                   <i class="bi bi-flag"></i>
                   País de Origen
                 </label>
-                <input 
-                  id="pais" 
-                  v-model="formData.pais" 
-                  class="form-control" 
-                  required 
-                  placeholder="País de origen"
-                />
+                <select v-model="formData.pais" class="form-control" required>
+              <option value="">Seleccione un país</option>
+              <option v-for="pais in paises" :key="pais.name" :value="pais.name">
+                {{ pais.name }}
+              </option>
+            </select>
               </div>
 
               <div class="form-group">
@@ -304,6 +304,7 @@
 <script>
 // El script permanece igual
 import { ref, onMounted } from 'vue'
+import { countries } from 'countries-list';
 
 export default {
   props: {
@@ -380,9 +381,18 @@ export default {
         isLoading.value = false
       }
     }
+    const paises = ref([])
+
+onMounted(() => {
+  paises.value = Object.entries(countries).map(([code, country]) => ({
+    code,
+    name: country.name
+  })).sort((a, b) => a.name.localeCompare(b.name))
+})
 
     return {
       formData,
+      paises,
       isLoading,
       handleSubmit,
       getCurrentDate

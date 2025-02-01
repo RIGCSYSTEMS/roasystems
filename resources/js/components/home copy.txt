@@ -75,7 +75,7 @@ export default {
       },
       showUserMenu: false,
       buttons: [
-        { name: 'ASILO', icon: 'images/asilo.png', url: '/searchClient' },
+        { name: 'ASILO', icon: 'images/asilo.png', url: '/client' },
         { name: 'APPEL', icon: '🏠', url: '/client' },
         { name: 'RESIDENCIA PERMANENTE', icon: 'images/card.png', url: '/resident' },
         { name: 'ERAR', icon: '🚫', url: '/client' },
@@ -171,29 +171,12 @@ export default {
 .home-container {
   font-family: 'Poppins', sans-serif;
   min-height: 100vh;
-  height: 100vh;
-  width: 100vw;
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
-  overflow: auto; /* Cambiado de 'hidden' a 'auto' */
+  overflow: hidden;
   background: linear-gradient(135deg, #6f42c1 0%, #4b367c 100%);
-  box-sizing: border-box; /* Añadido */
-  padding: 1rem; /* Añadido */
-  margin: 0; /* Añadido */
-}
-
-@media (max-width: 768px) {
-  .home-container {
-    padding: 0.5rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .home-container {
-    padding: 0.25rem;
-  }
 }
 
 .bg-animate {
@@ -461,7 +444,6 @@ export default {
 }
 
 @media (max-width: 768px) {
-  
   .welcome-text {
     font-size: 2rem;
   }
