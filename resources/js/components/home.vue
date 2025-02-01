@@ -75,13 +75,9 @@ export default {
       },
       showUserMenu: false,
       buttons: [
-        { name: 'ASILO', icon: 'images/asilo.png', url: '/searchClient' },
-        { name: 'APPEL', icon: '🏠', url: '/client' },
-        { name: 'RESIDENCIA PERMANENTE', icon: 'images/card.png', url: '/resident' },
-        { name: 'ERAR', icon: '🚫', url: '/client' },
-        { name: 'APADRINAMIENTO', icon: '👥', url: '/client' },
-        { name: 'HUMANITARIAS', icon: 'images/humanitario.png', url: '/client' },
-        { name: 'RESIDENCIA TEMPORAL', icon: 'images/visa.png', url: '/resident' },
+        { name: 'Panel de Control', icon: '⚙️', url: '/dashboard' },
+  { name: 'Clientes', icon: '👥', url: '/searchClient' },
+  { name: 'Expedientes', icon: '📁', url: '/expedientes' },
       ]
     }
   },
