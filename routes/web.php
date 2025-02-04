@@ -11,6 +11,7 @@ use App\Http\Controllers\AudienciaController;
 use App\Http\Controllers\BitacoraController;
 use App\Http\Controllers\TipoDocumentoController;
 use App\Http\Controllers\SearchClientController;
+use App\Http\Controllers\SearchExpedientController;
 
 
 // Ruta principal
@@ -74,6 +75,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('searchClient',[SearchClientController::class, 'index'])->name('searchClient.index');
         Route::get('/searchClient/lista/getDataClientes', [SearchClientController::class, 'getDataClientes'])->name('searchClient.getDataClientes');
         Route::delete('/client/{clientId}', [SearchClientController::class, 'destroy'])->name('client.destroy');
+
+        Route::get('searchExpedient',[SearchExpedientController::class, 'index'])->name('searchExpedient.index');
+        Route::get('/searchExpedient/lista/getDataExpedient', [SearchExpedientController::class, 'getDataExpedient'])->name('searchExpedient.getDataExpedient');
+        Route::delete('/expedientes/{expedientesId}', [SearchExpedientController::class, 'destroy'])->name('expedient.destroy');
+
         
 
 
