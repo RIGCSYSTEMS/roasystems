@@ -1,6 +1,6 @@
 <!-- resources/js/components/ExpedienteDetalle.vue -->
 <template>
-    <div class="expediente-detalle">
+    <div class="expediente-index">
       <div class="row">
         <!-- Columna principal -->
         <div class="col-lg-8">
@@ -121,14 +121,14 @@
       EdicionExpedienteModal
     },
     props: {
-      expedienteId: {
+      expediente: {
         type: Number,
         required: true
       }
     },
     data() {
       return {
-        expediente: null,
+        // expediente: null,
         mostrarModalEdicion: false
       };
     },

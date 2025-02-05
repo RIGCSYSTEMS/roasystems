@@ -27,13 +27,21 @@ class ExpedienteController extends Controller
     // public function show(Expediente $expediente)
     public function show($id)
     {
-        $expediente = Expediente::findOrFail($id);
+        $expediente = Expediente::with([
+            'client',
+            'tipoExpediente',
+            'bitacoras',
+            'audiencias',
+            'honorarios'
+        ])->findOrFail($id);
+
         return view('expedientes.show', [
             'expedienteId' => $id,
             'expediente' => $expediente
         ]);
-
     }
+
+    
 
     public function edit(Expediente $expediente)
     {

@@ -13,7 +13,7 @@
         </div>
         <div class="col-md-4 text-center text-sm-center text-md-end my-4 my-md-auto">
             <a href="{{ route('expedientes.create') }}" class="btn btn-primary">
-                <i class="fas fa-user-plus"></i> Crear un nuevo cliente
+                <i class="fas fa-user-plus"></i> Crear un nuevo Expediente
             </a>
         </div>
     </div>
@@ -21,7 +21,7 @@
         <div class="col-12">
             <div class="form-check form-switch">
                 <input class="form-check-input" type="checkbox" id="toggleExpedientes">
-                <label class="form-check-label" for="toggleExpedientes">Mostrar todos los clientes</label>
+                <label class="form-check-label" for="toggleExpedientes">Mostrar todos los Expedientes</label>
             </div>
         </div>
     </div>
@@ -33,7 +33,7 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Expediente</th>
+                            <th>Tipo de Expediente</th>
                             <th>cliente</th>
                             <th>estatus</th>
                             <th>prioridad</th>
