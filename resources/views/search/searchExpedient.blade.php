@@ -20,8 +20,8 @@
     <div class="row mb-3">
         <div class="col-12">
             <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" id="toggleClients">
-                <label class="form-check-label" for="toggleClients">Mostrar todos los clientes</label>
+                <input class="form-check-input" type="checkbox" id="toggleExpedientes">
+                <label class="form-check-label" for="toggleExpedientes">Mostrar todos los clientes</label>
             </div>
         </div>
     </div>
@@ -79,17 +79,17 @@ $(document).ready(function() {
             columns: [
                 {data: 'id', name: 'id'},
                 {
-                    data: 'tipo_expediente_id', 
-                    name: 'tipo_expediente_id',
+                    data: 'tipo_expediente', 
+                    name: 'tipo_expedientes.nombre',
                     render: function(data, type, row) {
-                        return '<a href="/expedient/' + row.id + '">' + data + '</a>';
+                        return '<a href="/expedientes/' + row.id + '">' + data + '</a>';
                     }
                 },
-                { data: 'client_id', name: 'cliente' },
-            { data: 'estatus_del_expediente', name: 'estatus' },
-            { data: 'prioridad', name: 'prioridad' },
-            { data: 'numero_de_dossier', name: 'dossier' },
-            { data: 'despacho', name: 'despacho' },
+                { data: 'cliente_asociado', name: 'clients.nombre_de_cliente' },
+            { data: 'estatus_del_expediente', name: 'expedientes.estatus_del_expediente' },
+            { data: 'prioridad', name: 'expediente.prioridad' },
+            { data: 'numero_de_dossier', name: 'expediente.dossier' },
+            { data: 'despacho', name: 'expediente.despacho' },
                 {data: 'acciones', name: 'acciones', orderable: false, searchable: false}
             ],
             language: {
@@ -115,15 +115,15 @@ $(document).ready(function() {
 
     initDataTable();
 
-    $('#toggleExpedients').on('change', function() {
+    $('#toggleExpedientes').on('change', function() {
         showAll = this.checked;
         table.ajax.reload();
     });
 });
-function confirmarEliminarCliente(expedientesId) {
-    if (confirm('¿Estás seguro de que quieres eliminar este cliente?')) {
+function confirmarEliminarCliente(expedienteId) {
+    if (confirm('¿Estás seguro de que quieres eliminar este Expediente?')) {
         $.ajax({
-            url: `/expedient/${expedientesId}`,
+            url: `/expedientes/${expedienteId}`,
             type: 'DELETE',
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -135,9 +135,9 @@ function confirmarEliminarCliente(expedientesId) {
                     table.ajax.reload();
                     
                     // Mostrar mensaje de éxito
-                    alert('Cliente eliminado correctamente');
+                    alert('Expediente eliminado correctamente');
                 } else {
-                    alert(response.message || 'Error al eliminar el cliente');
+                    alert(response.message || 'Error al eliminar el Expediente');
                 }
             },
             error: function(xhr, status, error) {
@@ -154,9 +154,9 @@ function confirmarEliminarCliente(expedientesId) {
         });
     }
 }
-function eliminarCliente(clienteId) {
+function eliminarCliente(expedienteId) {
     $.ajax({
-        url: '/client/' + clienteId,
+        url: '/expedientes/' + expedienteId,
         type: 'DELETE',
         data: {
             "_token": "{{ csrf_token() }}",
@@ -165,11 +165,11 @@ function eliminarCliente(clienteId) {
             // Recargar la tabla
             $('#searchClient').DataTable().ajax.reload();
             // Mostrar mensaje de éxito
-            alert('Cliente eliminado correctamente');
+            alert('Expediente eliminado correctamente');
         },
         error: function(xhr) {
             // Mostrar mensaje de error
-            alert('Error al eliminar el cliente');
+            alert('Error al eliminar el Expediente');
         }
     });
 }

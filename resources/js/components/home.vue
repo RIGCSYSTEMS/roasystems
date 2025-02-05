@@ -77,7 +77,7 @@ export default {
       buttons: [
         { name: 'Panel de Control', icon: '⚙️', url: '/dashboard' },
   { name: 'Clientes', icon: '👥', url: '/searchClient' },
-  { name: 'Expedientes', icon: '📁', url: '/expedientes' },
+  { name: 'Expedientes', icon: '📁', url: '/searchExpedient' },
       ]
     }
   },

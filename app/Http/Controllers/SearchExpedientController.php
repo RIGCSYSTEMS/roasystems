@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 
+use function Termwind\render;
 
 class SearchExpedientController extends Controller
 {
@@ -28,7 +29,16 @@ public function index()
         $show_all = $request->input('show_all', 0);
         $search = $request->input('search.value');
 
-        $query = Expediente::select('id', 'client_id', 'tipo_expediente_id', 'estatus_del_expediente', 'prioridad', 'numero_de_dossier', 'despacho');
+        $query = Expediente::select(
+            'expedientes.id', 
+            'clients.nombre_de_cliente as cliente_asociado', 
+            'tipos_expedientes.nombre as tipo_expediente',
+            'expedientes.estatus_del_expediente',
+            'expedientes.prioridad',
+            'expedientes.numero_de_dossier',
+            'expedientes.despacho');
+            $query->join('clients', 'expedientes.client_id', '=', 'clients.id');
+            $query->join('tipos_expedientes', 'expedientes.tipo_expediente_id', '=', 'tipos_expedientes.id');
 
         if (!$show_all && !$search) {
             $query->whereRaw('1 = 0');
@@ -38,17 +48,20 @@ public function index()
             ->filter(function ($query) use ($search) {
                 if ($search) {
                     $query->where(function($q) use ($search) {
-                        $q->where('client_id', 'like', "%{$search}%")
-                          ->orWhere('tipo_expediente_id', 'like', "%{$search}%")
-                          ->orWhere('estatus_del_expediente', 'like', "%{$search}%")
-                          ->orWhere('prioridad', 'like', "%{$search}%")
-                          ->orWhere('numero_de_dossier', 'like', "%{$search}%")
-                          ->orWhere('despacho', 'like', "%{$search}%");
+                        $q->where('clients.nombre_de_cliente', 'like', "%{$search}%")
+                          ->orWhere('tipos_expedientes.nombre', 'like', "%{$search}%")
+                          ->orWhere('expedientes.estatus_del_expediente', 'like', "%{$search}%")
+                          ->orWhere('expedientes.prioridad', 'like', "%{$search}%")
+                          ->orWhere('expedientes.numero_de_dossier', 'like', "%{$search}%")
+                          ->orWhere('expedientes.despacho', 'like', "%{$search}%");
                     });
                 }
             })
             ->addColumn('acciones', function(Expediente $expediente) {
-                return view('expedientes.actions', compact('expedientes'))->render();
+                
+                return view('expedientes.actions', ['expediente' => $expediente])->render();
+                
+               
             })
             ->rawColumns(['acciones'])
             ->toJson();
@@ -60,10 +73,10 @@ public function index()
         return view('expedientes.create');
     }
 
-    public function destroy($clientId)
+    public function destroy($expedienteId)
     {
         try {
-            $client = Expediente::findOrFail($clientId);
+            $client = Expediente::findOrFail($expedienteId);
             $client->delete();
     
             if (request()->ajax()) {
@@ -83,7 +96,7 @@ public function index()
                 return response()->json([
                     'success' => false,
                     'message' => 'Error al eliminar el cliente'
-                ], 200); // Cambiamos a 200 para evitar el error de Internal Server Error
+                ], 500); // Cambiamos a 500 para evitar el error de Internal Server Error
             }
     
             return redirect()->back()

@@ -22,8 +22,10 @@ class ExpedienteSeeder extends Seeder
             $this->command->info('No hay clientes en la base de datos. No se crearán expedientes.');
             return;
         }
+        $totalExpedientes = 0;
 
         foreach ($clients as $client) {
+            for ($i = 0; $i < 3; $i++) {
             Expediente::create([
                 'client_id' => $client->id,
                 'tipo_expediente_id' => $this->getRandomStypesexp(),
@@ -38,8 +40,9 @@ class ExpedienteSeeder extends Seeder
                 'progreso' => rand(0, 100),
                 'boite' => 'Boite ' . rand(1, 5),
             ]);
+            $totalExpedientes++;
         }
-
+    }
         $this->command->info('Se han creado ' . $clients->count() . ' expedientes, uno para cada cliente.');
     }
 

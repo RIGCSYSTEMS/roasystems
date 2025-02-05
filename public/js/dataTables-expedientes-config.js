@@ -22,16 +22,16 @@ $(document).ready(function() {
         columns: [
             { data: 'id', name: 'id' },
             { 
-                data: 'expediente',
+                data: 'tipo_expediente_id',
                 name: 'tipo_expediente_id',
                 render: function(data, type, row) {
-                    return '<a href="/expedient/' + row.id + '" class="client-link">' + data + '</a>';
+                    return '<a href="/expedientes/' + row.id + '" class="client-link">' + data + '</a>';
                 }
             },
-            { data: 'client_id', name: 'cliente' },
-            { data: 'estatus_del_expediente', name: 'estatus' },
+            { data: 'cliente_asoiado', name: 'cliente_asociado' },
+            { data: 'estatus_del_expediente', name: 'estatus_del_expediente' },
             { data: 'prioridad', name: 'prioridad' },
-            { data: 'numero_de_dossier', name: 'dossier' },
+            { data: 'numero_de_dossier', name: 'numero_de_dossier' },
             { data: 'despacho', name: 'despacho' },
             { 
                 data: 'acciones', 
