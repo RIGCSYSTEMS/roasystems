@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('etapas_expedientes', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('expediente_id');
-            $table->string('nombre'); // Nombre de la etapa (ej: Admisión, Historia)
+            $table->enum('nombre',['admision', 'historia', 'pruebas', 'audiencia', 'cierre']); // Nombre de la etapa (ej: Admisión, Historia)
+            $table->integer('porcentaje')->default(0);
             $table->boolean('completada')->default(false); // Estado de la etapa
             $table->timestamps();
 
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('etapa_expedientes');
+        Schema::dropIfExists('etapas_expedientes');
     }
 };

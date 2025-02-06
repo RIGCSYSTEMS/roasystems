@@ -44,9 +44,34 @@ class Expediente extends Model
         return $this->belongsTo(TipoExpediente::class);
     }
 
-    public function etapas(): HasMany
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function ($expediente) {
+            $expediente->etapas()->create([
+                'nombre' => 'admision',
+                'completada' => false,
+                'porcentaje' => 10
+            ]);
+        });
+    }
+
+    public function etapas()
     {
         return $this->hasMany(EtapaExpediente::class);
+    }
+
+    public function actualizarProgreso()
+    {
+        $this->progreso = $this->etapas()->sum('porcentaje');
+        $this->save();
+
+        if ($this->etapas()->where('nombre', 'cierre')->where('completada', true)->exists()) {
+            $this->estatus_del_expediente = 'Cerrado';
+            $this->fecha_de_cierre = now();
+            $this->save();
+        }
     }
 
     public function bitacoras(): HasMany
@@ -76,9 +101,9 @@ class Expediente extends Model
         return (int)(($etapasCompletadas / $totalEtapas) * 100);
     }
 
-    public function actualizarProgreso(): void
-    {
-        $this->progreso = $this->calcularProgreso();
-        $this->save();
-    }
+    // public function actualizarProgreso(): void
+    // {
+    //     $this->progreso = $this->calcularProgreso();
+    //     $this->save();
+    // }
 }

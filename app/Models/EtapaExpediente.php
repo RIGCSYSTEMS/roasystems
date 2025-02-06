@@ -11,10 +11,13 @@ class EtapaExpediente extends Model
 {
     use HasFactory;
 
+    protected $table = 'etapas_expedientes';
+
     protected $fillable = [
         'expediente_id',
         'nombre',
         'completada',
+        'porcentaje'
     ];
 
     public function documentos()
@@ -34,5 +37,13 @@ class EtapaExpediente extends Model
             $this->completada = true;
             $this->save();
         }
+    }
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::saved(function ($etapa) {
+            $etapa->expediente->actualizarProgreso();
+        });
     }
 }
