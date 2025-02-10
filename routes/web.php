@@ -36,9 +36,9 @@ Route::get('prueba', function(){
 Route::middleware(['auth'])->group(function () {
     // Rutas accesibles para todos los usuarios autenticados
 
-    // Route::get('/user/role', function () {
-    //     return response()->json(['role' => Auth::user()->role]);
-    // });
+    Route::get('/user/role', function () {
+        return response()->json(['role' => Auth::user()->role]);
+    });
 
 
 

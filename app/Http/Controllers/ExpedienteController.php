@@ -35,7 +35,7 @@ class ExpedienteController extends Controller
             'honorarios'
         ])->findOrFail($id);
 
-        return view('expedientes.show', [
+        return view('expedientes.index', [
             'expedienteId' => $id,
             'expediente' => $expediente
         ]);
