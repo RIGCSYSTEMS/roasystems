@@ -7,7 +7,9 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Documento;
+use App\Models\DocumentoExpediente;
 use App\Policies\DocumentoPolicy;
+use App\Policies\DocumentoExpedientePolicy;
 
 
 
@@ -20,6 +22,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         Documento::class => DocumentoPolicy::class,
+        DocumentoExpediente::class => DocumentoExpedientePolicy::class,
         // Model::class => ModelPolicy::class,
     ];
 
@@ -30,6 +33,14 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        // Aquí puedes definir tus gates
+        Gate::define('ver-documento', function ($user, $documento) {
+            if ($documento instanceof DocumentoExpediente) {
+                return $user->can('verDocumento', $documento);
+            }
+            if ($documento instanceof Documento) {
+                return $user->can('verDocumento', $documento);
+            }
+            return false;
+        });
     }
 }

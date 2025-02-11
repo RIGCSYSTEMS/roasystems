@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\DocumentoController;
+use App\Http\Controllers\DocumentoExpedienteController;
 use App\Http\Controllers\ExpedienteController;
 use App\Http\Controllers\HonorarioController;
 use App\Http\Controllers\AudienciaController;
@@ -51,7 +52,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/client/{client}/familia', [ClientController::class, 'addFamiliar'])->name('client.addFamiliar');
         Route::delete('/client/{client}/familia/{index}', [ClientController::class, 'removeFamiliar'])->name('client.removeFamiliar');
 
-        //documentos
+        //documentos cliente
         Route::post('/documentos/{id}/validar', [DocumentoController::class, 'validarDocumento'])->name('documentos.validar');
         Route::put('/documentos/{id}/estado', [DocumentoController::class, 'actualizarEstado'])->name('documentos.actualizarEstado');
         Route::get('/tipos-documentos', [TipoDocumentoController::class, 'index'])->name('tipos-documentos.index');
@@ -63,6 +64,18 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/documentos/{id}', [DocumentoController::class, 'update'])->name('documentos.update');
         Route::delete('/documentos/{id}', [DocumentoController::class, 'destroy'])->name('documentos.destroy');
         Route::put('/documentos/{id}/estado', [DocumentoController::class, 'actualizarEstado']);
+
+        //documentos expedientes
+        Route::post('/documentosexp/{id}/validar', [DocumentoExpedienteController::class, 'validarDocumento'])->name('documentosexp.validar');
+        Route::put('/documentosexp/{id}/estado', [DocumentoExpedienteController::class, 'actualizarEstado'])->name('documentosexp.actualizarEstado');
+        Route::get('/documentosexp/{id}/descargar', [DocumentoExpedienteController::class, 'descargar'])->name('documentosexp.descargar');
+        Route::get('/documentosexp/{id}/visualizar', [DocumentoExpedienteController::class, 'visualizar'])->name('documentosexp.visualizar');
+        Route::get('/expedientes/{expedienteId}/documentos', [DocumentoExpedienteController::class, 'index'])->name('expedientesexp.documentos');
+        Route::get('/expedientes/{expedienteId}/documentos/list', [DocumentoExpedienteController::class, 'getDocumentos'])->name('documentosexp.list');
+        Route::post('/documentosexp', [DocumentoExpedienteController::class, 'store'])->name('documentosexp.store');
+        Route::put('/documentosexp/{id}', [DocumentoExpedienteController::class, 'update'])->name('documentosexp.update');
+        Route::delete('/documentosexp/{id}', [DocumentoExpedienteController::class, 'destroy'])->name('documentosexp.destroy');
+        Route::put('/documentosexp/{id}/estado', [DocumentoExpedienteController::class, 'actualizarEstado']);
 
  
         Route::resource('documentos', DocumentoController::class);

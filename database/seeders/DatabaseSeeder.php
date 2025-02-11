@@ -16,17 +16,17 @@ class DatabaseSeeder extends Seeder
        
         $this->call([
 
-
+            userSeeder::class,
             TiposDocumentosSeeder::class,
             TiposExpedientesSeeder::class,
             clientSeeder::class,
             ExpedienteSeeder::class,         
-            userSeeder::class,
+           
             // AgendaSeeder::class,
             AudienciasSeeder::class,
             
             // documentosseeder::class,
-            EtapasExpedientesSeeder::class,
+            // EtapasExpedientesSeeder::class,
             HonorariosSeeder::class,
             BitacorasSeeder::class,
           

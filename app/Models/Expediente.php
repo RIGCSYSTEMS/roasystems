@@ -38,6 +38,11 @@ class Expediente extends Model
     {
         return $this->belongsTo(Client::class);
     }
+    
+    public function expedientes(): HasMany
+    {
+        return $this->hasMany(DocumentoExpediente::class);
+    }
 
     public function tipoExpediente(): BelongsTo
     {

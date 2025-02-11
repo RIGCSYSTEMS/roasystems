@@ -66,7 +66,9 @@
           </div>
           <div class="tabs-content">
             <keep-alive>
-              <component :is="activeTabComponent" :expediente="expediente"></component>
+              <component :is="activeTabComponent" :expediente="expediente"
+              :expediente-id="expediente.id"
+              ></component>
             </keep-alive>
           </div>
         </div>
@@ -146,6 +148,12 @@ import HonorariosExpediente from './HonorariosExpediente.vue';
 import BitacoraExpediente from './BitacoraExpediente.vue';
 import AudienciasExpediente from './AudienciasExpediente.vue';
 import EdicionExpedienteModal from './ExpedientesEdicion.vue';
+import DocumentoCreateExp from './DocumentoCreateExp.vue';
+import DocumentoEditExp from './DocumentoEditExp.vue';
+import DocumentoIndexExp from './DocumentoIndexExp.vue';
+import DocumentoListExp from './DocumentoListExp.vue';
+import DocumentoViewExp from './DocumentoViewExp.vue';
+
 
 export default {
   components: {
@@ -153,7 +161,12 @@ export default {
     HonorariosExpediente,
     BitacoraExpediente,
     AudienciasExpediente,
-    EdicionExpedienteModal
+    EdicionExpedienteModal,
+    DocumentoCreateExp,
+    DocumentoEditExp,
+    DocumentoIndexExp,
+    DocumentoListExp,
+    DocumentoViewExp
   },
   props: {
     expediente: {
@@ -168,7 +181,8 @@ export default {
       tabs: [
         { id: 'honorarios', name: 'Honorarios', icon: 'bi bi-cash' },
         { id: 'bitacora', name: 'Bitácora', icon: 'bi bi-journal-text' },
-        { id: 'audiencias', name: 'Audiencias', icon: 'bi bi-calendar-event' }
+        { id: 'audiencias', name: 'Audiencias', icon: 'bi bi-calendar-event' },
+        { id: 'DocumentoIndexExp', name: 'Listar-Documentos', icon: 'bi bi-file-earmark-text' }
       ]
     };
   },
@@ -177,8 +191,15 @@ export default {
       const components = {
         honorarios: HonorariosExpediente,
         bitacora: BitacoraExpediente,
-        audiencias: AudienciasExpediente
+        audiencias: AudienciasExpediente,
+        DocumentoIndexExp: DocumentoIndexExp,
+        DocumentoCreateExp: DocumentoCreateExp,
+        DocumentoEditExp: DocumentoEditExp,
+        DocumentoListExp: DocumentoListExp,
+        DocumentoViewExp: DocumentoViewExp
       };
+      console.log('Active tab:', this.activeTab);
+    console.log('Expediente ID:', this.expediente.id);
       return components[this.activeTab];
     }
   },

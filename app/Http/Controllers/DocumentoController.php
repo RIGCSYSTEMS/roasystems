@@ -68,7 +68,7 @@ class DocumentoController extends Controller
             $documento->client_id = $request->client_id;
             $documento->user_id = Auth::id();
             $documento->formato = $request->formato;
-            $documento->estado = 'En Revisión';
+            $documento->estado = 'pendiente';
             $documento->ruta = $path;
             $documento->observaciones = $request->observaciones;
             $documento->save();

@@ -9,6 +9,8 @@ class DocumentoExpediente extends Model
 {
     use HasFactory;
 
+    protected $table = 'documentos_expedientes';
+
     protected $fillable = [
         'expediente_id',
         'etapa_id',
@@ -24,8 +26,19 @@ class DocumentoExpediente extends Model
         return $this->belongsTo(EtapaExpediente::class, 'etapa_id');
     }
 
-    public function expediente()
+    public function expedientes()
     {
-        return $this->belongsTo(Expediente::class, 'expediente_id');
+        return $this->belongsTo(Expediente::class);
+    }
+
+    public function client()
+    {
+        return $this->belongsTo(Client::class);
+    }
+
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

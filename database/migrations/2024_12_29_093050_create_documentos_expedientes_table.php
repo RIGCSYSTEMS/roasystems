@@ -20,30 +20,30 @@ return new class extends Migration
             ->references('id')
             ->on('expedientes')
             ->onDelete('cascade');
-            $table->unsignedBigInteger('etapa_id');
-            $table->foreign('etapa_id')
-            ->references('id')
-            ->on('etapas_expedientes')
-            ->onDelete('cascade');
+            // $table->unsignedBigInteger('etapa_id');
+            // $table->foreign('etapa_id')
+            // ->references('id')
+            // ->on('etapas_expedientes')
+            // ->onDelete('cascade');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')
             ->references('id')
             ->on('users')
             ->onDelete('cascade');
-            $table->unsignedBigInteger('tipo_documento_expediente_id');
-            $table->foreign('tipo_documento_expediente_id')
-                ->references('id')
-                ->on('tipos_documentos_expedientes')
-                ->onDelete('cascade');
+            // $table->unsignedBigInteger('tipo_documento_expediente_id');
+            // $table->foreign('tipo_documento_expediente_id')
+            //     ->references('id')
+            //     ->on('tipos_documentos_expedientes')
+            //     ->onDelete('cascade');
 
             // Campos
             $table->string('nombre'); // Nombre del documento
             $table->string('ruta'); // Ruta del archivo
-            $table->enum('estado', ['Pendiente', 'En Revisión', 'Aceptado', 'Rechazado', 'Obsoleto'])
-            ->default('Pendiente'); // Estado inicial por defecto
+            $table->enum('estado', ['pendiente', 'aceptado', 'rechazado'])
+            ->default('pendiente'); // Estado inicial por defecto
             $table->enum('formato',['PDF', 'IMAGEN']); // Tipo de documento (ej: PDF, Imagen)
             $table->boolean('validado')->default(false); // Validación del abogado
-            $table->text('descripcion')->nullable(); // Información adicional
+            $table->string('observaciones')->nullable(); // Información adicional
             $table->timestamps();
 
         });

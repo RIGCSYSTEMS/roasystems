@@ -30,6 +30,13 @@ import documentoedit from './components/client/DocumentoEdit.vue';
 import documentocreate from './components/client/DocumentoCreate.vue';
 import DocumentoIndex from './components/client/DocumentoIndex.vue';
 
+//importaciones documentos expedientes
+import documentoListExp from './components/expedients/DocumentoListExp.vue';
+import documentoViewExp from './components/expedients/DocumentoViewExp.vue';
+import documentoEditExp from './components/expedients/DocumentoEditExp.vue';
+import documentoCreateExp from './components/expedients/DocumentoCreateExp.vue';
+import documentoIndexExp from './components/expedients/DocumentoIndexExp.vue';
+
 //importaciones expedientes
 import Expedientes from './components/expedients/Expedientes.vue';
 import ExpedientesEdicion from './components/expedients/ExpedientesEdicion.vue';
@@ -37,6 +44,8 @@ import AudienciasExpediente from './components/expedients/AudienciasExpediente.v
 import BitacoraExpediente from './components/expedients/BitacoraExpediente.vue';
 import HonorariosExpediente from './components/expedients/HonorariosExpediente.vue';
 import LineaTiempoExpediente from './components/expedients/LineaTiempoExpediente.vue';
+import DocumentoCreateExp from './components/expedients/DocumentoCreateExp.vue';
+import DocumentoIndexExp from './components/expedients/DocumentoIndexExp.vue';
 
 
 const app = createApp({});
@@ -59,6 +68,13 @@ app.component('edicion', edicion);
 app.component('creacion', creacion);
 
 //app documentos client
+app.component('documento-list-exp', documentoListExp);
+app.component('documento-viewer-exp', documentoViewExp);
+app.component('documento-edit-exp', documentoEditExp);
+app.component('documento-create-exp', documentoCreateExp);
+app.component('documento-index-exp', documentoIndexExp);
+
+//app documentos expedientes
 app.component('documento-list', documentolist);
 app.component('documento-viewer', documentoview);
 app.component('documento-edit', documentoedit);
@@ -72,5 +88,8 @@ app.component('audiencias-expediente', AudienciasExpediente);
 app.component('bitacora-expediente', BitacoraExpediente);
 app.component('honorarios-expediente', HonorariosExpediente);
 app.component('linea-tiempo-expediente', LineaTiempoExpediente);
+app.component('documento-create-exp', DocumentoCreateExp);
+app.component('documento-index-Exp', DocumentoIndexExp);
+
 
 app.mount('#app');
