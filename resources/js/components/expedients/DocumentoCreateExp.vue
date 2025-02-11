@@ -1,9 +1,12 @@
 <template>
   <div class="card custom-card">
-    <div class="card-header bg-gradient">
+    <div class="card-header bg-gradient d-flex justify-content-between align-items-center">
       <h2 class="card-title mb-0 text-white">
         <i class="bi bi-plus-circle me-2"></i>Subir Nuevo Documento
       </h2>
+      <button @click="$emit('cerrar')" class="btn btn-light btn-sm">
+        <i class="bi bi-x-lg"></i>
+      </button>
     </div>
     <div class="card-body">
       <form @submit.prevent="subirDocumento" enctype="multipart/form-data">
@@ -17,7 +20,7 @@
             rows="3"
           ></textarea>
         </div>
-       <div class="mb-3">
+        <div class="mb-3">
           <label for="formato" class="form-label">
             <i class="bi bi-file-earmark me-2"></i>Formato del Documento
           </label>
@@ -72,7 +75,6 @@ export default {
     expedienteId: {
       type: Number,
       required: true,
-
     }
   },
   data() {
@@ -86,9 +88,7 @@ export default {
       procesando: false
     }
   },
-
   methods: {
-
     onFileChange(e) {
       this.nuevoDocumento.archivo = e.target.files[0];
     },
@@ -119,6 +119,7 @@ export default {
           const fileInput = this.$el.querySelector('input[type="file"]');
           if (fileInput) fileInput.value = '';
           alert('Documento subido correctamente');
+          this.$emit('cerrar');
         }
       }).catch(error => {
         console.error('Error al subir documento:', error);

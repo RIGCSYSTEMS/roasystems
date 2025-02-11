@@ -7,7 +7,11 @@
         </h2>
       </div>
       <div class="card-body">
-        <div class="table-responsive">
+        <div v-if="documentos.length === 0" class="empty-state">
+          <i class="bi bi-folder2-open display-4 text-muted"></i>
+          <p class="text-muted mt-3">No hay documentos disponibles</p>
+        </div>
+        <div v-else class="table-responsive">
           <table class="table table-hover">
             <thead>
               <tr>
@@ -130,6 +134,37 @@ export default {
   margin: 0 2px;
 }
 .card {
-  box-shadow: 0 0.125rem 0.25rem rgba(255, 1, 1, 0.075);
+  width: 100%;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  min-height: 200px; /* Altura mínima cuando no hay documentos */
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.empty-state i {
+  color: #6c757d;
+}
+
+.empty-state p {
+  font-size: 1.1rem;
+  margin-bottom: 0;
+}
+
+.card-body {
+  min-height: auto; /* Elimina cualquier altura mínima fija */
+  max-height: calc(100vh - 300px); /* Altura máxima adaptativa */
+  overflow-y: auto;
+}
+
+.table-responsive {
+  margin-bottom: 0; /* Elimina el margen inferior extra */
 }
 </style>

@@ -4,33 +4,17 @@
       <div class="d-flex justify-content-between align-items-center">
         <h1 class="text-white mb-0">
           <i class="bi bi-folder me-2"></i>
-          Documentos de {{ clientName }}
+          Documentos de Admision: {{ expedienteId }}
         </h1>
-        <div>
-          <!-- Botón "Volver al Cliente" -->
-          <a :href="`/expedientes/${expedienteId}`" class="btn btn-light me-2">
-            <i class="bi bi-person me-2"></i>Volver al Cliente
-          </a>
-          <!-- Botón "Lista de Clientes", controlado por el rol -->
-          <a 
-            v-if="userRole !== 'CLIENTE'" 
-            href="/searchExpedient" 
-            class="btn btn-light">
-            <i class="bi bi-people me-2"></i>Lista de Clientes
-          </a>
-        </div>
+        <!-- Botón para abrir el modal -->
+        <button @click="showCreateModal = true" class="btn btn-light">
+          <i class="bi bi-plus-circle me-2"></i>Crear Nuevo Documento
+        </button>
       </div>
     </div>
 
     <div class="row g-4">
-      <div class="col-md-6">
-        <documento-create-exp 
-          :expediente-id="expedienteId"
-          @documento-creado="cargarDocumentos"
-        ></documento-create-exp>
-      </div>
-      
-      <div class="col-md-6">
+      <div class="col-md-12">
         <documento-list-exp 
           :documentos="documentos" 
           @editar-documento="editarDocumento"
@@ -39,6 +23,18 @@
         ></documento-list-exp>
       </div>
     </div>
+    
+    <!-- Modal para DocumentoCreateExp -->
+    <div v-if="showCreateModal" class="modal-backdrop" @click="showCreateModal = false"></div>
+    <transition name="modal">
+      <div v-if="showCreateModal" class="modal-container">
+        <documento-create-exp 
+          :expediente-id="expedienteId"
+          @documento-creado="documentoCreado"
+          @cerrar="showCreateModal = false"
+        ></documento-create-exp>
+      </div>
+    </transition>
     
     <documento-edit-exp 
       v-if="documentoEditando"
@@ -67,7 +63,7 @@ export default {
       type: String,
       required: true
     },
-    userRole: { // Recibe el rol del usuario como una prop
+    userRole: {
       type: String,
       required: true
     }
@@ -76,11 +72,11 @@ export default {
     return {
       documentos: [],
       documentoEditando: null,
-      documentoVisualizando: null
+      documentoVisualizando: null,
+      showCreateModal: false
     };
   },
   mounted() {
-    
     this.cargarDocumentos();
   },
   methods: {
@@ -125,6 +121,10 @@ export default {
       if (index !== -1) {
         this.documentos[index].estado = documentoActualizado.estado;
       }
+    },
+    documentoCreado() {
+      this.cargarDocumentos();
+      this.showCreateModal = false;
     }
   }
 };
@@ -154,7 +154,7 @@ h1 {
   margin-left: -0.5rem;
 }
 
-.col-md-6 {
+.col-md-12 {
   padding-right: 0.5rem;
   padding-left: 0.5rem;
 }
@@ -174,5 +174,37 @@ h1 {
   background-color: rgba(255, 255, 255, 0.2);
   border-color: rgba(255, 255, 255, 0.2);
   transform: translateY(-2px);
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.modal-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1001;
+  max-width: 90%;
+  max-height: 90%;
+  overflow-y: auto;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
+}
+
+.modal-enter-active, .modal-leave-active {
+  transition: opacity 0.3s;
+}
+
+.modal-enter, .modal-leave-to {
+  opacity: 0;
 }
 </style>
