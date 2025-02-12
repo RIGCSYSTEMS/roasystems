@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
     <div id="app">
         @if(isset($expediente))
             <expediente-index :expediente="{{ json_encode($expediente) }}"
@@ -15,7 +14,6 @@
             </div>
         @endif
     </div>
-</div>
 @endsection
 
 @push('scripts')
