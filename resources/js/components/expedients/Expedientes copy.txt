@@ -67,6 +67,9 @@
           </div>
         </div>
 
+        <!-- Línea de tiempo -->
+        <linea-tiempo-expediente :expediente="expediente" class="timeline-card"></linea-tiempo-expediente>
+
         <!-- Pestañas para Honorarios, Bitácora y Audiencias -->
         <div class="tabs-card">
           <div class="tabs-header">
@@ -89,6 +92,40 @@
           </div>
         </div>
       </div>
+
+      <!-- <div class="side-column"> -->
+        <!-- Resumen -->
+        <!-- <div class="summary-card">
+          <div class="card-header">
+            <i class="bi bi-info-circle"></i>
+            <h3>Resumen</h3>
+          </div>
+          <div class="card-body">
+            <div class="summary-item">
+              <span class="summary-label">Despacho:</span>
+              <span class="summary-value">{{ expediente.despacho }}</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Abogado:</span>
+              <span class="summary-value">{{ expediente.abogado }}</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Plazo FDA:</span>
+              <span class="summary-value">{{ expediente.plazo_fda ? formatDate(expediente.plazo_fda) : 'N/A' }}</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Boite:</span>
+              <span class="summary-value">{{ expediente.boite }}</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Progreso:</span>
+              <div class="progress-bar">
+                <div class="progress" :style="{ width: `${expediente.progreso}%` }"></div>
+              </div>
+              <span class="progress-text">{{ expediente.progreso }}%</span>
+            </div>
+          </div>
+        </div> -->
 
         <!-- Acciones rápidas -->
         <div class="actions-card">
