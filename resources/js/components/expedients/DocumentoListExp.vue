@@ -11,6 +11,7 @@
           <i class="bi bi-folder2-open display-4 text-muted"></i>
           <p class="text-muted mt-3">No hay documentos disponibles</p>
         </div>
+        
         <div v-else class="table-responsive">
           <table class="table table-hover">
             <thead>

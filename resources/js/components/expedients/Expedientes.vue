@@ -1,20 +1,21 @@
 <template>
   <div class="expediente-container">
-    <div class="expediente-header">
-      <h1 class="expediente-title">
-        {{ expediente.client.nombre_de_cliente }}
-        <span :class="['status-badge', getStatusClass(expediente.estatus_del_expediente)]">
-          {{ expediente.estatus_del_expediente }}
-        </span>
-      </h1>
-      <button @click="abrirModalEdicion" class="btn-edit">
-        <i class="bi bi-pencil"></i> Editar
-      </button>
-    </div>
+    <!-- Layout de dos columnas -->
+    <div class="two-column-layout">
+      <!-- Columna izquierda: información del expediente -->
+      <div class="left-column">
+        <div class="expediente-header">
+          <h1 class="expediente-title">
+            {{ expediente.client.nombre_de_cliente }}
+            <span :class="['status-badge', getStatusClass(expediente.estatus_del_expediente)]">
+              {{ expediente.estatus_del_expediente }}
+            </span>
+          </h1>
+          <button @click="abrirModalEdicion" class="btn-edit">
+            <i class="bi bi-pencil"></i> Editar
+          </button>
+        </div>
 
-    <div class="expediente-content">
-      <div class="main-column">
-        <!-- Información básica del expediente -->
         <div class="info-card">
           <div class="card-header">
             <i class="bi bi-file-earmark-text"></i>
@@ -49,7 +50,8 @@
               <div class="info-item">
                 <span class="info-label">Numero de dossier:</span>
                 <span class="info-value">{{ expediente.numero_de_dossier }}</span>
-              </div><div class="info-item">
+              </div>
+              <div class="info-item">
                 <span class="info-label">Plazo FDA:</span>
                 <span class="info-value">{{ formatDate(expediente.plazo_fda) }}</span>
               </div>
@@ -66,31 +68,10 @@
             </div>
           </div>
         </div>
-
-        <!-- Pestañas para Honorarios, Bitácora y Audiencias -->
-        <div class="tabs-card">
-          <div class="tabs-header">
-            <button 
-              v-for="tab in tabs" 
-              :key="tab.id" 
-              :class="['tab-button', { active: activeTab === tab.id }]"
-              @click="activeTab = tab.id"
-            >
-              <i :class="tab.icon"></i>
-              {{ tab.name }}
-            </button>
-          </div>
-          <div class="tabs-content">
-            <keep-alive>
-              <component :is="activeTabComponent" :expediente="expediente"
-              :expediente-id="expediente.id"
-              ></component>
-            </keep-alive>
-          </div>
-        </div>
       </div>
 
-        <!-- Acciones rápidas -->
+      <!-- Columna derecha: acciones rápidas -->
+      <div class="right-column">
         <div class="actions-card">
           <div class="card-header">
             <i class="bi bi-lightning"></i>
@@ -114,14 +95,33 @@
       </div>
     </div>
 
-    <!-- Modal de edición -->
-    <edicion-expediente-modal 
-      v-if="mostrarModalEdicion"
-      :expediente="expediente"
-      @cerrar="cerrarModalEdicion"
-      @actualizar="actualizarExpediente"
-    ></edicion-expediente-modal>
-  
+    <!-- Sección inferior: pestañas (ancho completo) -->
+    <div class="full-width-tabs">
+      <div class="tabs-card">
+        <div class="tabs-header">
+          <button 
+            v-for="tab in tabs" 
+            :key="tab.id" 
+            :class="['tab-button', { active: activeTab === tab.id }]"
+            @click="activeTab = tab.id"
+          >
+            <i :class="tab.icon"></i>
+            {{ tab.name }}
+          </button>
+        </div>
+        <div class="tabs-content">
+          <keep-alive>
+            <component 
+              :is="activeTabComponent" 
+              :expediente="expediente"
+              :expediente-id="expediente.id"
+            ></component>
+          </keep-alive>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </template>
 
 <script>
@@ -232,7 +232,7 @@ export default {
 .expediente-container {
   background-color: #f8f9fa;
   border-radius: 10px;
-  padding: 2rem;
+  padding: 1.5rem; /* Reduce el padding general */
   box-shadow: 0 0 20px rgba(0,0,0,0.1);
 }
 
@@ -241,61 +241,53 @@ export default {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
+  background: linear-gradient(135deg, #3b0866 0%, #964ad4 100%);
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  color: white;
 }
 
 .expediente-title {
   font-size: 2rem;
-  color: #2c3e50;
   display: flex;
   align-items: center;
   gap: 1rem;
-}
-
-.status-badge {
-  font-size: 0.9rem;
-  padding: 0.5em 1em;
-  border-radius: 20px;
-  font-weight: 500;
-}
-
-.status-open { background-color: #28a745; color: white; }
-.status-closed { background-color: #6c757d; color: white; }
-.status-pending { background-color: #ffc107; color: black; }
-.status-cancelled { background-color: #dc3545; color: white; }
-
-.btn-edit {
-  background-color: #3498db;
   color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
+  margin: 0;
+  font-weight: 600;
 }
 
-.btn-edit:hover {
-  background-color: #2980b9;
+/* Nuevo layout para el contenido principal y acciones rápidas */
+.expediente-layout {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
 }
 
 .expediente-content {
+  flex: 1;
   display: flex;
+  flex-direction: column;
   gap: 2rem;
 }
 
-.main-column {
-  flex: 1;
-}
-
-.side-column {
-  width: 300px;
-}
-
-.info-card, .timeline-card, .tabs-card, .summary-card, .actions-card {
-  background-color: white;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  margin-bottom: 2rem;
+.info-card, .tabs-card, .actions-card {
+  background: white;
+  border-radius: 1rem;
   overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tabs-card {
+  margin-bottom: 0; /* Elimina el margen inferior */
+}
+
+.actions-card {
+  width: 300px;
+  flex-shrink: 0;
+  align-self: flex-start;
 }
 
 .card-header {
@@ -308,30 +300,186 @@ export default {
 }
 
 .card-body {
-  padding: 1rem;
+  padding: 1.5rem;
 }
 
+.btn-edit {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  backdrop-filter: blur(4px);
+}
+
+.btn-edit:hover {
+  background-color: rgba(255,255,255,0.3);
+}
+
+/* Layout principal */
+.expediente-container {
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  padding: 2rem;
+  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+
+/* Layout de dos columnas */
+.two-column-layout {
+  display: flex;
+  gap: 1.5rem; /* Reduce el espacio entre columnas */
+  margin-bottom: 1.5rem; /* Reduce el espacio antes de las pestañas */
+}
+
+/* Columna izquierda */
+.left-column {
+  flex: 1; /* Toma el espacio disponible */
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem; /* Reduce el espacio entre elementos */
+}
+
+/* Columna derecha */
+.right-column {
+  width: 300px; /* Ancho fijo para acciones rápidas */
+  flex-shrink: 0; /* Evita que se encoja */
+}
+
+/* Sección de pestañas a ancho completo */
+.full-width-tabs {
+  width: 100%;
+  margin-top: 0; /* Elimina el margen superior */
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .two-column-layout {
+    flex-direction: column; /* Apila las columnas en móvil */
+  }
+
+  .right-column {
+    width: 100%; /* Ancho completo en móvil */
+    order: -1; /* Mueve las acciones rápidas arriba en móvil */
+  }
+}
+
+/* Estilos para los botones de acción */
+.action-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.75rem;
+  border: none;
+  border-radius: 0.5rem;
+  background-color: #3498db;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.action-button:last-child {
+  margin-bottom: 0;
+}
+
+.action-button:hover {
+  background-color: #2980b9;
+  transform: translateY(-1px);
+}
+
+.action-button i {
+  font-size: 1.25rem;
+}
+
+/* Estilos para las pestañas */
+.tabs-header {
+  display: flex;
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #e9ecef;
+  width: 100%;
+}
+
+.tab-button {
+  flex: 1;
+  padding: 1rem 1.5rem;
+  border: none;
+  background: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: #6c757d;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.tab-button.active {
+  background-color: white;
+  color: #964ad4;
+  border-bottom: 2px solid #964ad4;
+}
+
+.tab-button:hover:not(.active) {
+  background-color: #e9ecef;
+}
+
+.tabs-content {
+  padding: 1rem;
+  min-height: 200px;
+}
+
+.empty-state {
+  padding: 2rem;
+  text-align: center;
+  color: #6c757d;
+}
+
+.empty-state i {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+/* Estilos para la información */
 .info-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
+  gap: 1.5rem;
 }
 
-.info-item, .summary-item {
+.info-item {
   display: flex;
   flex-direction: column;
+  gap: 0.25rem;
 }
 
-.info-label, .summary-label {
-  font-weight: 600;
+.info-label {
+  font-size: 0.875rem;
   color: #6c757d;
-  font-size: 0.9rem;
+  font-weight: 500;
 }
 
-.info-value, .summary-value {
+.info-value {
   color: #2c3e50;
-  font-size: 1rem;
+  font-weight: 500;
 }
+
+/* Estilos para badges */
+.status-badge {
+  font-size: 0.9rem;
+  padding: 0.5em 1em;
+  border-radius: 20px;
+  font-weight: 500;
+}
+
+.status-open { background-color: #28a745; color: white; }
+.status-closed { background-color: #6c757d; color: white; }
+.status-pending { background-color: #ffc107; color: black; }
+.status-cancelled { background-color: #dc3545; color: white; }
 
 .priority-badge {
   align-self: flex-start;
@@ -344,82 +492,27 @@ export default {
 .priority-urgent { background-color: #dc3545; color: white; }
 .priority-normal { background-color: #17a2b8; color: white; }
 
-.tabs-header {
-  display: flex;
-  background-color: #f8f9fa;
-  border-bottom: 1px solid #dee2e6;
-}
-
-.tab-button {
-  padding: 1rem;
-  border: none;
-  background: none;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.tab-button.active {
-  background-color: white;
-  border-bottom: 2px solid #3498db;
-  font-weight: 600;
-}
-
-.tabs-content {
-  padding: 1rem;
-}
-
-.progress-bar {
-  width: 100%;
-  height: 10px;
-  background-color: #e9ecef;
-  border-radius: 5px;
-  overflow: hidden;
-  margin-top: 0.5rem;
-}
-
-.progress {
-  height: 100%;
-  background-color: #3498db;
-  transition: width 0.3s ease;
-}
-
-.progress-text {
-  margin-top: 0.25rem;
-  font-size: 0.9rem;
-  color: #6c757d;
-}
-
-.action-button {
-  display: block;
-  width: 100%;
-  padding: 0.75rem;
-  margin-bottom: 0.5rem;
-  border: none;
-  border-radius: 5px;
-  background-color: #3498db;
-  color: white;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  text-align: left;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.action-button:hover {
-  background-color: #2980b9;
-}
-
-@media (max-width: 768px) {
-  .expediente-content {
+/* Responsive */
+@media (max-width: 1024px) {
+  .expediente-layout {
     flex-direction: column;
   }
 
-  .side-column {
+  .actions-card {
     width: 100%;
+    order: -1;
+  }
+
+  .expediente-header {
+    padding: 1.5rem;
+  }
+
+  .expediente-title {
+    font-size: 1.5rem;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
   }
 }
 </style>
