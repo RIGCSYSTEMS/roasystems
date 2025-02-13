@@ -22,7 +22,7 @@
                 <th scope="col">
                   <i class="bi bi-calendar me-2"></i>Fecha de subida
                 </th>
-                <th scope="col">
+                <th scope="col">g
                   <i class="bi bi-check-circle me-2"></i>Estado
                 </th>
                 <th scope="col">
