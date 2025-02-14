@@ -4,7 +4,7 @@
       <div class="d-flex justify-content-between align-items-center">
         <h1 class="text-white mb-0">
           <i class="bi bi-folder me-2"></i>
-          Documentos de Admision: {{ expedienteId }}
+          Documentos de Admision: {{ expediente.numero_de_dossier }}
         </h1>
         <!-- Botón para abrir el modal -->
         <button @click="showCreateModal = true" class="btn btn-light">
@@ -64,6 +64,10 @@ export default {
       required: true
     },
     userRole: {
+      type: String,
+      required: true
+    },
+    expediente: {
       type: String,
       required: true
     }
