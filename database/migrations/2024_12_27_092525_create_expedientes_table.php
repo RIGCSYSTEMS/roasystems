@@ -24,7 +24,7 @@ return new class extends Migration
             ->on('tipos_expedientes')
             ->onDelete('cascade');
             $table->date('fecha_de_apertura');
-            $table->enum('estatus_del_expediente', ['Abierto', 'Cerrado', 'Pendiente', 'Cancelado'])->default('Pendiente');
+            $table->enum('estatus_del_expediente', ['Abierto', 'Cerrado', 'Cancelado'])->default('Abierto');
             $table->enum('prioridad',['Urgente','Normal'])->default('Normal');
             $table->date('fecha_de_cierre')->nullable();
             $table->string('numero_de_dossier')->unique();

@@ -100,6 +100,8 @@ Route::middleware(['auth'])->group(function () {
 
         Route::resource('expedientes', ExpedienteController::class);
         Route::get('/expedientes/{id}', [ExpedienteController::class, 'show'])->name('expedientes.show');
+        Route::put('/expedientes/{expediente}/estado', [ExpedienteController::class, 'updateStatus'])->name('expedientes.updateStatus');
+
 
 
 

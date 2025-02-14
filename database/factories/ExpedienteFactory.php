@@ -23,7 +23,7 @@ class ExpedienteFactory extends Factory
             'tipo_expediente_id' => $this->faker
             ->randomElement(['ASILO', 'APPEL','RESIDENCIA PERMANENTE','ERAR','APADRINAMIENTO','HUMANITARIA','RESIDENCIA TEMPORAL']), // Ajustar según los tipos reales
             'numero_de_dossier' => $this->faker->unique()->uuid,
-            'estatus_del_expediente' => $this->faker->randomElement(['Abierto', 'Cerrado', 'Pendiente', 'Cancelado']),
+            'estatus_del_expediente' => $this->faker->randomElement(['Abierto', 'Cerrado', 'Cancelado']),
             'prioridad' => $this->faker->randomElement(['Urgente', 'Normal']),
             'fecha_de_apertura' => $this->faker->date,
             'fecha_de_cierre' => $this->faker->optional()->date,

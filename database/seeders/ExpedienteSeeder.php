@@ -61,7 +61,7 @@ class ExpedienteSeeder extends Seeder
 
     private function getRandomStatus()
     {
-        $statuses = ['Abierto', 'Cerrado', 'Pendiente', 'Cancelado'];
+        $statuses = ['Abierto', 'Cerrado', 'Cancelado'];
         return $statuses[array_rand($statuses)];
     }
 

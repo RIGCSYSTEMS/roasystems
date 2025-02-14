@@ -50,12 +50,42 @@ class ExpedienteController extends Controller
 
     public function update(Request $request, Expediente $expediente)
     {
-//
+        // Verificar si el usuario tiene permiso para editar
+        if ($expediente->estatus_del_expediente === 'Cerrado' && 
+            !in_array(Auth::user()->role, ['DIRECTOR', 'ADMIN'])) {
+            return response()->json(['error' => 'No tienes permiso para editar este expediente'], 403);
+        }
+    
+        // Validación de los datos del request
+        $validatedData = $request->validate([
+            // ... tus reglas de validación ...
+        ]);
+        
+        // Actualizar el expediente
+        $expediente->update($validatedData);
+        
+        return response()->json($expediente, 200);
     }
 
     public function destroy(Expediente $expediente)
     {
 //
     }
+    public function updateStatus(Request $request, Expediente $expediente)
+{
+    // Verifica permisos
+    if (!in_array(Auth::user()->role, ['DIRECTOR', 'ADMIN']) && $expediente->estatus_del_expediente === 'Cerrado') {
+        return response()->json(['error' => 'No tienes permiso para cambiar el estado de este expediente'], 403);
+    }
+
+    $request->validate([
+        'estado' => 'required|in:Abierto,Cerrado,Cancelado',
+    ]);
+
+    $expediente->estatus_del_expediente = $request->estado;
+    $expediente->save();
+
+    return response()->json($expediente);
+}
     
 }

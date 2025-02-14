@@ -7,11 +7,13 @@
         <div class="expediente-header">
           <h1 class="expediente-title">
             {{ expediente.client.nombre_de_cliente }}
-            <span :class="['status-badge', getStatusClass(expediente.estatus_del_expediente)]">
-              {{ expediente.estatus_del_expediente }}
-            </span>
           </h1>
-          <button @click="abrirModalEdicion" class="btn-edit">
+      <ExpedienteStatusSelector 
+        :currentStatus="expediente.estatus_del_expediente"
+        :canEdit="puedeEditarExpediente"
+        @status-changed="cambiarEstadoExpediente"
+      />
+          <button v-if="puedeEditarExpediente" @click="abrirModalEdicion" class="btn-edit">
             <i class="bi bi-pencil"></i> Editar
           </button>
         </div>
@@ -135,6 +137,7 @@ import DocumentoEditExp from './DocumentoEditExp.vue';
 import DocumentoIndexExp from './DocumentoIndexExp.vue';
 import DocumentoListExp from './DocumentoListExp.vue';
 import DocumentoViewExp from './DocumentoViewExp.vue';
+import ExpedienteStatusSelector from './ExpedienteStatusSelector.vue';
 
 
 export default {
@@ -148,11 +151,16 @@ export default {
     DocumentoEditExp,
     DocumentoIndexExp,
     DocumentoListExp,
-    DocumentoViewExp
+    DocumentoViewExp,
+    ExpedienteStatusSelector
   },
   props: {
     expediente: {
       type: Object,
+      required: true
+    },
+    userRole: {
+      type: String,
       required: true
     }
   },
@@ -183,9 +191,21 @@ export default {
       console.log('Active tab:', this.activeTab);
     console.log('Expediente ID:', this.expediente.id);
       return components[this.activeTab];
+    },
+    puedeEditarExpediente() {
+      return this.expediente.estatus_del_expediente !== 'Cerrado' || 
+             ['DIRECTOR', 'ADMIN'].includes(this.userRole);
     }
   },
+  
   methods: {
+    abrirModalEdicion() {
+      if (this.puedeEditarExpediente) {
+        this.mostrarModalEdicion = true;
+      } else {
+        alert('No tienes permiso para editar este expediente.');
+      }
+    },
     formatDate(date) {
       return new Date(date).toLocaleDateString('es-ES', {
         year: 'numeric',
@@ -193,15 +213,23 @@ export default {
         day: 'numeric'
       });
     },
-    getStatusClass(status) {
-      const classes = {
-        'Abierto': 'status-open',
-        'Cerrado': 'status-closed',
-        'Pendiente': 'status-pending',
-        'Cancelado': 'status-cancelled'
-      };
-      return classes[status] || 'status-default';
-    },
+    cambiarEstadoExpediente(nuevoEstado) {
+      axios.put(`/expedientes/${this.expediente.id}/estado`, { estado: nuevoEstado })
+    .then(response => {
+      // Actualiza el estado del expediente localmente
+      this.expediente.estatus_del_expediente = nuevoEstado;
+      
+      // Forzar una actualización del componente
+      this.$forceUpdate();
+
+      // Emitir un evento para notificar al componente padre si es necesario
+      this.$emit('expediente-actualizado', this.expediente);
+    })
+    .catch(error => {
+      console.error('Error al cambiar el estado del expediente:', error);
+      // Maneja el error (por ejemplo, mostrando un mensaje al usuario)
+    });
+  },
     getPriorityClass(priority) {
       return priority === 'Urgente' ? 'priority-urgent' : 'priority-normal';
     },
