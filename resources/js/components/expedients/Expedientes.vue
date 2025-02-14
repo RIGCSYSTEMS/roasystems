@@ -230,10 +230,10 @@ export default {
 
 <style scoped>
 .expediente-container {
-  background-color: #f8f9fa;
+  background-color: #ffffff;
   border-radius: 10px;
   padding: 1.5rem; /* Reduce el padding general */
-  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+  /* box-shadow: 0 0 20px rgba(0,0,0,0.1); */
 }
 
 .expediente-header {
@@ -246,6 +246,11 @@ export default {
   border-radius: 15px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   color: white;
+}
+
+.expediente-header:hover{
+transform: translateY(-5px);
+box-shadow: 0 10px 10px rgba(0,0,0,0.1);
 }
 
 .expediente-title {
@@ -276,12 +281,21 @@ export default {
   background: white;
   border-radius: 1rem;
   overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+}
+
+.info-card:hover, .tabs-card:hover, .actions-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 10px rgba(0,0,0,0.1);
 }
 
 .tabs-card {
   margin-bottom: 0; /* Elimina el margen inferior */
+  display: flex;
+  flex-direction: column;
+  min-height: 0; /* Importante para que se ajuste al contenido */
 }
 
 .actions-card {
@@ -320,10 +334,10 @@ export default {
 
 /* Layout principal */
 .expediente-container {
-  background-color: #f8f9fa;
+  background-color: #ffffff;
   border-radius: 10px;
   padding: 2rem;
-  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+  /* box-shadow: 0 0 20px rgba(0,0,0,0.1); */
 }
 
 /* Layout de dos columnas */
@@ -431,6 +445,17 @@ export default {
 .tabs-content {
   padding: 1rem;
   min-height: 200px;
+  height: auto; /* Elimina la altura fija */
+  min-height: 0; /* Permite que se ajuste al contenido */
+  overflow: auto; /* Permite scroll si el contenido es muy largo */
+  transition: height 0.3s ease;
+}
+
+/* Asegúrate que los componentes de las pestañas también sean flexibles */
+.tabs-content > * {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .empty-state {

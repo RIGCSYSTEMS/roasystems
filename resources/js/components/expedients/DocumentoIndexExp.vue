@@ -142,6 +142,11 @@ export default {
 .container-fluid {
   background-color: #f8f9fa;
   min-height: 100vh;
+  height: auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: auto; /* Permite scroll si el contenido es muy largo */
 }
 
 h1 {
