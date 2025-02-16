@@ -167,12 +167,13 @@ export default {
   data() {
     return {
       mostrarModalEdicion: false,
-      activeTab: 'bitacora',
+      activeTab: 'DocumentoIndexExp',
       tabs: [
+      { id: 'DocumentoIndexExp', name: 'Listar-Documentos', icon: 'bi bi-file-earmark-text' },
         { id: 'honorarios', name: 'Honorarios', icon: 'bi bi-cash' },
         { id: 'bitacora', name: 'Bitácora', icon: 'bi bi-journal-text' },
-        { id: 'audiencias', name: 'Audiencias', icon: 'bi bi-calendar-event' },
-        { id: 'DocumentoIndexExp', name: 'Listar-Documentos', icon: 'bi bi-file-earmark-text' }
+        { id: 'audiencias', name: 'Audiencias', icon: 'bi bi-calendar-event' }
+        
       ]
     };
   },

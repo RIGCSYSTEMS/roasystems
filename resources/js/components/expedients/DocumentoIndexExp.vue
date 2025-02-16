@@ -16,7 +16,10 @@
     <div class="row g-4">
       <div class="col-md-12">
         <documento-list-exp 
-          :documentos="documentos" 
+          :documentos="documentos"
+          :expediente="expediente"
+          :user-role="userRole" 
+          :expedienteStatus="expediente.estatus_del_expediente"
           @editar-documento="editarDocumento"
           @eliminar-documento="eliminarDocumento"
           @ver-documento="verDocumento"
@@ -68,7 +71,7 @@ export default {
       required: true
     },
     expediente: {
-      type: String,
+      type: Object,
       required: true
     }
   },

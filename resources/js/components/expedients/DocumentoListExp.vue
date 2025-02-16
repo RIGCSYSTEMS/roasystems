@@ -75,11 +75,24 @@ export default {
     documentos: {
       type: Array,
       required: true
+    },
+    userRole: {
+      type: String,
+      required: true
+    },
+    expediente: {
+      type: Object,
+      required: true
+      },
+    expedienteStatus: {
+      type: String,
+      required: true
     }
   },
   data() {
     return {
-      userRole: null
+      userRole: null,
+      expediente: null
     }
   },
   mounted() {
@@ -99,8 +112,8 @@ export default {
     getEstadoClass(estado) {
       const clases = {
         'pendiente': 'text-info',
-        'Aceptado': 'text-success',
-        'Rechazado': 'text-danger'
+        'aceptado': 'text-success',
+        'rechazado': 'text-danger'
       };
       return clases[estado] || 'text-info';
     },
@@ -110,11 +123,16 @@ export default {
       });
     },
     puedeEditarDocumento(documento) {
-      if (['ADMIN', 'DIRECTOR', 'ABOGADO'].includes(this.userRole)) {
-        return true;
-      }
-      return this.userRole === 'CLIENTE' && documento.estado !== 'Aceptado';
-    },
+      return this.expedienteStatus !== 'Cerrado' || 
+      ['DIRECTOR', 'ADMIN'].includes(this.userRole);
+      },
+
+    // Se oculta el boton depende el estado del documente
+    //   if (['ADMIN', 'DIRECTOR', 'ABOGADO'].includes(this.userRole)) {
+    //     return true;
+    //   }
+    //   return this.userRole === 'CLIENTE' && documento.estado !== 'Aceptado' ;
+    // },
     puedeEliminarDocumento(documento) {
       return this.puedeEditarDocumento(documento);
     }

@@ -93,10 +93,9 @@ export default {
     },
     getEstadoClass(estado) {
       const clases = {
-        'En Revisión': 'text-info',
-        'Aceptado': 'text-success',
-        'Rechazado': 'text-danger',
-        'Obsoleto': 'text-secondary'
+        'pendiente': 'text-info',
+        'aceptado': 'text-success',
+        'rechazado': 'text-danger',
       };
       return clases[estado] || 'text-info';
     },
@@ -109,7 +108,7 @@ export default {
       if (['ADMIN', 'DIRECTOR', 'ABOGADO'].includes(this.userRole)) {
         return true;
       }
-      return this.userRole === 'CLIENTE' && documento.estado !== 'Aceptado';
+      return this.userRole === 'CLIENTE' && documento.estado !== 'aceptado';
     },
     puedeEliminarDocumento(documento) {
       return this.puedeEditarDocumento(documento);

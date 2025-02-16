@@ -20,7 +20,7 @@
             rows="3"
           ></textarea>
         </div>
-        <div class="mb-3">
+        <!-- <div class="mb-3">
           <label for="formato" class="form-label">
             <i class="bi bi-file-earmark me-2"></i>Formato del Documento
           </label>
@@ -33,7 +33,7 @@
             <option value="PDF">PDF</option>
             <option value="IMAGEN">Imagen</option>
           </select>
-        </div>
+        </div> -->
         
         <div class="mb-3">
           <label for="archivo" class="form-label">

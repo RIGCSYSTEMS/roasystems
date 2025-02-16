@@ -16,9 +16,11 @@ class DocumentoExpediente extends Model
         'etapa_id',
         'nombre',
         'ruta',
+        'estado',
+        'formato',
         'tipo',
         'validado',
-        'descripcion',
+        'observaciones',
     ];
 
     public function etapa()

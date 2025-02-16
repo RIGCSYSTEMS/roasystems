@@ -60,13 +60,13 @@ class DocumentoExpedienteController extends Controller
     $formData = [
         'expedientes_id' => $expedienteId,
         'nombre' => $request->nombre,
-        'formato' => $request->formato,
+        // 'formato' => $request->formato,
         'observaciones' => $request->observaciones
     ];
         try {
             $validated = $request->validate([
                 'nombre' => 'required|string',
-                'formato' => 'required|in:PDF,IMAGEN',
+                // 'formato' => 'required|in:PDF,IMAGEN',
                 'archivo' => 'required|file|mimes:pdf,jpg,jpeg,png|max:10240',
                 'observaciones' => 'nullable|string',
                 'expediente_id' => 'required|exists:expedientes,id'
@@ -74,6 +74,18 @@ class DocumentoExpedienteController extends Controller
     
             $expedienteId = $request->expediente_id;
             $file = $request->file('archivo');
+
+            // Detectar automáticamente el tipo de archivo
+            $mimeType = $file->getMimeType();
+            $formato = $this->detectarFormato($mimeType);
+
+            if (!$formato) {
+                return response()->json([
+                    'success' => false,
+                    'mensaje' => 'Tipo de archivo no soportado'
+                ], 400);
+            }
+
             $extension = $file->getClientOriginalExtension();
             $fileName = time() . '_' . uniqid() . '.' . $extension;
     
@@ -87,7 +99,7 @@ class DocumentoExpedienteController extends Controller
             $documentosexp->nombre = $request->nombre;
             $documentosexp->expediente_id = $expedienteId;
             $documentosexp->user_id = Auth::id();
-            $documentosexp->formato = $request->formato;
+            $documentosexp->formato = $formato;
             $documentosexp->estado = 'pendiente';
             $documentosexp->ruta = $path;
             $documentosexp->observaciones = $request->observaciones;
@@ -106,6 +118,20 @@ class DocumentoExpedienteController extends Controller
                 'mensaje' => 'Error al procesar el documento: ' . $e->getMessage()
             ], 500);
         }
+    }
+
+    private function detectarFormato($mimeType)
+    {
+        $pdfMimes = ['application/pdf'];
+        $imageMimes = ['image/jpeg', 'image/png', 'image/jpg'];
+
+        if (in_array($mimeType, $pdfMimes)) {
+            return 'PDF';
+        } elseif (in_array($mimeType, $imageMimes)) {
+            return 'IMAGEN';
+        }
+
+        return null;
     }
     
     public function update(Request $request, $id)
@@ -129,7 +155,7 @@ class DocumentoExpedienteController extends Controller
 
         $request->validate([
             'nombre' => 'nullable|string',
-            'formato' => 'required|in:PDF,IMAGEN',
+            // 'formato' => 'required|in:PDF,IMAGEN',
             'archivo' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
             'observaciones' => 'nullable|string'
         ]);
@@ -145,7 +171,7 @@ class DocumentoExpedienteController extends Controller
             }
 
             $documentosexp->nombre = $request->nombre;
-            $documentosexp->formato = $request->formato;
+            // $documentosexp->formato = $request->formato;
             $documentosexp->observaciones = $request->observaciones;
             $documentosexp->save();
 
