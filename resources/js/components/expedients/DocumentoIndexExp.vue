@@ -7,7 +7,7 @@
           Documentos de Admision: {{ expediente.numero_de_dossier }}
         </h1>
         <!-- Botón para abrir el modal -->
-        <button @click="showCreateModal = true" class="btn btn-light">
+        <button @click="$emit('abrir-modal-crear')" class="btn btn-light">
           <i class="bi bi-plus-circle me-2"></i>Crear Nuevo Documento
         </button>
       </div>
@@ -75,6 +75,7 @@ export default {
       required: true
     }
   },
+  emits: ['abrir-modal-crear'],
   data() {
     return {
       documentos: [],

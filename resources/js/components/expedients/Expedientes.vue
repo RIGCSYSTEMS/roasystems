@@ -117,10 +117,22 @@
               :is="activeTabComponent" 
               :expediente="expediente"
               :expediente-id="expediente.id"
+              @abrir-modal-crear="abrirModalCrear"
             ></component>
           </keep-alive>
         </div>
       </div>
+    </div>
+  </div>
+
+<!-- Modal para crear documento -->
+<div v-if="mostrarModalCrear" class="modal-backdrop" @click="cerrarModalCrear">
+    <div class="modal-container" @click.stop>
+      <documento-create-exp 
+        :expediente-id="expediente.id"
+        @documento-creado="documentoCreado"
+        @cerrar="cerrarModalCrear"
+      ></documento-create-exp>
     </div>
   </div>
 
@@ -167,13 +179,13 @@ export default {
   data() {
     return {
       mostrarModalEdicion: false,
+      mostrarModalCrear: false,
       activeTab: 'DocumentoIndexExp',
       tabs: [
       { id: 'DocumentoIndexExp', name: 'Listar-Documentos', icon: 'bi bi-file-earmark-text' },
         { id: 'honorarios', name: 'Honorarios', icon: 'bi bi-cash' },
         { id: 'bitacora', name: 'Bitácora', icon: 'bi bi-journal-text' },
-        { id: 'audiencias', name: 'Audiencias', icon: 'bi bi-calendar-event' }
-        
+        { id: 'audiencias', name: 'Audiencias', icon: 'bi bi-calendar-event' }        
       ]
     };
   },
@@ -206,6 +218,16 @@ export default {
       } else {
         alert('No tienes permiso para editar este expediente.');
       }
+    },
+    abrirModalCrear() {
+      this.mostrarModalCrear = true;
+    },
+    cerrarModalCrear() {
+      this.mostrarModalCrear = false;
+    },
+    documentoCreado() {
+      this.cerrarModalCrear();
+      // Aquí puedes agregar lógica adicional si es necesario
     },
     formatDate(date) {
       return new Date(date).toLocaleDateString('es-ES', {
@@ -568,5 +590,36 @@ box-shadow: 0 10px 10px rgba(0,0,0,0.1);
   .info-grid {
     grid-template-columns: 1fr;
   }
+}
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.modal-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1001;
+  max-width: 90%;
+  max-height: 90%;
+  overflow-y: auto;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
+}
+
+.modal-enter-active, .modal-leave-active {
+  transition: opacity 0.3s;
+}
+
+.modal-enter, .modal-leave-to {
+  opacity: 0;
 }
 </style>

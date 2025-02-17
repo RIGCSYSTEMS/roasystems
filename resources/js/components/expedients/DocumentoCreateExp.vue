@@ -14,11 +14,11 @@
           <label for="nombre" class="form-label">
             <i class="bi bi-chat-text me-2"></i>Nombre del Documento
           </label>
-          <textarea 
+          <input 
             v-model="nuevoDocumento.nombre" 
             class="form-control custom-textarea" 
             rows="3"
-          ></textarea>
+          ></input>
         </div>
         <!-- <div class="mb-3">
           <label for="formato" class="form-label">
@@ -77,6 +77,7 @@ export default {
       required: true,
     }
   },
+  emits: ['documento-creado', 'cerrar'],
   data() {
     return {
       nuevoDocumento: {
