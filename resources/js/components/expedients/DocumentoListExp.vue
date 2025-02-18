@@ -98,6 +98,7 @@ export default {
   mounted() {
     this.getUserRole();
   },
+  emits: ['ver-documento', 'editar-documento', 'eliminar-documento'],
   methods: {
     formatDate(date) {
       const options = { 

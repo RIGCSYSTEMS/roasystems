@@ -117,7 +117,12 @@
               :is="activeTabComponent" 
               :expediente="expediente"
               :expediente-id="expediente.id"
+              :documento="documentoVisualizando"
+              :user-role="userRole"
+              :expediente-name="expediente.numero_de_dossier"
               @abrir-modal-crear="abrirModalCrear"
+              @editar-documento="abrirModalEditar"
+              @ver-documento="abrirModalVer"
             ></component>
           </keep-alive>
         </div>
@@ -126,7 +131,10 @@
   </div>
 
 <!-- Modal para crear documento -->
-<div v-if="mostrarModalCrear" class="modal-backdrop" @click="cerrarModalCrear">
+<teleport to="body">
+  <transition name="modal">
+<div v-if="mostrarModalCrear" class="modal-wrapper">
+  <div class="modal-backdrop" @click="cerrarModalCrear"></div>
     <div class="modal-container" @click.stop>
       <documento-create-exp 
         :expediente-id="expediente.id"
@@ -135,6 +143,44 @@
       ></documento-create-exp>
     </div>
   </div>
+</transition>
+</teleport>
+
+    <!-- Modal para ver documento -->
+    <teleport to="body">
+    <transition name="modal">
+      <div v-if="mostrarModalVer" class="modal-wrapper">
+        <div class="modal-backdrop" @click.self="cerrarModalVer"></div>
+        <div class="modal-container" @click.stop>
+          <documento-view-exp
+            v-if="documentoVisualizando"
+            :documento="documentoVisualizando"
+            :expediente="expediente"
+            :user-role="userRole"
+            @cerrar-vista="cerrarModalVer"
+            @estado-actualizado="actualizarEstadoDocumento"
+          ></documento-view-exp>
+        </div>
+      </div>
+    </transition>
+  </teleport>
+
+     <!-- Modal para editar documento -->
+     <teleport to="body">
+    <transition name="modal">
+      <div v-if="mostrarModalEditar" class="modal-wrapper">
+        <div class="modal-backdrop" @click.self="cerrarModalEditar"></div>
+        <div class="modal-container" @click.stop> 
+      <documento-edit-exp 
+      v-if="documentoEditando"
+      :documento="documentoEditando"
+      @documento-actualizado="documentoActualizado"
+      @cancelar-edicion="cerrarModalEditar"
+    ></documento-edit-exp>
+  </div>
+      </div>
+    </transition>
+  </teleport>
 
 </template>
 
@@ -174,12 +220,25 @@ export default {
     userRole: {
       type: String,
       required: true
+    },
+    expedienteId: {
+      type: Number,
+      required: true
+    },
+    expedienteName: {
+      type: String,
+      required: true
     }
   },
   data() {
     return {
+      documentos: [],
       mostrarModalEdicion: false,
       mostrarModalCrear: false,
+      mostrarModalVer: false,
+      mostrarModalEditar: false,
+      documentoVisualizando: null,
+      documentoEditando: null,
       activeTab: 'DocumentoIndexExp',
       tabs: [
       { id: 'DocumentoIndexExp', name: 'Listar-Documentos', icon: 'bi bi-file-earmark-text' },
@@ -210,7 +269,10 @@ export default {
              ['DIRECTOR', 'ADMIN'].includes(this.userRole);
     }
   },
-  
+  emits: ['expediente-actualizado', 'actualizar'],
+  mounted() {
+    this.cargarDocumentos();
+  },
   methods: {
     abrirModalEdicion() {
       if (this.puedeEditarExpediente) {
@@ -219,6 +281,18 @@ export default {
         alert('No tienes permiso para editar este expediente.');
       }
     },
+    //Modales
+    cargarDocumentos() {
+      axios.get(`/expedientes/${this.expedienteId}/documentos/list`)
+        .then(response => {
+          this.documentos = response.data;
+          // Forzar actualización del componente
+      this.$forceUpdate();
+        })
+        .catch(error => {
+          console.error('Error al cargar documentos:', error);
+        });
+    },
     abrirModalCrear() {
       this.mostrarModalCrear = true;
     },
@@ -226,9 +300,56 @@ export default {
       this.mostrarModalCrear = false;
     },
     documentoCreado() {
-      this.cerrarModalCrear();
-      // Aquí puedes agregar lógica adicional si es necesario
+      this.cargarDocumentos();
+      this.mostrarModalCrear = false;
     },
+
+    abrirModalVer(documento) {
+      this.documentoVisualizando = null; // Reset first
+      this.$nextTick(() => {
+        this.documentoVisualizando = documento;
+        this.mostrarModalVer = true;
+      });
+    },
+    cerrarModalVer() {
+      this.mostrarModalVer = false;
+      this.$nextTick(() => {
+        this.documentoVisualizando = null;
+      });
+    },
+    actualizarEstadoDocumento(documentoActualizado) {
+      // Si tienes acceso directo a la lista de documentos
+      if (this.documentos) {
+        const index = this.documentos.findIndex(doc => doc.id === documentoActualizado.id);
+        if (index !== -1) {
+          this.documentos[index].estado = documentoActualizado.estado;
+        }
+      }
+      // O si necesitas recargar los documentos
+      this.$refs.documentoIndex?.cargarDocumentos();
+    },
+
+    abrirModalEditar(documento) {
+      this.documentoEditando = null; // Reset first
+      this.$nextTick(() => {
+        this.documentoEditando = documento;
+        this.mostrarModalEditar = true;
+      });
+    },
+
+    cerrarModalEditar() {
+      this.mostrarModalEditar = false;
+      this.$nextTick(() => {
+        this.documentoEditando = null;
+      });
+    },
+    documentoActualizado() {
+      this.cargarDocumentos();
+      this.cancelarEdicion();
+    },
+
+
+
     formatDate(date) {
       return new Date(date).toLocaleDateString('es-ES', {
         year: 'numeric',
@@ -591,6 +712,19 @@ box-shadow: 0 10px 10px rgba(0,0,0,0.1);
     grid-template-columns: 1fr;
   }
 }
+
+.modal-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
 .modal-backdrop {
   position: fixed;
   top: 0;
@@ -602,10 +736,7 @@ box-shadow: 0 10px 10px rgba(0,0,0,0.1);
 }
 
 .modal-container {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  position: relative;
   z-index: 1001;
   max-width: 90%;
   max-height: 90%;

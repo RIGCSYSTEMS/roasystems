@@ -18,7 +18,8 @@
         <documento-list-exp 
           :documentos="documentos"
           :expediente="expediente"
-          :user-role="userRole" 
+          :user-role="userRole"
+          :expediente-name="expedienteName" 
           :expedienteStatus="expediente.estatus_del_expediente"
           @editar-documento="editarDocumento"
           @eliminar-documento="eliminarDocumento"
@@ -27,31 +28,7 @@
       </div>
     </div>
     
-    <!-- Modal para DocumentoCreateExp -->
-    <div v-if="showCreateModal" class="modal-backdrop" @click="showCreateModal = false"></div>
-    <transition name="modal">
-      <div v-if="showCreateModal" class="modal-container">
-        <documento-create-exp 
-          :expediente-id="expedienteId"
-          @documento-creado="documentoCreado"
-          @cerrar="showCreateModal = false"
-        ></documento-create-exp>
-      </div>
-    </transition>
-    
-    <documento-edit-exp 
-      v-if="documentoEditando"
-      :documento="documentoEditando"
-      @documento-actualizado="documentoActualizado"
-      @cancelar-edicion="cancelarEdicion"
-    ></documento-edit-exp>
-    
-    <documento-viewer-exp
-      v-if="documentoVisualizando"
-      :documento="documentoVisualizando"
-      @cerrar-vista="cerrarVistaDocumento"
-      @estado-actualizado="actualizarEstadoDocumento"
-    ></documento-viewer-exp>
+
   </div>
 </template>
 
@@ -75,13 +52,15 @@ export default {
       required: true
     }
   },
-  emits: ['abrir-modal-crear'],
+  
   data() {
     return {
       documentos: [],
       documentoEditando: null,
       documentoVisualizando: null,
-      showCreateModal: false
+      showCreateModal: false,
+      showEditModal: false,
+      showViewModal: false
     };
   },
   mounted() {
@@ -98,7 +77,9 @@ export default {
         });
     },
     editarDocumento(documento) {
-      this.documentoEditando = documento;
+      
+      console.log('DocumentoIndexExp - Recibido documento para ver:', documento);
+      this.$emit('editar-documento', documento);
     },
     eliminarDocumento(id) {
       if (confirm('¿Está seguro de eliminar este documento?')) {
@@ -120,6 +101,10 @@ export default {
     },
     verDocumento(documento) {
       this.documentoVisualizando = documento;
+    },
+    verDocumento(documento) {
+      console.log('DocumentoIndexExp - Recibido documento para ver:', documento);
+      this.$emit('ver-documento', documento);
     },
     cerrarVistaDocumento() {
       this.documentoVisualizando = null;

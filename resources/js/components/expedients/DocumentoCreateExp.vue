@@ -110,7 +110,7 @@ export default {
         }
       }).then(response => {
         if (response.data.success) {
-          this.$emit('documento-creado');
+          this.$emit('documento-creado', response.data.documento);
           this.nuevoDocumento = {
             nombre: '',
             formato: '',
