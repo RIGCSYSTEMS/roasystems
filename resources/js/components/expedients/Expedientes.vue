@@ -123,6 +123,7 @@
               @abrir-modal-crear="abrirModalCrear"
               @editar-documento="abrirModalEditar"
               @ver-documento="abrirModalVer"
+              ref="documentoIndex"
             ></component>
           </keep-alive>
         </div>
@@ -288,16 +289,9 @@ export default {
       this.cerrarModalEditar();
     },
     cargarDocumentos() {
-      axios.get(`/expedientes/${this.expedienteId}/documentos/list`)
-        .then(response => {
-          this.documentos = response.data;
-          this.$forceUpdate();
-          // Forzar actualización del componente
-      this.$forceUpdate();
-        })
-        .catch(error => {
-          console.error('Error al cargar documentos:', error);
-        });
+      if (this.$refs.documentoIndex && this.$refs.documentoIndex.cargarDocumentos) {
+        this.$refs.documentoIndex.cargarDocumentos();
+      }
     },
     abrirModalCrear() {
       this.mostrarModalCrear = true;
@@ -305,10 +299,15 @@ export default {
     cerrarModalEditar() {
       this.mostrarModalEditar = false;
       this.documentoEditando = null;
-    },
-    documentoCreado() {
       this.cargarDocumentos();
+    },
+    documentoCreado(nuevoDocumento) {
+      this.cargarDocumentos();
+      this.cerrarModalCrear();
+    },
+    cerrarModalCrear() {
       this.mostrarModalCrear = false;
+      this.cargarDocumentos();
     },
 
     abrirModalVer(documento) {
@@ -322,6 +321,7 @@ export default {
       this.mostrarModalVer = false;
       this.$nextTick(() => {
         this.documentoVisualizando = null;
+        this.cargarDocumentos();
       });
     },
     actualizarEstadoDocumento(documentoActualizado) {
@@ -346,10 +346,12 @@ export default {
 
     cerrarModalEditar() {
       this.mostrarModalEditar = false;
-
-    },
-    documentoActualizado() {
+      this.documentoEditando = null;
       this.cargarDocumentos();
+    },
+    documentoActualizado(documentoActualizado) {
+      this.cargarDocumentos();
+      this.cerrarModalEditar();
     },
 
 

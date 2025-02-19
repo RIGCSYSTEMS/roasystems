@@ -72,6 +72,7 @@ export default {
       axios.get(`/expedientes/${this.expedienteId}/documentos/list`)
         .then(response => {
           this.documentos = response.data;
+          this.$forceUpdate(); // Forzar actualización del componente
         })
         .catch(error => {
           console.error('Error al cargar documentos:', error);
