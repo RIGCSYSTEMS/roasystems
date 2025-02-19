@@ -12,61 +12,62 @@
           <p class="text-muted mt-3">No hay documentos disponibles</p>
         </div>
         
-        <div v-else class="table-responsive">
-          <table class="table table-hover">
-            <thead>
-              <tr>
-                <th scope="col">
-                  <i class="bi bi-tag me-2"></i>Nombre
-                </th>
-                <th scope="col">
-                  <i class="bi bi-tag me-2"></i>Tipo
-                </th>
-                <th scope="col">
-                  <i class="bi bi-calendar me-2"></i>Fecha de subida
-                </th>
-                <th scope="col">
-                  <i class="bi bi-check-circle me-2"></i>Estado
-                </th>
-                <th scope="col">
-                  <i class="bi bi-gear me-2"></i>Acciones
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="documento in documentos" :key="documento.id">
-                <td>{{ documento.nombre }}</td>
-                <td>{{ documento.tipo_documento_expediente}}</td>
-                <td>{{ formatDate(documento.created_at) }}</td>
-                <td>
-                  <span :class="getEstadoClass(documento.estado)">
-                    {{ documento.estado }}
-                  </span>
-                </td>
-                <td>
-                  <div class="btn-group">
-                    <button @click="$emit('ver-documento', documento)" class="btn btn-outline-primary btn-sm">
-                      <i class="bi bi-eye me-1"></i> Ver
-                    </button>
-                    <button 
-                      v-if="puedeEditarDocumento(documento)" 
-                      @click="$emit('editar-documento', documento)" 
-                      class="btn btn-outline-warning btn-sm"
-                    >
-                      <i class="bi bi-pencil me-1"></i> Editar
-                    </button>
-                    <button 
-                      v-if="puedeEliminarDocumento(documento)" 
-                      @click="$emit('eliminar-documento', documento.id)" 
-                      class="btn btn-outline-danger btn-sm"
-                    >
-                      <i class="bi bi-trash me-1"></i> Eliminar
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+        <div v-else class="accordion" id="documentosAccordion">
+          <div v-for="(docs, tipo) in documentosAgrupados" :key="tipo" class="accordion-item">
+            <h2 class="accordion-header" :id="'heading' + tipo">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" :data-bs-target="'#collapse' + tipo" aria-expanded="true" :aria-controls="'collapse' + tipo">
+                {{ tipo }}
+              </button>
+            </h2>
+            <div :id="'collapse' + tipo" class="accordion-collapse collapse show" :aria-labelledby="'heading' + tipo" data-bs-parent="#documentosAccordion">
+              <div class="accordion-body">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th scope="col"><i class="bi bi-tag me-2"></i>Nombre</th>
+                      <th scope="col"><i class="bi bi-tag me-2"></i>Formato</th>
+                      <th scope="col"><i class="bi bi-calendar me-2"></i>Fecha de subida</th>
+                      <th scope="col"><i class="bi bi-check-circle me-2"></i>Estado</th>
+                      <th scope="col"><i class="bi bi-gear me-2"></i>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="documento in docs" :key="documento.id">
+                      <td>{{ documento.nombre }}</td>
+                      <td>{{ documento.formato }}</td>
+                      <td>{{ formatDate(documento.created_at) }}</td>
+                      <td>
+                        <span :class="getEstadoClass(documento.estado)">
+                          {{ documento.estado }}
+                        </span>
+                      </td>
+                      <td>
+                        <div class="btn-group">
+                          <button @click="$emit('ver-documento', documento)" class="btn btn-outline-primary btn-sm">
+                            <i class="bi bi-eye me-1"></i> Ver
+                          </button>
+                          <button 
+                            v-if="puedeEditarDocumento(documento)" 
+                            @click="$emit('editar-documento', documento)" 
+                            class="btn btn-outline-warning btn-sm"
+                          >
+                            <i class="bi bi-pencil me-1"></i> Editar
+                          </button>
+                          <button 
+                            v-if="puedeEliminarDocumento(documento)" 
+                            @click="$emit('eliminar-documento', documento.id)" 
+                            class="btn btn-outline-danger btn-sm"
+                          >
+                            <i class="bi bi-trash me-1"></i> Eliminar
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -103,6 +104,20 @@ export default {
     this.getUserRole();
   },
   emits: ['ver-documento', 'editar-documento', 'eliminar-documento', 'cancelar-edicion'],
+
+  computed: {
+    documentosAgrupados() {
+      return this.documentos.reduce((acc, doc) => {
+        const tipo = doc.tipo_documento_expediente || 'Sin clasificar';
+        if (!acc[tipo]) {
+          acc[tipo] = [];
+        }
+        acc[tipo].push(doc);
+        return acc;
+      }, {});
+    }
+  },
+
   methods: {
     formatDate(date) {
       const options = { 
@@ -190,5 +205,17 @@ export default {
 
 .table-responsive {
   margin-bottom: 0; /* Elimina el margen inferior extra */
+}
+.accordion-button:not(.collapsed) {
+  background-color: #f8f9fa;
+  color: #3b0866;
+}
+
+.accordion-button:focus {
+  box-shadow: 0 0 0 0.25rem rgba(150, 74, 212, 0.25);
+}
+
+.accordion-body {
+  padding: 1rem;
 }
 </style>
