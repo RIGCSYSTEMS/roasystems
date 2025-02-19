@@ -32,7 +32,7 @@ class DocumentoExpedienteController extends Controller
     public function getDocumentos($expedienteId)
     {
         $documentosexp = DocumentoExpediente::where('expediente_id', $expedienteId)
-        // ->with('tipoDocumentoExpediente')    
+        ->with('tipoDocumentoExpediente')    
         ->get()
             ->map(function ($documentoexp) {
                 return [

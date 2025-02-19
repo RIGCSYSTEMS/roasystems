@@ -99,7 +99,7 @@ export default {
   emits: ['documento-creado', 'cerrar'],
   data() {
     return {
-      tipoDocumentoExpediente: [],
+      tiposDocumentoExp: [],
       nuevoDocumento: {
         nombre: '',
         tipo_documento_expediente_id: '',
