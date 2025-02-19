@@ -11,7 +11,7 @@
     <div class="card-body">
       <form @submit.prevent="subirDocumento" enctype="multipart/form-data">
         <div class="mb-3">
-          <label for="tipo_documento_id" class="form-label">
+          <label for="tipo_documento_expediente_id" class="form-label">
             <i class="bi bi-tag me-2"></i>Tipo de Documento
           </label>
           <select 
@@ -99,7 +99,7 @@ export default {
   emits: ['documento-creado', 'cerrar'],
   data() {
     return {
-      tiposDocumentoExpediente: [],
+      tipoDocumentoExpediente: [],
       nuevoDocumento: {
         nombre: '',
         tipo_documento_expediente_id: '',
@@ -111,10 +111,10 @@ export default {
     }
   },
   mounted() {
-    this.cargarTiposDocumentoExpediente();
+    this.cargarTipoDocumentoExpediente();
   },
   methods: {
-    cargarTiposDocumentoExpediente() {
+    cargarTipoDocumentoExpediente() {
       axios.get('/tipos-documentos-exp')
         .then(response => {
           this.tiposDocumentoExp = response.data;
