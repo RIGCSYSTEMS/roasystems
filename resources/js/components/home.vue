@@ -33,7 +33,7 @@
       <div class="logo-container">
         <img src="/images/logo.png" alt="Logo" class="logo">
       </div>
-      <p class="tagline">Innovación y Excelencia en Servicios Migratorios</p>
+      <p class="tagline">Innovación y excelencia en servicios migratorios</p>
       <div class="dashboard-buttons">
         <a v-for="(button, index) in buttons" :key="index" :href="button.url" class="dashboard-button">
           <span class="dashboard-button-icon">

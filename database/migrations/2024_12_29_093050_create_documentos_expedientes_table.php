@@ -30,11 +30,11 @@ return new class extends Migration
             ->references('id')
             ->on('users')
             ->onDelete('cascade');
-            // $table->unsignedBigInteger('tipo_documento_expediente_id');
-            // $table->foreign('tipo_documento_expediente_id')
-            //     ->references('id')
-            //     ->on('tipos_documentos_expedientes')
-            //     ->onDelete('cascade');
+            $table->unsignedBigInteger('tipo_documento_expediente_id');
+            $table->foreign('tipo_documento_expediente_id')
+                ->references('id')
+                ->on('tipos_documentos_expedientes')
+                ->onDelete('cascade');
 
             // Campos
             $table->string('nombre'); // Nombre del documento

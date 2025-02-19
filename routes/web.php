@@ -13,6 +13,7 @@ use App\Http\Controllers\BitacoraController;
 use App\Http\Controllers\TipoDocumentoController;
 use App\Http\Controllers\SearchClientController;
 use App\Http\Controllers\SearchExpedientController;
+use App\Http\Controllers\TipoDocumentoExpedienteController;
 
 
 // Ruta principal
@@ -76,7 +77,7 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/documentosexp/{id}', [DocumentoExpedienteController::class, 'update'])->name('documentosexp.update');
         Route::delete('/documentosexp/{id}', [DocumentoExpedienteController::class, 'destroy'])->name('documentosexp.destroy');
         Route::put('/documentosexp/{id}/estado', [DocumentoExpedienteController::class, 'actualizarEstado']);
-
+        Route::get('/tipos-documentos-exp', [TipoDocumentoExpedienteController::class, 'index'])->name('tipos-documentos-exp.index');
  
         Route::resource('documentos', DocumentoController::class);
     });

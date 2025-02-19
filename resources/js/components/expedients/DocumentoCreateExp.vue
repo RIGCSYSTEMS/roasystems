@@ -11,6 +11,25 @@
     <div class="card-body">
       <form @submit.prevent="subirDocumento" enctype="multipart/form-data">
         <div class="mb-3">
+          <label for="tipo_documento_id" class="form-label">
+            <i class="bi bi-tag me-2"></i>Tipo de Documento
+          </label>
+          <select 
+            v-model="nuevoDocumento.tipo_documento_expediente_id" 
+            class="form-select custom-select" 
+            required
+          >
+            <option value="">Seleccione un tipo</option>
+            <option 
+              v-for="tipo in tiposDocumentoExp" 
+              :key="tipo.id" 
+              :value="tipo.id"
+            >
+              {{ tipo.nombre }}
+            </option>
+          </select>
+        </div>
+        <div class="mb-3">
           <label for="nombre" class="form-label">
             <i class="bi bi-chat-text me-2"></i>Nombre del Documento
           </label>
@@ -80,8 +99,10 @@ export default {
   emits: ['documento-creado', 'cerrar'],
   data() {
     return {
+      tiposDocumentoExpediente: [],
       nuevoDocumento: {
         nombre: '',
+        tipo_documento_expediente_id: '',
         formato: '',
         observaciones: '',
         archivo: null
@@ -89,7 +110,19 @@ export default {
       procesando: false
     }
   },
+  mounted() {
+    this.cargarTiposDocumentoExpediente();
+  },
   methods: {
+    cargarTiposDocumentoExpediente() {
+      axios.get('/tipos-documentos-exp')
+        .then(response => {
+          this.tiposDocumentoExp = response.data;
+        })
+        .catch(error => {
+          console.error('Error al cargar tipos de documento:', error);
+        });
+    },
     onFileChange(e) {
       this.nuevoDocumento.archivo = e.target.files[0];
     },
@@ -99,6 +132,7 @@ export default {
       this.procesando = true;
       let formData = new FormData();
       formData.append('expediente_id', this.expedienteId);
+      formData.append('tipo_documento_expediente_id', this.nuevoDocumento.tipo_documento_expediente_id);
       formData.append('nombre', this.nuevoDocumento.nombre);
       formData.append('formato', this.nuevoDocumento.formato);
       formData.append('observaciones', this.nuevoDocumento.observaciones);
@@ -113,6 +147,7 @@ export default {
           this.$emit('documento-creado', response.data.documento);
           this.nuevoDocumento = {
             nombre: '',
+            tipo_documento_expediente_id: '',
             formato: '',
             observaciones: '',
             archivo: null

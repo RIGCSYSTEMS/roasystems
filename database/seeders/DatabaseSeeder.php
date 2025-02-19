@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
 
             userSeeder::class,
             TiposDocumentosSeeder::class,
+            TiposDocumentosExpedientesSeeder::class,
             TiposExpedientesSeeder::class,
             clientSeeder::class,
             ExpedienteSeeder::class,         

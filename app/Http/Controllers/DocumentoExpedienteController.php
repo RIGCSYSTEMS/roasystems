@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\File;
 use Illuminate\Routing\Controller;
 use App\Models\DocumentoExpediente;
+use App\Models\TipoDocumentoExpediente;
 
 class DocumentoExpedienteController extends Controller
 {
@@ -31,11 +32,13 @@ class DocumentoExpedienteController extends Controller
     public function getDocumentos($expedienteId)
     {
         $documentosexp = DocumentoExpediente::where('expediente_id', $expedienteId)
-            ->get()
+        // ->with('tipoDocumentoExpediente')    
+        ->get()
             ->map(function ($documentoexp) {
                 return [
                     'id' => $documentoexp->id,
                     'nombre' => $documentoexp->nombre,
+                    'tipo_documento_expediente' => $documentoexp->tipoDocumentoExpediente->nombre,
                     'formato' => $documentoexp->formato,
                     'estado' => $documentoexp->estado,
                     'observaciones' => $documentoexp->observaciones,
@@ -98,6 +101,7 @@ class DocumentoExpedienteController extends Controller
             $documentosexp = new DocumentoExpediente();
             $documentosexp->nombre = $request->nombre;
             $documentosexp->expediente_id = $expedienteId;
+            $documentosexp->tipo_documento_expediente_id = $request->tipo_documento_expediente_id;
             $documentosexp->user_id = Auth::id();
             $documentosexp->formato = $formato;
             $documentosexp->estado = 'pendiente';
@@ -171,6 +175,7 @@ class DocumentoExpedienteController extends Controller
             }
 
             $documentosexp->nombre = $request->nombre;
+            $documentosexp->tipo_documento_expediente_id = $request->tipo_documento_expediente_id;
             // $documentosexp->formato = $request->formato;
             $documentosexp->observaciones = $request->observaciones;
             $documentosexp->save();
@@ -236,11 +241,11 @@ class DocumentoExpedienteController extends Controller
         return response()->json(['success' => true]);
     }
 
-    // public function getTiposDocumento()
-    // {
-    //     $tipos = TipoDocumento::all();
-    //     return response()->json($tipos);
-    // }
+    public function getTiposDocumentoExpediente()
+    {
+        $tipos = TipoDocumentoExpediente::all();
+        return response()->json($tipos);
+    }
 
     public function validarDocumento($id)
     {

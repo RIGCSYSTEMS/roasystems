@@ -12,7 +12,11 @@
           <div class="info-grid">
             <div class="info-item">
               <i class="bi bi-tag text-primary"></i>
-              <strong>Tipo:</strong> {{ documento.nombre }}
+              <strong>Nombre:</strong> {{ documento.nombre }}
+            </div>
+            <div class="info-item">
+              <i class="bi bi-tag text-primary"></i>
+              <strong>Tipo:</strong> {{ documento.tipo_documento_expediente }}
             </div>
             <div class="info-item">
               <i class="bi bi-file-earmark text-primary"></i>
@@ -47,7 +51,7 @@
             <p class="bg-light p-3 rounded">{{ documento.observaciones }}</p>
           </div>
 
-          <div class="mt-4">
+          <!-- <div class="mt-4">
             <h6 class="mb-2">
               <i class="bi bi-check-circle me-2"></i>Estado del Documento:
             </h6>
@@ -62,7 +66,7 @@
               <option value="Rechazado">Rechazado</option>
             </select>
             <p v-else class="form-control-plaintext">{{ documentoEstado }}</p>
-          </div>
+          </div> -->
         </div>
         <div class="modal-footer">
           <a 
@@ -115,7 +119,7 @@ export default {
         this.userRole = response.data.role;
       });
     },
-    actualizarEstado() {
+  actualizarEstado() {
   if (!this.puedeValidarDocumentos) return;
   
   axios.put(`/documentosexp/${this.documento.id}/estado`, {

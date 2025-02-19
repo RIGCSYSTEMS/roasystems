@@ -17,6 +17,9 @@
             <thead>
               <tr>
                 <th scope="col">
+                  <i class="bi bi-tag me-2"></i>Nombre
+                </th>
+                <th scope="col">
                   <i class="bi bi-tag me-2"></i>Tipo
                 </th>
                 <th scope="col">
@@ -33,6 +36,7 @@
             <tbody>
               <tr v-for="documento in documentos" :key="documento.id">
                 <td>{{ documento.nombre }}</td>
+                <td>{{ documento.tipo_documento_expediente}}</td>
                 <td>{{ formatDate(documento.created_at) }}</td>
                 <td>
                   <span :class="getEstadoClass(documento.estado)">

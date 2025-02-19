@@ -10,13 +10,13 @@ class TipoDocumentoExpediente extends Model
     protected $table = 'tipos_documentos_expedientes';
 
     // Campos que se pueden llenar de forma masiva
-    protected $fillable = ['nombre'];
+    protected $fillable = ['nombre', 'descripcion'];
 
     /**
      * Relación: Un tipo de documento puede estar asociado a muchos documentos.
      */
-    public function documentos()
+    public function documentosExp()
     {
-        return $this->hasMany(Documento::class);
+        return $this->hasMany(DocumentoExpediente::class);
     }
 }

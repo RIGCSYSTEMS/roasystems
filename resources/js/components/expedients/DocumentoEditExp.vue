@@ -14,26 +14,31 @@
               <label for="nombre" class="form-label">
                 <i class="bi bi-chat-text me-2"></i>Nombre del Documento
               </label>
-              <textarea 
+              <input 
                 v-model="documentoEditado.nombre" 
                 class="form-control" 
                 rows="3"
-              ></textarea>
+              ></input>
             </div>
 
-            <div class="mb-3">
-              <label for="formato" class="form-label">
-                <i class="bi bi-file-earmark me-2"></i>Formato del Documento
-              </label>
-              <select 
-                v-model="documentoEditado.formato" 
-                class="form-select" 
-                required
-              >
-                <option value="PDF">PDF</option>
-                <option value="IMAGEN">Imagen</option>
-              </select>
-            </div>
+            
+          <div class="mb-3">
+        
+              <label for="estado" class="form-label">
+              <i class="bi bi-check-circle me-2"></i>Estado del Documento:
+            
+          </label>
+            <select 
+              v-model="documentoEditado.estado" 
+              class="form-select" 
+              required
+            >
+              <option value="pendiente">Pendiente</option>
+              <option value="aceptado">Aceptado</option>
+              <option value="rechazado">Rechazado</option>
+            </select>
+          </div>
+        
 
             <div class="mb-3">
               <label for="archivo" class="form-label">
@@ -110,7 +115,7 @@ export default {
       let formData = new FormData();
       formData.append('_method', 'PUT');
       formData.append('nombre', this.documentoEditado.nombre);
-      formData.append('formato', this.documentoEditado.formato);
+      formData.append('estado', this.documentoEditado.estado);
       formData.append('observaciones', this.documentoEditado.observaciones);
       if (this.nuevoArchivo) {
         formData.append('archivo', this.nuevoArchivo);
