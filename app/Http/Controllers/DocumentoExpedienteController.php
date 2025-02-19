@@ -140,56 +140,58 @@ class DocumentoExpedienteController extends Controller
     
     public function update(Request $request, $id)
     {
-        $documentosexp = DocumentoExpediente::findOrFail($id);
-        $user = Auth::user();
-
-        if ($documentosexp->estado === 'Aceptado' && !in_array($user->role, ['ADMIN', 'DIRECTOR', 'ABOGADO'])) {
-            return response()->json([
-                'success' => false,
-                'message' => 'No tiene permiso para modificar documentos aceptados'
-            ], 403);
-        }
-
-        if ($user->role === 'CLIENTE' && $documentosexp->estado === 'Aceptado') {
-            return response()->json([
-                'success' => false,
-                'message' => 'No puede modificar documentos aceptados'
-            ], 403);
-        }
-
-        $request->validate([
-            'nombre' => 'nullable|string',
-            // 'formato' => 'required|in:PDF,IMAGEN',
-            'archivo' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
-            'observaciones' => 'nullable|string'
-        ]);
-
         try {
+            $documentosexp = DocumentoExpediente::findOrFail($id);
+            $user = Auth::user();
+    
+            if ($documentosexp->estado === 'aceptado' && !in_array($user->role, ['ADMIN', 'DIRECTOR', 'ABOGADO'])) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No tiene permiso para modificar documentos aceptados'
+                ], 403);
+            }
+    
+            // Validación
+            $validated = $request->validate([
+                'nombre' => 'required|string',
+                'tipo_documento_expediente_id' => 'required|exists:tipos_documentos_expedientes,id',
+                'estado' => 'required|in:pendiente,aceptado,rechazado',
+                'archivo' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
+                'observaciones' => 'nullable|string'
+            ]);
+    
+            // Actualizar archivo si se proporciona uno nuevo
             if ($request->hasFile('archivo')) {
-                if ($documentosexp->ruta) {
+                if ($documentosexp->ruta && Storage::disk('local')->exists($documentosexp->ruta)) {
                     Storage::disk('local')->delete($documentosexp->ruta);
                 }
                 
-                $path = $request->file('archivo')->store('expedientes/' . $documentosexp->expedientes_id, 'local');
+                $path = $request->file('archivo')->storeAs(
+                    'expedientes/' . $documentosexp->expediente_id,
+                    time() . '_' . uniqid() . '.' . $request->file('archivo')->getClientOriginalExtension(),
+                    'local'
+                );
                 $documentosexp->ruta = $path;
             }
-
+    
+            // Actualizar campos
             $documentosexp->nombre = $request->nombre;
             $documentosexp->tipo_documento_expediente_id = $request->tipo_documento_expediente_id;
-            // $documentosexp->formato = $request->formato;
+            $documentosexp->estado = strtolower($request->estado);
             $documentosexp->observaciones = $request->observaciones;
             $documentosexp->save();
-
+    
             return response()->json([
                 'success' => true,
+                'message' => 'Documento actualizado correctamente',
                 'documento' => $documentosexp
             ]);
-
+    
         } catch (\Exception $e) {
             Log::error('Error al actualizar documento: ' . $e->getMessage());
             return response()->json([
                 'success' => false,
-                'message' => 'Error al actualizar el documento'
+                'message' => 'Error al actualizar el documento: ' . $e->getMessage()
             ], 500);
         }
     }

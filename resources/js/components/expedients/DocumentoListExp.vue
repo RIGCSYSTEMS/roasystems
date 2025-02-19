@@ -102,7 +102,7 @@ export default {
   mounted() {
     this.getUserRole();
   },
-  emits: ['ver-documento', 'editar-documento', 'eliminar-documento'],
+  emits: ['ver-documento', 'editar-documento', 'eliminar-documento', 'cancelar-edicion'],
   methods: {
     formatDate(date) {
       const options = { 

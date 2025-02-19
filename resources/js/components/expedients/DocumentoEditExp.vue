@@ -21,6 +21,26 @@
               ></input>
             </div>
 
+            <div class="mb-3">
+              <label for="tipo_documento_expediente_id" class="form-label">
+                <i class="bi bi-tag me-2"></i>Tipo de Documento
+              </label>
+              <select 
+            v-model="documentoEditado.tipo_documento_expediente_id" 
+            class="form-select custom-select" 
+            required
+          >
+            <option value="">Seleccione un tipo</option>
+            <option 
+              v-for="tipo in tiposDocumentoExp" 
+              :key="tipo.id" 
+              :value="tipo.id"
+            >
+              {{ tipo.nombre }}
+            </option>
+          </select>
+            </div>
+
             
           <div class="mb-3">
         
@@ -79,7 +99,7 @@
           <button type="button" class="btn btn-primary" @click="actualizarDocumento">
             <i class="bi bi-check-circle me-2"></i>Guardar Cambios
           </button>
-          <button type="button" class="btn btn-secondary" @click="$emit('cancelar-edicion')">
+          <button type="button" class="btn btn-secondary" @click="cerrarModal">
             <i class="bi bi-x-circle me-2"></i>Cancelar
           </button>
         </div>
@@ -89,6 +109,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   props: {
     documento: {
@@ -98,16 +119,47 @@ export default {
   },
   data() {
     return {
+      tiposDocumentoExp: [],
       documentoEditado: { 
         ...this.documento,
-        nombre: this.documento.nombre
+        nombre: this.documento.nombre,
+        tipo_documento_expediente_id: this.documento.tipo_documento_expediente_id,
+        estado: this.documento.estado, 
+      observaciones: this.documento.observaciones 
       },
       nuevoArchivo: null
     }
   },
-
+  mounted() {
+    this.cargarTipoDocumentoExpediente();
+  },
+  emits:['documento-actualizado', 'cancelar-edicion'],
   methods: {
-
+    cerrarModal() {
+      this.$emit('cancelar-edicion');
+    },
+    cargarDocumentosExp() {
+      axios.get(`/documentosexp/${this.expdienteId}/documentos/list`)
+        .then(response => {
+          this.documentos = response.data;
+        })
+        .catch(error => {
+          console.error('Error al cargar documentos:', error);
+        });
+    },
+    documentoActualizado() {
+      this.cargarTipoDocumentoExp();
+      this.documentoEditando = null;
+    },
+    cargarTipoDocumentoExpediente() {
+      axios.get('/tipos-documentos-exp')
+        .then(response => {
+          this.tiposDocumentoExp = response.data;
+        })
+        .catch(error => {
+          console.error('Error al cargar tipos de documento:', error);
+        });
+    },
     onFileChange(e) {
       this.nuevoArchivo = e.target.files[0];
     },
@@ -115,6 +167,7 @@ export default {
       let formData = new FormData();
       formData.append('_method', 'PUT');
       formData.append('nombre', this.documentoEditado.nombre);
+      formData.append('tipo_documento_expediente_id', this.documentoEditado.tipo_documento_expediente_id);
       formData.append('estado', this.documentoEditado.estado);
       formData.append('observaciones', this.documentoEditado.observaciones);
       if (this.nuevoArchivo) {
@@ -125,10 +178,17 @@ export default {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
-      }).then(() => {
-        this.$emit('documento-actualizado');
+      }).then(response => {
+        if (response.data.success) {
+          this.$emit('documento-actualizado', response.data.documento);
+          alert('Documento actualizado certeramente');
+          this.cerrarModal();
+        } else {
+          throw new Error(response.data.message || 'Error al actualizar el documento');
+        }
       }).catch(error => {
         console.error('Error al actualizar documento:', error);
+        alert('Error al actualizar el documento: ' + error.message);
       });
     }
   }
@@ -202,5 +262,11 @@ export default {
 
 .bi {
   font-size: 1.1rem;
+}
+.custom-select {
+  border-radius: 8px;
+  border: 1px solid #ced4da;
+  padding: 0.75rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 </style>

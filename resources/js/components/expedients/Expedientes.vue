@@ -283,10 +283,15 @@ export default {
       }
     },
     //Modales
+    manejarDocumentoActualizado(documentoActualizado) {
+      this.cargarDocumentos();
+      this.cerrarModalEditar();
+    },
     cargarDocumentos() {
       axios.get(`/expedientes/${this.expedienteId}/documentos/list`)
         .then(response => {
           this.documentos = response.data;
+          this.$forceUpdate();
           // Forzar actualización del componente
       this.$forceUpdate();
         })
@@ -297,8 +302,9 @@ export default {
     abrirModalCrear() {
       this.mostrarModalCrear = true;
     },
-    cerrarModalCrear() {
-      this.mostrarModalCrear = false;
+    cerrarModalEditar() {
+      this.mostrarModalEditar = false;
+      this.documentoEditando = null;
     },
     documentoCreado() {
       this.cargarDocumentos();
@@ -340,13 +346,10 @@ export default {
 
     cerrarModalEditar() {
       this.mostrarModalEditar = false;
-      this.$nextTick(() => {
-        this.documentoEditando = null;
-      });
+
     },
     documentoActualizado() {
       this.cargarDocumentos();
-      this.cancelarEdicion();
     },
 
 

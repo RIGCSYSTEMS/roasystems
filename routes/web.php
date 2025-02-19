@@ -54,6 +54,7 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/client/{client}/familia/{index}', [ClientController::class, 'removeFamiliar'])->name('client.removeFamiliar');
 
         //documentos cliente
+        Route::resource('documentos', DocumentoController::class);
         Route::post('/documentos/{id}/validar', [DocumentoController::class, 'validarDocumento'])->name('documentos.validar');
         Route::put('/documentos/{id}/estado', [DocumentoController::class, 'actualizarEstado'])->name('documentos.actualizarEstado');
         Route::get('/tipos-documentos', [TipoDocumentoController::class, 'index'])->name('tipos-documentos.index');
@@ -67,6 +68,7 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/documentos/{id}/estado', [DocumentoController::class, 'actualizarEstado']);
 
         //documentos expedientes
+        Route::resource('documentosexp', DocumentoExpedienteController::class);
         Route::post('/documentosexp/{id}/validar', [DocumentoExpedienteController::class, 'validarDocumento'])->name('documentosexp.validar');
         Route::put('/documentosexp/{id}/estado', [DocumentoExpedienteController::class, 'actualizarEstado'])->name('documentosexp.actualizarEstado');
         Route::get('/documentosexp/{id}/descargar', [DocumentoExpedienteController::class, 'descargar'])->name('documentosexp.descargar');
@@ -79,7 +81,7 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/documentosexp/{id}/estado', [DocumentoExpedienteController::class, 'actualizarEstado']);
         Route::get('/tipos-documentos-exp', [TipoDocumentoExpedienteController::class, 'index'])->name('tipos-documentos-exp.index');
  
-        Route::resource('documentos', DocumentoController::class);
+        
     });
 
     // Rutas solo para abogados, directores y administradores

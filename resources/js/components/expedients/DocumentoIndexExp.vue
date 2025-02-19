@@ -24,6 +24,7 @@
           @editar-documento="editarDocumento"
           @eliminar-documento="eliminarDocumento"
           @ver-documento="verDocumento"
+          @cancelar-edicion="cancelarEdicion"
         ></documento-list-exp>
       </div>
     </div>
