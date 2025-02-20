@@ -39,6 +39,7 @@ class ExpedienteSeeder extends Seeder
                 'plazo_fda' => now()->addMonths(rand(1, 12)),
                 'progreso' => rand(0, 100),
                 'boite' => 'Boite ' . rand(1, 5),
+                'observaciones' => $this->getRandomObservation(),
             ]);
             $totalExpedientes++;
         }
@@ -70,5 +71,27 @@ class ExpedienteSeeder extends Seeder
         return 'DOS-' . strtoupper(substr(md5(microtime()), 0, 8));
     }
 
+    private function getRandomObservation()
+{
+    $observations = [
+        "Revisión pendiente",
+        "En proceso",
+        "Requiere seguimiento",
+        "Documentación incompleta",
+        "Caso en espera",
+        "Próxima actualización",
+        "Consulta programada",
+        "Sin novedades",
+        "Avance normal",
+        "Atención requerida",
+        "Expediente activo",
+        "En evaluación",
+        "Pendiente de respuesta",
+        "Seguimiento semanal",
+        "Caso estándar",
+    ];
+
+    return $observations[array_rand($observations)];
+}
 
 }

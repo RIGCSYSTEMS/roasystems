@@ -31,7 +31,8 @@ return new class extends Migration
             $table->string('despacho')->nullable();
             $table->string('abogado')->nullable();
             $table->date('plazo_fda')->nullable();
-            $table->string('boite'); 
+            $table->string('boite');
+            $table->string('observaciones')->nullable();
             $table->integer('progreso')->default(0);
             $table->timestamps();
 
