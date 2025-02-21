@@ -51,7 +51,9 @@
             <h6 class="mb-2">
               <i class="bi bi-check-circle me-2"></i>Estado del Documento:
             </h6>
-            <select 
+            <p class="bg-light p-3 rounded">{{ documento.estado }}</p>
+          
+            <!-- <select 
               v-if="puedeValidarDocumentos"
               v-model="documentoEstado" 
               class="form-select" 
@@ -63,7 +65,7 @@
               <option value="Rechazado">Rechazado</option>
               <option value="Obsoleto">Obsoleto</option>
             </select>
-            <p v-else class="form-control-plaintext">{{ documentoEstado }}</p>
+            <p v-else class="form-control-plaintext">{{ documentoEstado }}</p> -->
           </div>
         </div>
         <div class="modal-footer">

@@ -52,12 +52,23 @@ class DocumentoController extends Controller
         try {
             $validated = $request->validate([
                 'tipo_documento_id' => 'required|exists:tipos_documentos,id',
-                'formato' => 'required|in:PDF,IMAGEN',
+                // 'formato' => 'required|in:PDF,IMAGEN',
                 'archivo' => 'required|file|mimes:pdf,jpg,jpeg,png|max:10240',
                 'observaciones' => 'nullable|string',
                 'client_id' => 'required|exists:clients,id'
             ]);
     
+                        // Detectar automáticamente el tipo de archivo
+                        $mimeType = $request->file('archivo')->getMimeType();
+                        $formato = $this->detectarFormato($mimeType);
+            
+                        if (!$formato) {
+                            return response()->json([
+                                'success' => false,
+                                'mensaje' => 'Tipo de archivo no soportado'
+                            ], 400);
+                        }
+
             $path = $request->file('archivo')->store(
                 'documentos/' . $request->client_id,
                 'local'
@@ -67,7 +78,7 @@ class DocumentoController extends Controller
             $documento->tipo_documento_id = $request->tipo_documento_id;
             $documento->client_id = $request->client_id;
             $documento->user_id = Auth::id();
-            $documento->formato = $request->formato;
+            $documento->formato = $formato;
             $documento->estado = 'pendiente';
             $documento->ruta = $path;
             $documento->observaciones = $request->observaciones;
@@ -88,19 +99,33 @@ class DocumentoController extends Controller
         }
     }
     
+    private function detectarFormato($mimeType)
+    {
+        $pdfMimes = ['application/pdf'];
+        $imageMimes = ['image/jpeg', 'image/png', 'image/jpg'];
+
+        if (in_array($mimeType, $pdfMimes)) {
+            return 'PDF';
+        } elseif (in_array($mimeType, $imageMimes)) {
+            return 'IMAGEN';
+        }
+
+        return null;
+    }
+
     public function update(Request $request, $id)
     {
         $documento = Documento::findOrFail($id);
         $user = Auth::user();
 
-        if ($documento->estado === 'Aceptado' && !in_array($user->role, ['ADMIN', 'DIRECTOR', 'ABOGADO'])) {
+        if ($documento->estado === 'aceptado' && !in_array($user->role, ['ADMIN', 'DIRECTOR', 'ABOGADO'])) {
             return response()->json([
                 'success' => false,
                 'message' => 'No tiene permiso para modificar documentos aceptados'
             ], 403);
         }
 
-        if ($user->role === 'CLIENTE' && $documento->estado === 'Aceptado') {
+        if ($user->role === 'CLIENTE' && $documento->estado === 'aceptado') {
             return response()->json([
                 'success' => false,
                 'message' => 'No puede modificar documentos aceptados'
@@ -109,7 +134,8 @@ class DocumentoController extends Controller
 
         $request->validate([
             'tipo_documento_id' => 'required|exists:tipos_documentos,id',
-            'formato' => 'required|in:PDF,IMAGEN',
+            // 'formato' => 'required|in:PDF,IMAGEN',
+            'estado' => 'required|in:pendiente,aceptado,rechazado',
             'archivo' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
             'observaciones' => 'nullable|string'
         ]);
@@ -125,7 +151,8 @@ class DocumentoController extends Controller
             }
 
             $documento->tipo_documento_id = $request->tipo_documento_id;
-            $documento->formato = $request->formato;
+            // $documento->formato = $request->formato;
+            $documento->estado = $request->estado;
             $documento->observaciones = $request->observaciones;
             $documento->save();
 

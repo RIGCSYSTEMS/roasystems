@@ -15,6 +15,9 @@
                   <i class="bi bi-tag me-2"></i>Tipo
                 </th>
                 <th scope="col">
+                  <i class="bi bi-calendar me-2"></i>Formato
+                </th>
+                <th scope="col">
                   <i class="bi bi-calendar me-2"></i>Fecha de subida
                 </th>
                 <th scope="col">
@@ -28,6 +31,7 @@
             <tbody>
               <tr v-for="documento in documentos" :key="documento.id">
                 <td>{{ documento.nombre }}</td>
+                <td>{{ documento.formato }}</td>
                 <td>{{ formatDate(documento.created_at) }}</td>
                 <td>
                   <span :class="getEstadoClass(documento.estado)">

@@ -47,12 +47,12 @@
       @cancelar-edicion="cancelarEdicion"
     ></documento-edit>
     
-    <documento-viewer
+    <documento-view
       v-if="documentoVisualizando"
       :documento="documentoVisualizando"
       @cerrar-vista="cerrarVistaDocumento"
       @estado-actualizado="actualizarEstadoDocumento"
-    ></documento-viewer>
+    ></documento-view>
   </div>
 </template>
 
