@@ -32,7 +32,7 @@ return new class extends Migration
             $table->string('abogado')->nullable();
             $table->date('plazo_fda')->nullable();
             $table->string('boite');
-            $table->string('observaciones')->nullable();
+            $table->text('observaciones')->nullable();
             $table->integer('progreso')->default(0);
             $table->timestamps();
 

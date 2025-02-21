@@ -26,11 +26,11 @@
           <div class="card-body">
             <div class="info-grid">
               <div class="info-item">
-                <span class="info-label">Tipo de expediente:</span>
-                <span class="info-value">{{ expediente.tipo_expediente.nombre }}</span>
+                <span class="info-label">Cliente:</span>
+                <span class="info-value">{{ expediente.client.nombre_de_cliente }}</span>
               </div>
               <div class="info-item">
-                <span class="info-label">Tipo:</span>
+                <span class="info-label">Tipo de expediente:</span>
                 <span class="info-value">{{ expediente.tipo_expediente.nombre }}</span>
               </div>
               <div class="info-item">
@@ -66,6 +66,10 @@
                 <span :class="['priority-badge', getPriorityClass(expediente.prioridad)]">
                   {{ expediente.prioridad }}
                 </span>
+              </div>
+                <div class="info-item">
+                <span class="info-label">Obesarvaciones:</span>
+                <span class="info-value">{{ expediente.observaciones }}</span>
               </div>
             </div>
           </div>
@@ -130,6 +134,14 @@
       </div>
     </div>
   </div>
+
+    <!-- Modal de edición -->
+    <expediente-Edicion
+      v-if="mostrarModalEdicion"
+      :expediente="expediente"
+      @cerrar="cerrarModalEdicion"
+      @actualizar="actualizarExpediente"
+    ></expediente-Edicion>
 
 <!-- Modal para crear documento -->
 <teleport to="body">
@@ -240,6 +252,7 @@ export default {
       mostrarModalEditar: false,
       documentoVisualizando: null,
       documentoEditando: null,
+      actualizarExpediente: null,
       activeTab: 'DocumentoIndexExp',
       tabs: [
       { id: 'DocumentoIndexExp', name: 'Listar-Documentos', icon: 'bi bi-file-earmark-text' },

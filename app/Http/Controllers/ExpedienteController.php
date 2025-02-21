@@ -9,6 +9,12 @@ use App\Models\Bitacora;
 use Illuminate\Support\Facades\Auth;
 class ExpedienteController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
 //
@@ -56,16 +62,24 @@ class ExpedienteController extends Controller
             return response()->json(['error' => 'No tienes permiso para editar este expediente'], 403);
         }
     
-        // Validación de los datos del request
-        $validatedData = $request->validate([
-            // ... tus reglas de validación ...
-        ]);
+    // Validación de los datos del request
+    $validatedData = $request->validate([
+        'numero_de_dossier' => 'required|string',
+        'prioridad' => 'required|string',
+        'fecha_de_apertura' => 'required|date',
+        'fecha_de_cierre' => 'nullable|date',
+        'despacho' => 'nullable|string',
+        'abogado' => 'nullable|string',
+        'plazo_fda' => 'nullable|date',
+        'boite' => 'nullable|string',
+        'observaciones' => 'nullable|string',
+    ]);
         
-        // Actualizar el expediente
-        $expediente->update($validatedData);
-        
-        return response()->json($expediente, 200);
-    }
+    // Actualizar el expediente
+    $expediente->update($validatedData);
+    
+    return response()->json($expediente, 200);
+}
 
     public function destroy(Expediente $expediente)
     {

@@ -24,7 +24,8 @@ class Expediente extends Model
         'abogado',
         'plazo_fda',
         'boite',
-        'progreso'
+        'progreso',
+        'observaciones'
     ];
 
     protected $casts = [
