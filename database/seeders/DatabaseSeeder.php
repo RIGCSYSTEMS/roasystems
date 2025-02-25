@@ -29,6 +29,8 @@ class DatabaseSeeder extends Seeder
             // documentosseeder::class,
             // EtapasExpedientesSeeder::class,
             HonorariosSeeder::class,
+            AbonosSeeder::class,
+            ExtrasSeeder::class,
             BitacorasSeeder::class,
           
             // followSeeder::class,

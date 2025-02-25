@@ -6,21 +6,31 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    public function up(): void
+    public function up()
     {
         Schema::create('abonos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('honorario_id')->constrained()->onDelete('cascade');
-            $table->date('fecha');
-            $table->string('factura')->nullable();
+            $table->unsignedBigInteger('honorario_id');
+            $table->unsignedBigInteger('usuario_id');
             $table->decimal('monto', 10, 2);
-            $table->string('metodo_pago');
-            $table->foreignId('usuario_id')->constrained('users');
+            $table->decimal('gst_rate', 5, 3);
+            $table->decimal('qst_rate', 5, 3);
+            $table->decimal('impuestos', 10, 2);
+            $table->date('fecha');
             $table->timestamps();
+            $table->softDeletes();
+
+            $table->foreign('honorario_id')
+                  ->references('id')
+                  ->on('honorarios')
+                  ->onDelete('cascade');
+            $table->foreign('usuario_id')
+            ->references('id')
+            ->on('users');
         });
     }
 
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('abonos');
     }

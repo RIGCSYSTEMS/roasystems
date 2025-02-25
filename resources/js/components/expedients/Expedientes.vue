@@ -68,7 +68,7 @@
                 </span>
               </div>
                 <div class="info-item">
-                <span class="info-label">Obesarvaciones:</span>
+                <span class="info-label">Observaciones:</span>
                 <span class="info-value">{{ expediente.observaciones }}</span>
               </div>
             </div>

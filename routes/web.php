@@ -107,6 +107,13 @@ Route::middleware(['auth'])->group(function () {
 
 
 
+        Route::get('/honorarios', [HonorarioController::class, 'index'])->name('honorarios.index');
+Route::get('/honorarios/{expediente_id}', [HonorarioController::class, 'show'])->name('honorarios.show');
+Route::post('/honorarios', [HonorarioController::class, 'store'])->name('honorarios.store');
+Route::get('/honorarios/{honorario}/data', [HonorarioController::class, 'getHonorarioData'])->name('honorarios.data');
+Route::post('/honorarios/{honorario}/abonos', [HonorarioController::class, 'storeAbono'])->name('honorarios.abonos.store');
+Route::post('/honorarios/{honorario}/extras', [HonorarioController::class, 'storeExtra'])->name('honorarios.extras.store');
+Route::put('/honorarios/{honorario}/abonos/{abono}', [HonorarioController::class, 'updateAbono'])->name('honorarios.abonos.update');
 
         Route::post('/expedientes/{expediente}/honorarios', [HonorarioController::class, 'store'])->name('honorarios.store');
         Route::put('/honorarios/{honorario}', [HonorarioController::class, 'update'])->name('honorarios.update');

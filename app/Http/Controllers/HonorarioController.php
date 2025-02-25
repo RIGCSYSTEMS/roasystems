@@ -9,91 +9,111 @@ use App\Models\Bitacora;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Client;
-
+use App\Models\Extra;
+use Illuminate\Support\Facades\DB;
 class HonorarioController extends Controller
 {
-    public function store(Request $request, Expediente $expediente)
+    public function __construct()
     {
-        $validatedData = $request->validate([
-            'monto_total_expediente' => 'required|numeric|min:0',
-            'monto_adicional' => 'nullable|numeric|min:0',
-        ]);
-
-        $honorario = $expediente->honorario()->create($validatedData);
-
-        Bitacora::create([
-            'usuario_id' => Auth::id(),
-            'expediente_id' => $expediente->id,
-            'categoria' => 'Honorarios',
-            'descripcion' => "Se establecieron los honorarios del expediente por $" . $honorario->monto_total_a_pagar,
-            'fecha_y_hora_del_evento' => now(),
-        ]);
-
-        return redirect()->route('expedientes.show', $expediente)->with('success', 'Honorarios registrados correctamente');
+        $this->middleware('auth');
+    }
+    public function index()
+    {
+        return view('honorarios.index');
     }
 
-    public function update(Request $request, Honorario $honorario)
+    public function show($expediente_id)
     {
-        $validatedData = $request->validate([
-            'monto_adicional' => 'required|numeric|min:0',
-        ]);
+        $honorario = Honorario::with(['abonos', 'extras'])
+            ->where('expediente_id', $expediente_id)
+            ->firstOrFail();
 
-        $montoAnterior = $honorario->monto_adicional;
-        $honorario->monto_adicional = $validatedData['monto_adicional'];
-        $honorario->save();
-
-        Bitacora::create([
-            'usuario_id' => Auth::id(),
-            'expediente_id' => $honorario->expediente_id,
-            'categoria' => 'Honorarios',
-            'descripcion' => "Se actualizó el monto adicional de $" . $montoAnterior . " a $" . $honorario->monto_adicional,
-            'fecha_y_hora_del_evento' => now(),
-        ]);
-
-        return redirect()->back()->with('success', 'Monto adicional actualizado correctamente');
+        return view('honorarios.show', compact('honorario'));
     }
 
-    public function registrarAbono(Request $request, Honorario $honorario)
+    public function store(Request $request)
     {
-        $validatedData = $request->validate([
+        $validated = $request->validate([
+            'expediente_id' => 'required|exists:expedientes,id',
+            'monto_inicial' => 'required|numeric|min:0',
+            'fecha_apertura' => 'required|date',
+        ]);
+
+        $honorario = Honorario::create($validated);
+
+        return response()->json($honorario);
+    }
+
+    public function storeAbono(Request $request, Honorario $honorario)
+    {
+        $validated = $request->validate([
+            'monto' => 'required|numeric|min:0',
             'fecha' => 'required|date',
-            'factura' => 'nullable|string',
-            'monto' => 'required|numeric|min:0|max:' . $honorario->saldo_pendiente,
-            'metodo_pago' => 'required|string',
+            'gst_rate' => 'required|numeric|min:0',
+            'qst_rate' => 'required|numeric|min:0',
         ]);
 
-        $validatedData['usuario_id'] = Auth::id();
-        $abono = $honorario->abonos()->create($validatedData);
+        $impuestos = ($validated['monto'] * $validated['gst_rate'] / 100) +
+                     ($validated['monto'] * $validated['qst_rate'] / 100);
 
-        Bitacora::create([
-            'usuario_id' => Auth::id(),
-            'expediente_id' => $honorario->expediente_id,
-            'categoria' => 'Honorarios',
-            'descripcion' => "Se registró un abono de $" . $abono->monto,
-            'fecha_y_hora_del_evento' => now(),
+        $abono = $honorario->abonos()->create([
+            ...$validated,
+            'impuestos' => $impuestos,
         ]);
 
-        return redirect()->back()->with('success', 'Abono registrado correctamente');
+        return response()->json($abono);
     }
 
-    public function show(Client $client)
+    public function storeExtra(Request $request, Honorario $honorario)
     {
-        $expedientes = $client->expedientes()->with(['honorarios', 'honorarios.abonos'])->get();
-        
-        $totalHonorarios = $expedientes->sum(function($expediente) {
-            return $expediente->honorarios ? $expediente->honorarios->monto_total_expediente : 0;
-        });
-        
-        $totalPagado = $expedientes->sum(function($expediente) {
-            return $expediente->honorarios ? $expediente->honorarios->total_abonos : 0;
-        });
-        
-        $saldoPendiente = $totalHonorarios - $totalPagado;
-    
-        return view('honorarios.show', compact('client', 'expedientes', 'totalHonorarios', 'totalPagado', 'saldoPendiente'));
+        $validated = $request->validate([
+            'concepto' => 'required|string|max:255',
+            'monto' => 'required|numeric|min:0',
+            'fecha' => 'required|date',
+            'gst_rate' => 'required|numeric|min:0',
+            'qst_rate' => 'required|numeric|min:0',
+        ]);
+
+        $impuestos = ($validated['monto'] * $validated['gst_rate'] / 100) +
+                     ($validated['monto'] * $validated['qst_rate'] / 100);
+
+        $extra = $honorario->extras()->create([
+            ...$validated,
+            'impuestos' => $impuestos,
+        ]);
+
+        return response()->json($extra);
     }
 
+    public function updateAbono(Request $request, Honorario $honorario, Abono $abono)
+    {
+        $validated = $request->validate([
+            'monto' => 'required|numeric|min:0',
+            'fecha' => 'required|date',
+            'gst_rate' => 'required|numeric|min:0',
+            'qst_rate' => 'required|numeric|min:0',
+        ]);
 
+        $impuestos = ($validated['monto'] * $validated['gst_rate'] / 100) +
+                     ($validated['monto'] * $validated['qst_rate'] / 100);
 
+        $abono->update([
+            ...$validated,
+            'impuestos' => $impuestos,
+        ]);
+
+        return response()->json($abono);
+    }
+
+    public function getHonorarioData(Honorario $honorario)
+    {
+        $honorario->load(['abonos', 'extras']);
+        
+        return response()->json([
+            'honorario' => $honorario,
+            'abonos' => $honorario->abonos,
+            'extras' => $honorario->extras,
+        ]);
+    }
 }
 
