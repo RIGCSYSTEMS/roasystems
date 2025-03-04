@@ -5,16 +5,39 @@
     <!-- Panel de Apertura de Honorarios -->
     <div class="glass-panel animate-fade-in-1" v-if="!expedienteIniciado">
       <h3 class="section-title">Apertura de Expediente</h3>
-      <div class="setup-form">
+      <div v-if="cargando" class="loading-indicator">
+        <i class="bi bi-arrow-repeat spin"></i> Cargando...
+      </div>
+      <div v-else class="setup-form">
         <div class="input-group">
           <label>Monto Total Acordado</label>
-          <input type="number" v-model="montoInicial" class="payment-input" placeholder="Monto inicial">
+          <input 
+            type="number" 
+            v-model="montoInicial" 
+            class="payment-input" 
+            placeholder="Monto inicial"
+            :disabled="!puedeEditar"
+          >
+          <small v-if="errorMonto" class="error-text">{{ errorMonto }}</small>
         </div>
         <div class="input-group">
           <label>Fecha de Apertura</label>
-          <input type="date" v-model="fechaApertura" class="payment-input">
+          <input 
+            type="date" 
+            v-model="fechaApertura" 
+            class="payment-input"
+            :disabled="!puedeEditar"
+          >
+          <small v-if="errorFecha" class="error-text">{{ errorFecha }}</small>
         </div>
-        <button @click="iniciarExpediente" class="payment-button">Iniciar Expediente</button>
+        <button 
+          @click="iniciarExpediente" 
+          class="payment-button"
+          :disabled="!puedeEditar || cargando"
+        >
+          <span v-if="cargando"><i class="bi bi-arrow-repeat spin"></i> Procesando...</span>
+          <span v-else>Iniciar Expediente</span>
+        </button>
       </div>
     </div>
 
@@ -24,7 +47,7 @@
         <div v-for="(stat, index) in stats" :key="index" class="stat-card" :class="`animate-fade-in-${index + 1}`">
           <div class="stat-content">
             <h3 class="stat-label">{{ stat.label }}</h3>
-            <p class="stat-value" :style="{ color: stat.color }">${{ stat.value.toFixed(2) }}</p>
+            <p class="stat-value" :style="{ color: stat.color }">${{ formatMoney(stat.value) }}</p>
           </div>
           <div class="stat-bar" :style="{ backgroundColor: stat.color }"></div>
         </div>
@@ -39,7 +62,7 @@
                  class="cost-item" 
                  :class="{ 'total-row': item.label === 'Total General' }">
               <span class="cost-label">{{ item.label }}:</span>
-              <span class="cost-value" :style="{ color: item.color }">${{ item.value.toFixed(2) }}</span>
+              <span class="cost-value" :style="{ color: item.color }">${{ formatMoney(item.value) }}</span>
             </div>
           </div>
         </div>
@@ -48,10 +71,20 @@
         <div class="glass-panel animate-slide-in-right">
           <h3 class="section-title">Acciones</h3>
           <div class="action-buttons">
-            <button @click="showAbonoModal = true" class="action-button primary">
+            <button 
+              @click="showAbonoModal = true" 
+              class="action-button primary"
+              :disabled="!puedeEditar"
+            >
+              <i class="bi bi-plus-circle"></i>
               Agregar Abono
             </button>
-            <button @click="showExtrasModal = true" class="action-button secondary">
+            <button 
+              @click="showExtrasModal = true" 
+              class="action-button secondary"
+              :disabled="!puedeEditar"
+            >
+              <i class="bi bi-plus-square"></i>
               Agregar Extra
             </button>
           </div>
@@ -75,47 +108,67 @@
             Extras
           </button>
         </div>
-        <table class="history-table">
-          <thead>
-            <tr>
-              <th>Fecha</th>
-              <th>Concepto</th>
-              <th>Monto</th>
-              <th>Impuestos</th>
-              <th>Total</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(movimiento, index) in movimientosFiltrados" :key="index">
-              <td>{{ formatDate(movimiento.fecha) }}</td>
-              <td>{{ movimiento.concepto || 'Abono' }}</td>
-              <td>${{ movimiento.monto.toFixed(2) }}</td>
-              <td>${{ movimiento.impuestos.toFixed(2) }}</td>
-              <td>${{ (movimiento.monto + movimiento.impuestos).toFixed(2) }}</td>
-              <td>
-                <button class="icon-button" @click="editarMovimiento(movimiento)">
-                  ✏️
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table-container">
+          <table class="history-table">
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Concepto</th>
+                <th>Monto</th>
+                <th>GST (5%)</th>
+                <th>QST (9.975%)</th>
+                <th>Total</th>
+                <th v-if="puedeEditar">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(movimiento, index) in movimientosFiltrados" :key="index">
+                <td>{{ formatDate(movimiento.fecha) }}</td>
+                <td>{{ movimiento.concepto || 'Abono' }}</td>
+                <td>${{ formatMoney(movimiento.monto) }}</td>
+                <td>${{ formatMoney(movimiento.monto * (movimiento.gst_rate || 5) / 100) }}</td>
+                <td>${{ formatMoney(movimiento.monto * (movimiento.qst_rate || 9.975) / 100) }}</td>
+                <td>${{ formatMoney(calcularTotal(movimiento)) }}</td>
+                <td v-if="puedeEditar" class="actions-cell">
+                  <button class="icon-button edit" @click="editarMovimiento(movimiento)">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                  <button class="icon-button delete" @click="eliminarMovimiento(movimiento)">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </td>
+              </tr>
+              <tr v-if="movimientosFiltrados.length === 0">
+                <td colspan="7" class="text-center">No hay registros disponibles</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 
-    <!-- Modal para Agregar/Editar Abono -->
-    <div class="modal" v-if="showAbonoModal">
+    <!-- Modales -->
+    <div v-if="showAbonoModal" class="modal">
+      <div class="modal-backdrop" @click="closeAbonoModal"></div>
       <div class="modal-content glass-panel">
-        <h3 class="section-title">{{ editingMovimiento ? 'Editar' : 'Agregar' }} Abono</h3>
+        <div class="modal-header">
+          <h3 class="section-title">
+            {{ editingMovimiento ? 'Editar' : 'Agregar' }} Abono
+          </h3>
+          <button class="close-button" @click="closeAbonoModal">
+            <i class="bi bi-x"></i>
+          </button>
+        </div>
         <div class="modal-form">
           <div class="input-group">
             <label>Monto</label>
             <input type="number" v-model="nuevoAbono.monto" class="payment-input" step="0.01">
+            <small v-if="errorAbonoMonto" class="error-text">{{ errorAbonoMonto }}</small>
           </div>
           <div class="input-group">
             <label>Fecha</label>
             <input type="date" v-model="nuevoAbono.fecha" class="payment-input">
+            <small v-if="errorAbonoFecha" class="error-text">{{ errorAbonoFecha }}</small>
           </div>
           <div class="input-group">
             <label>GST (%)</label>
@@ -125,30 +178,49 @@
             <label>QST (%)</label>
             <input type="number" v-model="nuevoAbono.qstRate" class="payment-input" step="0.01">
           </div>
+          <div class="taxes-preview" v-if="nuevoAbono.monto > 0">
+            <p>GST ({{ nuevoAbono.gstRate }}%): ${{ formatMoney(nuevoAbono.monto * (nuevoAbono.gstRate / 100)) }}</p>
+            <p>QST ({{ nuevoAbono.qstRate }}%): ${{ formatMoney(nuevoAbono.monto * (nuevoAbono.qstRate / 100)) }}</p>
+            <p class="total">Total: ${{ formatMoney(calcularTotalNuevoAbono()) }}</p>
+          </div>
           <div class="modal-actions">
-            <button @click="guardarAbono" class="payment-button">Guardar</button>
-            <button @click="showAbonoModal = false" class="cancel-button">Cancelar</button>
+            <button @click="guardarAbono" class="payment-button" :disabled="cargando">
+              <span v-if="cargando"><i class="bi bi-arrow-repeat spin"></i> Procesando...</span>
+              <span v-else>{{ editingMovimiento ? 'Actualizar' : 'Guardar' }}</span>
+            </button>
+            <button @click="closeAbonoModal" class="cancel-button" :disabled="cargando">Cancelar</button>
           </div>
         </div>
       </div>
     </div>
 
     <!-- Modal para Agregar Extra -->
-    <div class="modal" v-if="showExtrasModal">
+    <div v-if="showExtrasModal" class="modal">
+      <div class="modal-backdrop" @click="closeExtrasModal"></div>
       <div class="modal-content glass-panel">
-        <h3 class="section-title">Agregar Servicio Extra</h3>
+        <div class="modal-header">
+          <h3 class="section-title">
+            {{ editingMovimiento ? 'Editar' : 'Agregar' }} Servicio Extra
+          </h3>
+          <button class="close-button" @click="closeExtrasModal">
+            <i class="bi bi-x"></i>
+          </button>
+        </div>
         <div class="modal-form">
           <div class="input-group">
             <label>Concepto</label>
             <input type="text" v-model="nuevoExtra.concepto" class="payment-input">
+            <small v-if="errorExtraConcepto" class="error-text">{{ errorExtraConcepto }}</small>
           </div>
           <div class="input-group">
             <label>Monto</label>
             <input type="number" v-model="nuevoExtra.monto" class="payment-input" step="0.01">
+            <small v-if="errorExtraMonto" class="error-text">{{ errorExtraMonto }}</small>
           </div>
           <div class="input-group">
             <label>Fecha</label>
             <input type="date" v-model="nuevoExtra.fecha" class="payment-input">
+            <small v-if="errorExtraFecha" class="error-text">{{ errorExtraFecha }}</small>
           </div>
           <div class="input-group">
             <label>GST (%)</label>
@@ -158,9 +230,17 @@
             <label>QST (%)</label>
             <input type="number" v-model="nuevoExtra.qstRate" class="payment-input" step="0.01">
           </div>
+          <div class="taxes-preview" v-if="nuevoExtra.monto > 0">
+            <p>GST ({{ nuevoExtra.gstRate }}%): ${{ formatMoney(nuevoExtra.monto * (nuevoExtra.gstRate / 100)) }}</p>
+            <p>QST ({{ nuevoExtra.qstRate }}%): ${{ formatMoney(nuevoExtra.monto * (nuevoExtra.qstRate / 100)) }}</p>
+            <p class="total">Total: ${{ formatMoney(calcularTotalNuevoExtra()) }}</p>
+          </div>
           <div class="modal-actions">
-            <button @click="guardarExtra" class="payment-button">Guardar</button>
-            <button @click="showExtrasModal = false" class="cancel-button">Cancelar</button>
+            <button @click="guardarExtra" class="payment-button" :disabled="cargando">
+              <span v-if="cargando"><i class="bi bi-arrow-repeat spin"></i> Procesando...</span>
+              <span v-else>{{ editingMovimiento ? 'Actualizar' : 'Guardar' }}</span>
+            </button>
+            <button @click="closeExtrasModal" class="cancel-button" :disabled="cargando">Cancelar</button>
           </div>
         </div>
       </div>
@@ -169,38 +249,56 @@
 </template>
 
 <script>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import axios from 'axios'
 
 export default {
-  name: 'HonorariosComponent',
+  name: 'HonorariosExpediente',
   props: {
-    honorarioId: {
-      type: Number,
-      required: false
-    },
-    initialData: {
+    expediente: {
       type: Object,
-      required: false,
-      default: () => ({})
+      required: true
     },
     expedienteId: {
       type: Number,
-      required: false
+      required: false,
+      default: null
+    },
+    userRole: {
+      type: String,
+      required: false,
+      default: 'USER'
     }
   },
-  setup(props) {
+  emits: ['honorario-actualizado'],
+  setup(props, { emit }) {
+    // Estado general
+    const cargando = ref(false)
     const expedienteIniciado = ref(false)
     const montoInicial = ref(0)
-    const fechaApertura = ref('')
+    const fechaApertura = ref(new Date().toISOString().split('T')[0])
     const activeTab = ref('abonos')
+    
+    // Estado de modales
     const showAbonoModal = ref(false)
     const showExtrasModal = ref(false)
     const editingMovimiento = ref(null)
 
+    // Datos
+    const honorario = ref(null)
     const abonos = ref([])
     const extras = ref([])
 
+    // Mensajes de error
+    const errorMonto = ref('')
+    const errorFecha = ref('')
+    const errorAbonoMonto = ref('')
+    const errorAbonoFecha = ref('')
+    const errorExtraConcepto = ref('')
+    const errorExtraMonto = ref('')
+    const errorExtraFecha = ref('')
+
+    // Formularios
     const nuevoAbono = ref({
       monto: 0,
       fecha: new Date().toISOString().split('T')[0],
@@ -216,95 +314,207 @@ export default {
       qstRate: 9.975
     })
 
-    // Cargar datos iniciales si existen
-    const loadInitialData = () => {
-      if (props.initialData && Object.keys(props.initialData).length > 0) {
-        montoInicial.value = props.initialData.montoInicial
-        fechaApertura.value = props.initialData.fechaApertura
-        abonos.value = props.initialData.abonos || []
-        extras.value = props.initialData.extras || []
-        expedienteIniciado.value = true
-      }
-    }
+    // Permisos
+    const puedeEditar = computed(() => {
+      return props.expediente.estatus_del_expediente !== 'Cerrado' || 
+             ['DIRECTOR', 'ADMIN'].includes(props.userRole);
+    });
 
-    // Cargar datos del honorario desde el servidor
+    // Cargar datos del honorario
     const loadHonorarioData = async () => {
-      if (props.honorarioId) {
-        try {
-          const response = await axios.get(`/honorarios/${props.honorarioId}/data`)
-          const { honorario, abonos: abonosData, extras: extrasData } = response.data
-          montoInicial.value = honorario.monto_inicial
-          fechaApertura.value = honorario.fecha_apertura
-          abonos.value = abonosData
-          extras.value = extrasData
-          expedienteIniciado.value = true
-        } catch (error) {
-          console.error('Error al cargar datos:', error)
+      cargando.value = true
+      errorMonto.value = ''
+      errorFecha.value = ''
+      
+      try {
+        console.log('Cargando datos de honorario...')
+        
+        // Obtenemos el ID del expediente
+        const expedienteId = props.expedienteId || props.expediente?.id
+        
+        if (!expedienteId) {
+          console.error('No se proporcionó un ID de expediente válido')
+          throw new Error('ID de expediente no válido')
         }
+        
+        // Primero verificamos si existe un honorario para este expediente
+        const response = await axios.get(`/expedientes/${expedienteId}/honorarios`)
+        console.log('Respuesta de honorarios:', response.data)
+        
+        if (response.data && response.data.length > 0) {
+          honorario.value = response.data[0]
+          console.log('Honorario encontrado:', honorario.value)
+          montoInicial.value = parseFloat(honorario.value.monto_total_expediente) || 0
+          fechaApertura.value = honorario.value.created_at?.split('T')[0] || new Date().toISOString().split('T')[0]
+          expedienteIniciado.value = true
+          
+          // Cargar abonos y extras
+          if (honorario.value.id) {
+            try {
+              const [abonosResponse, extrasResponse] = await Promise.all([
+                axios.get(`/honorarios/${honorario.value.id}/abonos`),
+                axios.get(`/honorarios/${honorario.value.id}/extras`)
+              ])
+              
+              console.log('Respuesta de abonos:', abonosResponse.data)
+              console.log('Respuesta de extras:', extrasResponse.data)
+              
+              abonos.value = abonosResponse.data || []
+              extras.value = extrasResponse.data || []
+              
+              // Emitir evento para actualizar el honorario en el componente padre
+              emit('honorario-actualizado', honorario.value)
+            } catch (error) {
+              console.error('Error al cargar abonos y extras:', error)
+              // No lanzamos el error aquí para permitir que se muestre el honorario aunque fallen los abonos
+            }
+          }
+        } else {
+          console.log('No se encontraron honorarios para este expediente')
+          expedienteIniciado.value = false
+          montoInicial.value = 0
+          fechaApertura.value = new Date().toISOString().split('T')[0]
+        }
+      } catch (error) {
+        console.error('Error al cargar datos:', error)
+        expedienteIniciado.value = false
+        // Mostrar mensaje de error más amigable
+        if (error.response?.status === 404) {
+          console.error('No se encontró el expediente especificado.')
+        } else {
+          console.error('Ocurrió un error al cargar los datos. Por favor, intente nuevamente.')
+        }
+      } finally {
+        cargando.value = false
       }
     }
 
     const iniciarExpediente = async () => {
-      if (montoInicial.value > 0 && fechaApertura.value) {
-        try {
-          const response = await axios.post('/honorarios', {
-            expediente_id: props.expedienteId,
-            monto_inicial: montoInicial.value,
-            fecha_apertura: fechaApertura.value
-          })
+      // Validación
+      errorMonto.value = ''
+      errorFecha.value = ''
+      
+      if (!montoInicial.value || montoInicial.value <= 0) {
+        errorMonto.value = 'Por favor, ingrese un monto inicial válido.'
+        return
+      }
+
+      if (!fechaApertura.value) {
+        errorFecha.value = 'Por favor, seleccione una fecha de apertura.'
+        return
+      }
+
+      // Obtener el ID del expediente
+      const expedienteId = props.expedienteId || props.expediente?.id
+      if (!expedienteId) {
+        console.error('No se proporcionó un ID de expediente válido')
+        alert('Error: No se pudo determinar el ID del expediente.')
+        return
+      }
+
+      cargando.value = true
+      try {
+        console.log('Iniciando expediente con ID:', expedienteId)
+        console.log('Datos a enviar:', {
+          expediente_id: expedienteId,
+          monto_total_expediente: parseFloat(montoInicial.value),
+          monto_adicional: 0,
+          monto_total_a_pagar: parseFloat(montoInicial.value),
+          total_abonos: 0,
+          saldo_pendiente: parseFloat(montoInicial.value),
+          estado: 'pendiente',
+          usuario_id: props.expediente.usuario_id || null
+        })
+        
+        const response = await axios.post('/honorarios', {
+          expediente_id: expedienteId,
+          monto_total_expediente: parseFloat(montoInicial.value),
+          monto_adicional: 0,
+          monto_total_a_pagar: parseFloat(montoInicial.value),
+          total_abonos: 0,
+          saldo_pendiente: parseFloat(montoInicial.value),
+          estado: 'pendiente',
+          usuario_id: props.expediente.usuario_id || null
+        })
+        
+        console.log('Respuesta del servidor:', response.data)
+        
+        if (response.data && response.data.id) {
+          honorario.value = response.data
           expedienteIniciado.value = true
-          // Actualizar el honorarioId si es necesario
-          if (response.data.id) {
-            props.honorarioId = response.data.id
-          }
-        } catch (error) {
-          console.error('Error al iniciar expediente:', error)
-          alert('Error al iniciar el expediente. Por favor, intente nuevamente.')
+          emit('honorario-actualizado', response.data)
+          
+          // Recargar los datos del honorario
+          await loadHonorarioData()
+        } else {
+          throw new Error('La respuesta del servidor no incluye el ID del honorario.')
         }
+      } catch (error) {
+        console.error('Error al iniciar expediente:', error)
+        alert('Error al iniciar el expediente. Por favor, intente nuevamente.')
+      } finally {
+        cargando.value = false
       }
     }
 
+    // Cálculos
     const totalAbonos = computed(() => {
-      return abonos.value.reduce((total, abono) => total + Number(abono.monto), 0)
+      return abonos.value.reduce((total, abono) => total + parseFloat(abono.monto || 0), 0)
     })
 
     const totalImpuestos = computed(() => {
-      const impuestosAbonos = abonos.value.reduce((total, abono) => total + Number(abono.impuestos), 0)
-      const impuestosExtras = extras.value.reduce((total, extra) => total + Number(extra.impuestos), 0)
+      const impuestosAbonos = abonos.value.reduce((total, abono) => {
+        const monto = parseFloat(abono.monto || 0)
+        const gstRate = parseFloat(abono.gst_rate || 5)
+        const qstRate = parseFloat(abono.qst_rate || 9.975)
+        return total + (monto * (gstRate / 100)) + (monto * (qstRate / 100))
+      }, 0)
+      
+      const impuestosExtras = extras.value.reduce((total, extra) => {
+        const monto = parseFloat(extra.monto || 0)
+        const gstRate = parseFloat(extra.gst_rate || 5)
+        const qstRate = parseFloat(extra.qst_rate || 9.975)
+        return total + (monto * (gstRate / 100)) + (monto * (qstRate / 100))
+      }, 0)
+      
       return impuestosAbonos + impuestosExtras
     })
 
     const totalExtras = computed(() => {
-      return extras.value.reduce((total, extra) => total + Number(extra.monto), 0)
+      return extras.value.reduce((total, extra) => total + parseFloat(extra.monto || 0), 0)
     })
 
     const saldoPendiente = computed(() => {
-      return montoInicial.value - totalAbonos.value
+      return parseFloat(montoInicial.value) - parseFloat(totalAbonos.value)
     })
 
     const totalGeneral = computed(() => {
-      return montoInicial.value + totalExtras.value + totalImpuestos.value
+      const montoBase = parseFloat(montoInicial.value) || 0
+      const extrasTotal = parseFloat(totalExtras.value) || 0
+      const impuestosTotal = parseFloat(totalImpuestos.value) || 0
+      return montoBase + extrasTotal + impuestosTotal
     })
 
+    // Stats y desglose
     const stats = computed(() => [
       { 
         label: 'Monto Inicial', 
-        value: montoInicial.value, 
+        value: parseFloat(montoInicial.value) || 0, 
         color: '#3b82f6' 
       },
       { 
         label: 'Saldo Pendiente', 
-        value: saldoPendiente.value, 
+        value: parseFloat(saldoPendiente.value) || 0, 
         color: '#ef4444' 
       },
       { 
-        label: 'Total Abonos', 
-        value: totalAbonos.value, 
+        label: 'Total Abonado', 
+        value: parseFloat(totalAbonos.value) || 0, 
         color: '#10b981' 
       },
       { 
         label: 'Total General', 
-        value: totalGeneral.value, 
+        value: parseFloat(totalGeneral.value) || 0, 
         color: '#f59e0b' 
       }
     ])
@@ -312,34 +522,34 @@ export default {
     const desglose = computed(() => [
       { 
         label: 'Monto Inicial', 
-        value: montoInicial.value, 
+        value: parseFloat(montoInicial.value) || 0, 
         color: '#ffffff' 
       },
       { 
-        label: 'Saldo Pendiente', 
-        value: saldoPendiente.value, 
-        color: '#ef4444' 
-      },
-      { 
-        label: 'Total Abonos', 
-        value: totalAbonos.value, 
+        label: 'Total Abonado', 
+        value: parseFloat(totalAbonos.value) || 0, 
         color: '#10b981' 
       },
       { 
+        label: 'Saldo Pendiente', 
+        value: parseFloat(saldoPendiente.value) || 0, 
+        color: '#ef4444' 
+      },
+      { 
         label: 'Total Impuestos', 
-        value: totalImpuestos.value, 
+        value: parseFloat(totalImpuestos.value) || 0, 
         color: '#93c5fd' 
       },
       { 
         label: 'Total Extras', 
-        value: totalExtras.value, 
+        value: parseFloat(totalExtras.value) || 0, 
         color: '#8b5cf6' 
       },
       { 
         label: 'Total General', 
-        value: totalGeneral.value, 
+        value: parseFloat(totalGeneral.value) || 0, 
         color: '#f59e0b',
-        className: 'font-bold text-lg' 
+        isTotal: true
       }
     ])
 
@@ -347,84 +557,300 @@ export default {
       return activeTab.value === 'abonos' ? abonos.value : extras.value
     })
 
-    const guardarAbono = async () => {
-      if (nuevoAbono.value.monto > 0) {
-        try {
-          const datos = {
-            monto: nuevoAbono.value.monto,
-            fecha: nuevoAbono.value.fecha,
-            gst_rate: nuevoAbono.value.gstRate,
-            qst_rate: nuevoAbono.value.qstRate
-          }
+    // Métodos auxiliares
+    const calcularTotal = (movimiento) => {
+      const monto = parseFloat(movimiento.monto || 0)
+      const gstRate = parseFloat(movimiento.gst_rate || 5)
+      const qstRate = parseFloat(movimiento.qst_rate || 9.975)
+      const gst = monto * (gstRate / 100)
+      const qst = monto * (qstRate / 100)
+      return monto + gst + qst
+    }
 
-          let response
-          if (editingMovimiento.value) {
-            response = await axios.put(
-              `/honorarios/${props.honorarioId}/abonos/${editingMovimiento.value.id}`,
-              datos
-            )
-            const index = abonos.value.findIndex(a => a.id === editingMovimiento.value.id)
-            if (index !== -1) {
-              abonos.value[index] = response.data
-            }
-          } else {
-            response = await axios.post(`/honorarios/${props.honorarioId}/abonos`, datos)
-            abonos.value.push(response.data)
-          }
-          
-          showAbonoModal.value = false
-          resetNuevoAbono()
-        } catch (error) {
-          console.error('Error al guardar abono:', error)
-          alert('Error al guardar el abono. Por favor, intente nuevamente.')
+    const calcularTotalNuevoAbono = () => {
+      const monto = parseFloat(nuevoAbono.value.monto || 0)
+      const gstRate = parseFloat(nuevoAbono.value.gstRate || 5)
+      const qstRate = parseFloat(nuevoAbono.value.qstRate || 9.975)
+      const gst = monto * (gstRate / 100)
+      const qst = monto * (qstRate / 100)
+      return monto + gst + qst
+    }
+
+    const calcularTotalNuevoExtra = () => {
+      const monto = parseFloat(nuevoExtra.value.monto || 0)
+      const gstRate = parseFloat(nuevoExtra.value.gstRate || 5)
+      const qstRate = parseFloat(nuevoExtra.value.qstRate || 9.975)
+      const gst = monto * (gstRate / 100)
+      const qst = monto * (qstRate / 100)
+      return monto + gst + qst
+    }
+
+    // Métodos para guardar datos
+    const guardarAbono = async () => {
+      // Validación
+      errorAbonoMonto.value = ''
+      errorAbonoFecha.value = ''
+      
+      if (!nuevoAbono.value.monto || nuevoAbono.value.monto <= 0) {
+        errorAbonoMonto.value = 'Por favor, ingrese un monto válido.'
+        return
+      }
+      
+      if (!nuevoAbono.value.fecha) {
+        errorAbonoFecha.value = 'Por favor, seleccione una fecha.'
+        return
+      }
+      
+      cargando.value = true
+      try {
+        if (!honorario.value || !honorario.value.id) {
+          alert('No se pudo determinar el ID del honorario.')
+          return
         }
+        
+        const monto = parseFloat(nuevoAbono.value.monto)
+        const gstRate = parseFloat(nuevoAbono.value.gstRate)
+        const qstRate = parseFloat(nuevoAbono.value.qstRate)
+        const impuestos = (monto * gstRate / 100) + (monto * qstRate / 100)
+        
+        const datos = {
+          honorario_id: honorario.value.id,
+          monto: monto,
+          fecha: nuevoAbono.value.fecha,
+          gst_rate: gstRate,
+          qst_rate: qstRate,
+          impuestos: impuestos,
+          usuario_id: props.expediente.usuario_id || null
+        }
+
+        console.log('Guardando abono para honorario ID:', honorario.value.id)
+        console.log('Datos a enviar:', datos)
+
+        let response
+        if (editingMovimiento.value) {
+          response = await axios.put(
+            `/honorarios/abonos/${editingMovimiento.value.id}`,
+            datos
+          )
+          console.log('Respuesta de actualización de abono:', response.data)
+          
+          const index = abonos.value.findIndex(a => a.id === editingMovimiento.value.id)
+          if (index !== -1) {
+            abonos.value[index] = response.data
+          }
+        } else {
+          response = await axios.post(`/honorarios/abonos`, datos)
+          console.log('Respuesta de creación de abono:', response.data)
+          abonos.value.push(response.data)
+        }
+        
+        // Actualizar el honorario con el nuevo saldo
+        await actualizarSaldoHonorario()
+        
+        closeAbonoModal()
+      } catch (error) {
+        console.error('Error al guardar abono:', error)
+        alert('Error al guardar el abono. Por favor, intente nuevamente.')
+      } finally {
+        cargando.value = false
       }
     }
 
     const guardarExtra = async () => {
-      if (nuevoExtra.value.monto > 0 && nuevoExtra.value.concepto) {
-        try {
-          const datos = {
-            concepto: nuevoExtra.value.concepto,
-            monto: nuevoExtra.value.monto,
-            fecha: nuevoExtra.value.fecha,
-            gst_rate: nuevoExtra.value.gstRate,
-            qst_rate: nuevoExtra.value.qstRate
-          }
-
-          const response = await axios.post(`/honorarios/${props.honorarioId}/extras`, datos)
-          extras.value.push(response.data)
-          showExtrasModal.value = false
-          resetNuevoExtra()
-        } catch (error) {
-          console.error('Error al guardar extra:', error)
-          alert('Error al guardar el servicio extra. Por favor, intente nuevamente.')
+      // Validación
+      errorExtraConcepto.value = ''
+      errorExtraMonto.value = ''
+      errorExtraFecha.value = ''
+      
+      if (!nuevoExtra.value.concepto) {
+        errorExtraConcepto.value = 'Por favor, ingrese un concepto para el servicio extra.'
+        return
+      }
+      
+      if (!nuevoExtra.value.monto || nuevoExtra.value.monto <= 0) {
+        errorExtraMonto.value = 'Por favor, ingrese un monto válido.'
+        return
+      }
+      
+      if (!nuevoExtra.value.fecha) {
+        errorExtraFecha.value = 'Por favor, seleccione una fecha.'
+        return
+      }
+      
+      cargando.value = true
+      try {
+        if (!honorario.value || !honorario.value.id) {
+          alert('No se pudo determinar el ID del honorario.')
+          return
         }
+        
+        const monto = parseFloat(nuevoExtra.value.monto)
+        const gstRate = parseFloat(nuevoExtra.value.gstRate)
+        const qstRate = parseFloat(nuevoExtra.value.qstRate)
+        const impuestos = (monto * gstRate / 100) + (monto * qstRate / 100)
+        
+        const datos = {
+          honorario_id: honorario.value.id,
+          concepto: nuevoExtra.value.concepto,
+          monto: monto,
+          fecha: nuevoExtra.value.fecha,
+          gst_rate: gstRate,
+          qst_rate: qstRate,
+          impuestos: impuestos,
+          usuario_id: props.expediente.usuario_id || null
+        }
+
+        console.log('Guardando extra para honorario ID:', honorario.value.id)
+        console.log('Datos a enviar:', datos)
+
+        let response
+        if (editingMovimiento.value) {
+          response = await axios.put(
+            `/honorarios/extras/${editingMovimiento.value.id}`,
+            datos
+          )
+          console.log('Respuesta de actualización de extra:', response.data)
+          
+          const index = extras.value.findIndex(e => e.id === editingMovimiento.value.id)
+          if (index !== -1) {
+            extras.value[index] = response.data
+          }
+        } else {
+          response = await axios.post(`/honorarios/extras`, datos)
+          console.log('Respuesta de creación de extra:', response.data)
+          extras.value.push(response.data)
+        }
+        
+        // Actualizar el honorario con el nuevo monto adicional
+        await actualizarMontoAdicionalHonorario()
+        
+        closeExtrasModal()
+      } catch (error) {
+        console.error('Error al guardar extra:', error)
+        alert('Error al guardar el servicio extra. Por favor, intente nuevamente.')
+      } finally {
+        cargando.value = false
+      }
+    }
+    
+    // Eliminar movimiento (abono o extra)
+    const eliminarMovimiento = async (movimiento) => {
+      if (!confirm('¿Está seguro de eliminar este registro?')) {
+        return
+      }
+
+      cargando.value = true
+      try {
+        const endpoint = activeTab.value === 'abonos' 
+          ? `/honorarios/abonos/${movimiento.id}`
+          : `/honorarios/extras/${movimiento.id}`
+
+        await axios.delete(endpoint)
+        
+        if (activeTab.value === 'abonos') {
+          abonos.value = abonos.value.filter(a => a.id !== movimiento.id)
+          await actualizarSaldoHonorario()
+        } else {
+          extras.value = extras.value.filter(e => e.id !== movimiento.id)
+          await actualizarMontoAdicionalHonorario()
+        }
+        
+        console.log(`${activeTab.value === 'abonos' ? 'Abono' : 'Extra'} eliminado correctamente`)
+      } catch (error) {
+        console.error('Error al eliminar:', error)
+        alert('Error al eliminar el registro. Por favor, intente nuevamente.')
+      } finally {
+        cargando.value = false
+      }
+    }
+    
+    // Actualizar saldo del honorario
+    const actualizarSaldoHonorario = async () => {
+      if (!honorario.value || !honorario.value.id) return
+      
+      try {
+        const nuevoTotalAbonos = parseFloat(totalAbonos.value)
+        const nuevoSaldoPendiente = parseFloat(montoInicial.value) - nuevoTotalAbonos
+        const nuevoEstado = nuevoSaldoPendiente <= 0 ? 'pagado' : 'pendiente'
+        
+        const response = await axios.put(`/honorarios/${honorario.value.id}`, {
+          total_abonos: nuevoTotalAbonos,
+          saldo_pendiente: nuevoSaldoPendiente,
+          estado: nuevoEstado
+        })
+        
+        console.log('Honorario actualizado con nuevo saldo:', response.data)
+        honorario.value = response.data
+        emit('honorario-actualizado', honorario.value)
+      } catch (error) {
+        console.error('Error al actualizar saldo del honorario:', error)
+      }
+    }
+    
+    // Actualizar monto adicional del honorario
+    const actualizarMontoAdicionalHonorario = async () => {
+      if (!honorario.value || !honorario.value.id) return
+      
+      try {
+        const nuevoMontoAdicional = parseFloat(totalExtras.value)
+        const nuevoMontoTotalAPagar = parseFloat(montoInicial.value) + nuevoMontoAdicional + parseFloat(totalImpuestos.value)
+        
+        const response = await axios.put(`/honorarios/${honorario.value.id}`, {
+          monto_adicional: nuevoMontoAdicional,
+          monto_total_a_pagar: nuevoMontoTotalAPagar
+        })
+        
+        console.log('Honorario actualizado con nuevo monto adicional:', response.data)
+        honorario.value = response.data
+        emit('honorario-actualizado', honorario.value)
+      } catch (error) {
+        console.error('Error al actualizar monto adicional del honorario:', error)
       }
     }
 
+    // Métodos para manejar modales
     const editarMovimiento = (movimiento) => {
       editingMovimiento.value = movimiento
-      nuevoAbono.value = {
-        monto: movimiento.monto,
-        fecha: movimiento.fecha,
-        gstRate: movimiento.gst_rate,
-        qstRate: movimiento.qst_rate
+      
+      if (activeTab.value === 'abonos') {
+        nuevoAbono.value = {
+          monto: parseFloat(movimiento.monto),
+          fecha: movimiento.fecha,
+          gstRate: parseFloat(movimiento.gst_rate || 5),
+          qstRate: parseFloat(movimiento.qst_rate || 9.975)
+        }
+        showAbonoModal.value = true
+      } else {
+        nuevoExtra.value = {
+          concepto: movimiento.concepto,
+          monto: parseFloat(movimiento.monto),
+          fecha: movimiento.fecha,
+          gstRate: parseFloat(movimiento.gst_rate || 5),
+          qstRate: parseFloat(movimiento.qst_rate || 9.975)
+        }
+        showExtrasModal.value = true
       }
-      showAbonoModal.value = true
     }
 
-    const resetNuevoAbono = () => {
+    const closeAbonoModal = () => {
+      showAbonoModal.value = false
+      editingMovimiento.value = null
+      errorAbonoMonto.value = ''
+      errorAbonoFecha.value = ''
       nuevoAbono.value = {
         monto: 0,
         fecha: new Date().toISOString().split('T')[0],
         gstRate: 5,
         qstRate: 9.975
       }
-      editingMovimiento.value = null
     }
 
-    const resetNuevoExtra = () => {
+    const closeExtrasModal = () => {
+      showExtrasModal.value = false
+      editingMovimiento.value = null
+      errorExtraConcepto.value = ''
+      errorExtraMonto.value = ''
+      errorExtraFecha.value = ''
       nuevoExtra.value = {
         concepto: '',
         monto: 0,
@@ -434,7 +860,9 @@ export default {
       }
     }
 
+    // Formateo
     const formatDate = (date) => {
+      if (!date) return 'N/A'
       return new Date(date).toLocaleDateString('es-ES', {
         year: 'numeric',
         month: 'long',
@@ -442,15 +870,26 @@ export default {
       })
     }
 
-    // Cargar datos cuando el componente se monta
+    const formatMoney = (amount) => {
+      return parseFloat(amount || 0).toFixed(2)
+    }
+
+    // Lifecycle
     onMounted(() => {
-      loadInitialData()
-      if (props.honorarioId && !props.initialData) {
+      console.log('Componente HonorariosExpediente montado')
+      loadHonorarioData()
+    })
+
+    // Observar cambios en las props
+    watch(() => props.expedienteId, (newVal) => {
+      console.log('Prop expedienteId cambió:', newVal)
+      if (newVal) {
         loadHonorarioData()
       }
     })
 
     return {
+      cargando,
       expedienteIniciado,
       montoInicial,
       fechaApertura,
@@ -460,14 +899,29 @@ export default {
       editingMovimiento,
       nuevoAbono,
       nuevoExtra,
+      puedeEditar,
       stats,
       desglose,
       movimientosFiltrados,
+      errorMonto,
+      errorFecha,
+      errorAbonoMonto,
+      errorAbonoFecha,
+      errorExtraConcepto,
+      errorExtraMonto,
+      errorExtraFecha,
       iniciarExpediente,
       guardarAbono,
       guardarExtra,
       editarMovimiento,
-      formatDate
+      eliminarMovimiento,
+      closeAbonoModal,
+      closeExtrasModal,
+      formatDate,
+      formatMoney,
+      calcularTotal,
+      calcularTotalNuevoAbono,
+      calcularTotalNuevoExtra
     }
   }
 }
@@ -629,6 +1083,12 @@ export default {
   transform: translateY(-2px);
 }
 
+.payment-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
 .modal {
   position: fixed;
   top: 0;
@@ -639,7 +1099,15 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 1050;
+}
+
+.modal-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .modal-content {
@@ -647,6 +1115,23 @@ export default {
   max-width: 500px;
   max-height: 90vh;
   overflow-y: auto;
+  position: relative;
+  z-index: 1051;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
 }
 
 .modal-form {
@@ -686,6 +1171,11 @@ export default {
   color: white;
 }
 
+.action-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .history-tabs {
   display: flex;
   gap: 1rem;
@@ -707,6 +1197,10 @@ export default {
   color: white;
 }
 
+.table-container {
+  overflow-x: auto;
+}
+
 .history-table {
   width: 100%;
   border-collapse: separate;
@@ -725,6 +1219,11 @@ export default {
   color: #e2e8f0;
 }
 
+.actions-cell {
+  display: flex;
+  gap: 0.5rem;
+}
+
 .icon-button {
   background: none;
   border: none;
@@ -734,8 +1233,14 @@ export default {
   transition: all 0.3s ease;
 }
 
-.icon-button:hover {
-  background: rgba(255, 255, 255, 0.1);
+.icon-button.edit:hover {
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+}
+
+.icon-button.delete:hover {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
 }
 
 .cancel-button {
@@ -750,6 +1255,47 @@ export default {
 
 .cancel-button:hover {
   background: rgba(255, 255, 255, 0.2);
+}
+
+.taxes-preview {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 0.5rem;
+}
+
+.taxes-preview p {
+  margin: 0.5rem 0;
+}
+
+.taxes-preview .total {
+  font-weight: bold;
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.error-text {
+  color: #ef4444;
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.loading-indicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  color: #e2e8f0;
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 @keyframes fadeIn {

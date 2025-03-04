@@ -106,6 +106,23 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/expedientes/{expediente}/estado', [ExpedienteController::class, 'updateStatus'])->name('expedientes.updateStatus');
 
 
+// Rutas para honorarios
+Route::get('/expedientes/{expediente}/honorarios', [HonorarioController::class, 'getHonorariosByExpediente']);
+Route::post('/honorarios', [HonorarioController::class, 'store']);
+Route::put('/honorarios/{honorario}', [HonorarioController::class, 'update']);
+
+// Rutas para abonos
+Route::get('/honorarios/{honorario}/abonos', [HonorarioController::class, 'getAbonos']);
+Route::post('/honorarios/abonos', [HonorarioController::class, 'storeAbono']);
+Route::put('/honorarios/abonos/{abono}', [HonorarioController::class, 'updateAbono']);
+
+// Rutas para extras
+Route::get('/honorarios/{honorario}/extras', [HonorarioController::class, 'getExtras']);
+Route::post('/honorarios/extras', [HonorarioController::class, 'storeExtra']);
+// Agregar estas rutas en web.php
+Route::delete('/honorarios/abonos/{abono}', [HonorarioController::class, 'destroyAbono']);
+Route::delete('/honorarios/extras/{extra}', [HonorarioController::class, 'destroyExtra']);
+
 
         Route::get('/honorarios', [HonorarioController::class, 'index'])->name('honorarios.index');
 Route::get('/honorarios/{expediente_id}', [HonorarioController::class, 'show'])->name('honorarios.show');

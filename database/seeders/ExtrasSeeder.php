@@ -32,6 +32,7 @@ class ExtrasSeeder extends Seeder
         foreach ($honorarios as $honorario) {
             // Crear entre 0 y 3 extras por honorario
             $numExtras = rand(0, 3);
+            $totalExtras = 0;
 
             for ($i = 0; $i < $numExtras; $i++) {
                 $montoExtra = rand(50, 500);
@@ -49,6 +50,16 @@ class ExtrasSeeder extends Seeder
                     'impuestos' => $impuestos,
                     'usuario_id' => $usuarios->random()->id,
                 ]);
+
+                $totalExtras += $montoExtra;
+            }
+
+            // Actualizar el honorario con los nuevos montos adicionales
+            if ($totalExtras > 0) {
+                $honorario->monto_adicional += $totalExtras;
+                $honorario->monto_total_a_pagar = $honorario->monto_total_expediente + $honorario->monto_adicional;
+                $honorario->saldo_pendiente = $honorario->monto_total_a_pagar - $honorario->total_abonos;
+                $honorario->save();
             }
         }
     }

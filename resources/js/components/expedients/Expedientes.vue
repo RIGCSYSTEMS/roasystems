@@ -122,11 +122,13 @@
               :expediente="expediente"
               :expediente-id="expediente.id"
               :documento="documentoVisualizando"
+              :honorario="expediente.honorarios ? expediente.honorarios[0] : null"
               :user-role="userRole"
               :expediente-name="expediente.numero_de_dossier"
               @abrir-modal-crear="abrirModalCrear"
               @editar-documento="abrirModalEditar"
               @ver-documento="abrirModalVer"
+              @honorario-actualizado="actualizarHonorario"
               ref="documentoIndex"
             ></component>
           </keep-alive>
@@ -241,6 +243,10 @@ export default {
     expedienteName: {
       type: String,
       required: true
+    },
+    honorario: {
+      type: Object,
+      default: null
     }
   },
   data() {
@@ -302,7 +308,9 @@ export default {
       this.cerrarModalEditar();
     },
     cargarDocumentos() {
-      if (this.$refs.documentoIndex && this.$refs.documentoIndex.cargarDocumentos) {
+      if (this.$refs.documentoIndex && 
+      this.activeTab === 'DocumentoIndexExp' &&
+      this.$refs.documentoIndex.cargarDocumentos) {
         this.$refs.documentoIndex.cargarDocumentos();
       }
     },
@@ -407,13 +415,35 @@ export default {
       this.cerrarModalEdicion();
     },
     agregarBitacora() {
-      // Implementar lógica para agregar entrada a la bitácora
+      // Cambiar a la pestaña de bitácora
+      this.activeTab = 'bitacora';
+      // Aquí podrías implementar lógica adicional si es necesario
     },
     programarAudiencia() {
-      // Implementar lógica para programar una audiencia
+      // Cambiar a la pestaña de audiencias
+      this.activeTab = 'audiencias';
+      // Aquí podrías implementar lógica adicional si es necesario
     },
     registrarAbono() {
-      // Implementar lógica para registrar un abono
+      // Cambiar a la pestaña de honorarios
+      this.activeTab = 'honorarios';
+      // Aquí podrías implementar lógica adicional si es necesario
+    },
+    actualizarHonorario(honorarioActualizado) {
+      // Actualizar el honorario en el expediente
+      if (!this.expediente.honorarios) {
+        this.expediente.honorarios = [];
+      }
+      
+      const index = this.expediente.honorarios.findIndex(h => h.id === honorarioActualizado.id);
+      if (index !== -1) {
+        this.expediente.honorarios[index] = honorarioActualizado;
+      } else {
+        this.expediente.honorarios.push(honorarioActualizado);
+      }
+      
+      // Forzar actualización del componente
+      this.$forceUpdate();
     }
   }
 };

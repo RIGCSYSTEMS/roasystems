@@ -19,8 +19,9 @@ class AbonosSeeder extends Seeder
         }
 
         foreach ($honorarios as $honorario) {
-            $saldoPendiente = $honorario->monto_inicial;
+            $saldoPendiente = $honorario->saldo_pendiente;
             $numAbonos = rand(1, 5);
+            $totalAbonos = 0;
 
             for ($i = 0; $i < $numAbonos && $saldoPendiente > 0; $i++) {
                 $montoAbono = $saldoPendiente > 100 ? rand(100, min(1000, $saldoPendiente)) : $saldoPendiente;
@@ -39,40 +40,14 @@ class AbonosSeeder extends Seeder
                 ]);
 
                 $saldoPendiente -= $montoAbono;
+                $totalAbonos += $montoAbono;
             }
+
+            // Actualizar el honorario con los nuevos totales
+            $honorario->total_abonos = $totalAbonos;
+            $honorario->saldo_pendiente = $honorario->monto_total_a_pagar - $totalAbonos;
+            $honorario->estado = $honorario->saldo_pendiente <= 0 ? 'pagado' : 'pendiente';
+            $honorario->save();
         }
-        // $honorarios = Honorario::all();
-        // $usuarios = User::all();
-
-        // if ($usuarios->isEmpty()) {
-        //     $usuarios = User::factory()->count(5)->create();
-        // }
-
-        // foreach ($honorarios as $honorario) {
-        //     $saldoPendiente = $honorario->monto_total_a_pagar;
-        //     $numAbonos = rand(1, 5);
-
-        //     for ($i = 0; $i < $numAbonos && $saldoPendiente > 0; $i++) {
-        //         $montoAbono = $saldoPendiente > 100 ? rand(100, min(1000, $saldoPendiente)) : $saldoPendiente;
-
-        //         $abono = new Abono([
-        //             'honorario_id' => $honorario->id,
-        //             'fecha' => now()->subDays(rand(0, 365)),
-        //             'factura' => 'FAC-' . str_pad(rand(1, 9999), 4, '0', STR_PAD_LEFT),
-        //             'monto' => $montoAbono,
-        //             'metodo_pago' => ['efectivo', 'tarjeta', 'transferencia'][rand(0, 2)],
-        //             'usuario_id' => $usuarios->random()->id,
-        //         ]);
-
-        //         $abono->save();
-
-        //         $saldoPendiente -= $montoAbono;
-        //         $honorario->total_abonos += $montoAbono;
-        //     }
-
-        //     $honorario->saldo_pendiente = $saldoPendiente;
-        //     $honorario->estado = $saldoPendiente <= 0 ? 'pagado' : 'pendiente';
-        //     $honorario->save();
-        // }
     }
 }

@@ -10,10 +10,15 @@ return new class extends Migration
     {
         Schema::create('honorarios', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('usuario_id');
             $table->unsignedBigInteger('expediente_id');
-            $table->decimal('monto_inicial', 10, 2);
-            $table->date('fecha_apertura');
+            $table->decimal('monto_total_expediente', 10, 2);
+            $table->decimal('monto_adicional', 10, 2)->default(0);
+            $table->decimal('monto_total_a_pagar', 10, 2);
+            $table->decimal('total_abonos', 10, 2)->default(0);
+            $table->decimal('saldo_pendiente', 10, 2);
+            $table->enum('estado', ['pendiente', 'pagado', 'cancelado'])->default('pendiente');
+            $table->text('descripcion')->nullable();
+            $table->unsignedBigInteger('usuario_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
 
