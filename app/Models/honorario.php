@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Prunable;
+
 
 class Honorario extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, Prunable;
 
     protected $fillable = [
         'expediente_id',
@@ -64,5 +66,9 @@ class Honorario extends Model
         $this->total_abonos = $this->abonos()->sum('monto');
         $this->saldo_pendiente = $this->monto_total_a_pagar - $this->total_abonos;
         $this->save();
+    }
+    public function prunable()
+    {
+        return static::where('deleted_at', '<=', now()->subYears(7));
     }
 }

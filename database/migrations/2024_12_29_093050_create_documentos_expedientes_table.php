@@ -44,6 +44,7 @@ return new class extends Migration
             $table->enum('formato',['PDF', 'IMAGEN']); // Tipo de documento (ej: PDF, Imagen)
             $table->boolean('validado')->default(false); // Validación del abogado
             $table->string('observaciones')->nullable(); // Información adicional
+            $table->softDeletes();
             $table->timestamps();
 
         });

@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Prunable;
 
 class DocumentoExpediente extends Model
 {
-    use HasFactory;
+    use HasFactory, softDeletes, Prunable;
 
     protected $table = 'documentos_expedientes';
 
@@ -46,5 +48,10 @@ class DocumentoExpediente extends Model
     public function tipodocumentoexpediente()
     {
         return $this->belongsTo(TipoDocumentoExpediente::class, 'tipo_documento_expediente_id');
+    }
+
+    public function prunable()
+    {
+        return static::where('deleted_at', '<=', now()->subYears(7));
     }
 }

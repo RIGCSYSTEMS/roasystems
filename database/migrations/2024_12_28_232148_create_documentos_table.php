@@ -32,6 +32,7 @@ return new class extends Migration
             $table->enum('estado', ['pendiente', 'aceptado', 'rechazado'])
             ->default('pendiente'); // Estado inicial por defecto
             $table->string('ruta')->nullable();
+            $table->softDeletes();
             $table->string('observaciones')->nullable();
 
             $table->timestamps();

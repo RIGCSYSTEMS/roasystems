@@ -7,10 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Prunable;
 
 class Expediente extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes, Prunable;
 
     protected $fillable = [
         'client_id',
@@ -106,6 +108,12 @@ class Expediente extends Model
         $etapasCompletadas = $this->etapas()->where('completada', true)->count();
         return (int)(($etapasCompletadas / $totalEtapas) * 100);
     }
+
+    public function prunable()
+    {
+        return static::where('deleted_at', '<=', now()->subYears(7));
+    }
+
 
     // public function actualizarProgreso(): void
     // {

@@ -523,7 +523,7 @@ export default {
       { 
         label: 'Monto Inicial', 
         value: parseFloat(montoInicial.value) || 0, 
-        color: '#ffffff' 
+        color: '#3b82f6' 
       },
       { 
         label: 'Total Abonado', 
@@ -930,18 +930,18 @@ export default {
 <style scoped>
 .honorarios-dashboard {
   font-family: 'Inter', sans-serif;
-  background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+  background: linear-gradient(135deg, rgb(76, 21, 165) 0%, #f3e8ff 100%);
   padding: 2rem;
   border-radius: 1rem;
-  color: #ffffff;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  color: #4a5568;
+  box-shadow: 0 10px 15px -3px rgba(168, 85, 247, 0.1);
 }
 
 .dashboard-title {
   font-size: 2.5rem;
   font-weight: 800;
   margin-bottom: 2rem;
-  background: linear-gradient(to right, #a78bfa, #ec4899);
+  background: linear-gradient(to right, #ffffff, #d4cdda);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -955,15 +955,18 @@ export default {
 }
 
 .stat-card {
-  background: rgba(255, 255, 255, 0.1);
+  background: #ffffff;
   border-radius: 0.75rem;
   overflow: hidden;
-  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 6px -1px rgba(168, 85, 247, 0.1);
   transition: transform 0.3s ease;
+  border: 1px solid rgba(192, 38, 211, 0.1);
 }
 
 .stat-card:hover {
   transform: translateY(-5px);
+  box-shadow: 0 8px 15px -3px rgba(168, 85, 247, 0.2);
+  border-color: rgba(192, 38, 211, 0.2);
 }
 
 .stat-content {
@@ -974,7 +977,7 @@ export default {
   font-size: 1rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
-  color: #e2e8f0;
+  color: #718096;
 }
 
 .stat-value {
@@ -995,19 +998,20 @@ export default {
 }
 
 .glass-panel {
-  background: rgba(255, 255, 255, 0.1);
+  background: #ffffff;
   border-radius: 0.75rem;
   padding: 1.5rem;
-  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 6px -1px rgba(168, 85, 247, 0.1);
   flex: 1;
   min-width: 300px;
+  border: 1px solid rgba(192, 38, 211, 0.1);
 }
 
 .section-title {
   font-size: 1.5rem;
   font-weight: 700;
   margin-bottom: 1rem;
-  color: #a78bfa;
+  color: #9333ea;
 }
 
 .cost-items {
@@ -1026,11 +1030,11 @@ export default {
 .cost-item.total-row {
   margin-top: 1rem;
   padding-top: 1rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  border-top: 10px solid rgba(192, 38, 211, 0.2);
 }
 
 .cost-label {
-  color: #e2e8f0;
+  color: #4a5568;
 }
 
 .cost-value {
@@ -1051,25 +1055,26 @@ export default {
 
 .input-group label {
   font-size: 0.875rem;
-  color: #e2e8f0;
+  color: #4a5568;
 }
 
 .payment-input {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: #faf5ff;
+  border: 1px solid rgba(192, 38, 211, 0.2);
   border-radius: 0.5rem;
   padding: 0.5rem;
-  color: white;
+  color: #2d3748;
   outline: none;
   transition: border-color 0.3s ease;
 }
 
 .payment-input:focus {
-  border-color: #a78bfa;
+  border-color: #9333ea;
+  box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.1);
 }
 
 .payment-button {
-  background: linear-gradient(to right, #3b82f6, #8b5cf6);
+  background: linear-gradient(to right, #9333ea, #c026d3);
   color: white;
   border: none;
   padding: 0.75rem 1rem;
@@ -1081,6 +1086,7 @@ export default {
 
 .payment-button:hover {
   transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(168, 85, 247, 0.3);
 }
 
 .payment-button:disabled {
@@ -1117,6 +1123,10 @@ export default {
   overflow-y: auto;
   position: relative;
   z-index: 1051;
+  background: #ffffff;
+  border-radius: 0.75rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(192, 38, 211, 0.1);
 }
 
 .modal-header {
@@ -1129,7 +1139,7 @@ export default {
 .close-button {
   background: none;
   border: none;
-  color: white;
+  color: #718096;
   font-size: 1.5rem;
   cursor: pointer;
 }
@@ -1162,13 +1172,14 @@ export default {
 }
 
 .action-button.primary {
-  background: linear-gradient(to right, #3b82f6, #8b5cf6);
+  background: linear-gradient(to right, #9333ea, #c026d3);
   color: white;
 }
 
 .action-button.secondary {
-  background: linear-gradient(to right, #10b981, #059669);
-  color: white;
+  background: #ffffff;
+  color: #9333ea;
+  border: 1px solid #9333ea;
 }
 
 .action-button:disabled {
@@ -1184,17 +1195,18 @@ export default {
 
 .tab-button {
   padding: 0.5rem 1rem;
-  border: none;
+  border: 1px solid rgba(192, 38, 211, 0.2);
   border-radius: 0.5rem;
-  background: rgba(255, 255, 255, 0.1);
-  color: #e2e8f0;
+  background: #ffffff;
+  color: #718096;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .tab-button.active {
-  background: rgba(255, 255, 255, 0.2);
+  background: #9333ea;
   color: white;
+  border-color: #9333ea;
 }
 
 .table-container {
@@ -1207,16 +1219,20 @@ export default {
   border-spacing: 0;
 }
 
-.history-table th,
+.history-table th {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 2px solid rgba(192, 38, 211, 0.1);
+  font-weight: 600;
+  color: #4a5568;
+  background: #faf5ff;
+}
+
 .history-table td {
   padding: 0.75rem;
   text-align: left;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.history-table th {
-  font-weight: 600;
-  color: #e2e8f0;
+  border-bottom: 1px solid rgba(192, 38, 211, 0.1);
+  color: #4a5568;
 }
 
 .actions-cell {
@@ -1231,11 +1247,12 @@ export default {
   padding: 0.25rem;
   border-radius: 0.25rem;
   transition: all 0.3s ease;
+  color: #718096;
 }
 
 .icon-button.edit:hover {
-  background: rgba(59, 130, 246, 0.1);
-  color: #3b82f6;
+  background: rgba(147, 51, 234, 0.1);
+  color: #9333ea;
 }
 
 .icon-button.delete:hover {
@@ -1244,9 +1261,9 @@ export default {
 }
 
 .cancel-button {
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-  border: none;
+  background: #faf5ff;
+  color: #4a5568;
+  border: 1px solid #e2e8f0;
   padding: 0.75rem 1rem;
   border-radius: 0.5rem;
   cursor: pointer;
@@ -1254,29 +1271,32 @@ export default {
 }
 
 .cancel-button:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: #f3e8ff;
 }
 
 .taxes-preview {
   margin-top: 1rem;
   padding: 1rem;
-  background: rgba(255, 255, 255, 0.05);
+  background: #faf5ff;
   border-radius: 0.5rem;
+  border: 1px solid rgba(192, 38, 211, 0.1);
 }
 
 .taxes-preview p {
   margin: 0.5rem 0;
+  color: #4a5568;
 }
 
 .taxes-preview .total {
   font-weight: bold;
   margin-top: 0.5rem;
   padding-top: 0.5rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(192, 38, 211, 0.1);
+  color: #9333ea;
 }
 
 .error-text {
-  color: #ef4444;
+  color: #e53e3e;
   font-size: 0.75rem;
   margin-top: 0.25rem;
 }
@@ -1286,7 +1306,7 @@ export default {
   justify-content: center;
   align-items: center;
   padding: 1rem;
-  color: #e2e8f0;
+  color: #718096;
 }
 
 .spin {

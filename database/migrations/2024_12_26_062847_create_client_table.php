@@ -31,6 +31,7 @@ return new class extends Migration
             $table->string('permiso_de_trabajo')->nullable();
             $table->string('iuc')->nullable();
             $table->text('observaciones');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

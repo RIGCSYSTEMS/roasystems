@@ -7,10 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Prunable;
 
 class Client extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes, Prunable;
 
     protected $fillable = [
         'nombre_de_cliente',
@@ -71,5 +73,10 @@ class Client extends Model
     public function getSaldoPendienteAttribute()
     {
         return $this->total_honorarios - $this->total_pagado;
+    }
+
+    public function prunable()
+    {
+        return static::where('deleted_at', '<=', now()->subYears(7));
     }
 }

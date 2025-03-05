@@ -23,6 +23,7 @@ return new class extends Migration
             $table->text('descripcion');
             $table->time('tiempo_empleado')->nullable();
             $table->timestamp('fecha_y_hora_del_evento')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

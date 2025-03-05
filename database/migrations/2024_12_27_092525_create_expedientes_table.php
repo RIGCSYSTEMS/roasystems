@@ -34,6 +34,7 @@ return new class extends Migration
             $table->string('boite');
             $table->text('observaciones')->nullable();
             $table->integer('progreso')->default(0);
+            $table->softDeletes();
             $table->timestamps();
 
 
