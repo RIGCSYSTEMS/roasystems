@@ -6,7 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
-        "laravel/framework": "^11.40",
+        "laravel/framework": "^11.44.1",
         "laravel/tinker": "^2.9",
         "laravel/ui": "^4.6",
         "league/commonmark": "^2.6.0",
