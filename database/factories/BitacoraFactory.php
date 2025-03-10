@@ -7,6 +7,7 @@ use App\Models\BitacoraCategoria;
 use App\Models\User;
 use App\Models\Expediente;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Carbon\Carbon;
 
 class BitacoraFactory extends Factory
 {
@@ -14,37 +15,53 @@ class BitacoraFactory extends Factory
 
     public function definition(): array
     {
-        // Fecha de creación entre hace 6 meses y hoy
-        $fechaCreacion = $this->faker->dateTimeBetween('-6 months', '-1 day');
+        // Usar Carbon para manejar fechas de manera consistente
+        $now = Carbon::now('UTC');
+        $sixMonthsAgo = $now->copy()->subMonths(6);
+        
+        // Fecha de creación entre hace 6 meses y hace 1 día
+        $fechaCreacion = Carbon::createFromTimestamp(
+            mt_rand($sixMonthsAgo->timestamp, $now->copy()->subDay()->timestamp)
+        )->setTimezone('UTC');
+        
+        // Fecha de actualización entre la creación y hace 1 hora
+        $fechaActualizacion = Carbon::createFromTimestamp(
+            mt_rand($fechaCreacion->timestamp, $now->copy()->subHour()->timestamp)
+        )->setTimezone('UTC');
         
         $tipo = $this->faker->randomElement(['normal', 'seguimiento']);
         $estado = $this->faker->randomElement(['completado', 'en_proceso', 'pendiente']);
         
-        // Fecha de completado debe ser posterior a la fecha de creación
+        // Fecha de completado debe ser entre la creación y la actualización
         $fechaCompletado = null;
         if ($estado === 'completado') {
-            $fechaCompletado = $this->faker->dateTimeBetween($fechaCreacion, '-1 minute');
+            $fechaCompletado = Carbon::createFromTimestamp(
+                mt_rand($fechaCreacion->timestamp, $fechaActualizacion->timestamp)
+            )->setTimezone('UTC');
         }
         
-        // Fecha de reactivación debe ser posterior a la fecha de completado (si existe)
+        // Fecha de reactivación debe ser entre el completado y la actualización
         $fechaReactivacion = null;
-        if ($estado !== 'completado' && $this->faker->boolean(20)) {
-            $fechaReactivacion = $this->faker->dateTimeBetween(
-                $fechaCompletado ?? $fechaCreacion,
-                '-1 minute'
-            );
+        if ($estado !== 'completado' && $this->faker->boolean(20) && $fechaCompletado) {
+            $fechaReactivacion = Carbon::createFromTimestamp(
+                mt_rand($fechaCompletado->timestamp, $fechaActualizacion->timestamp)
+            )->setTimezone('UTC');
         }
         
-        // Fecha límite debe ser posterior a la fecha de creación para bitácoras de seguimiento
+        // Fecha límite depende del estado
         $fechaLimite = null;
         $prioridadFecha = null;
         if ($tipo === 'seguimiento') {
-            // Si está completada, la fecha límite debe ser anterior a la fecha de completado
             if ($estado === 'completado' && $fechaCompletado) {
-                $fechaLimite = $this->faker->dateTimeBetween($fechaCreacion, $fechaCompletado);
+                // Si está completada, la fecha límite debe ser anterior a la fecha de completado
+                $fechaLimite = Carbon::createFromTimestamp(
+                    mt_rand($fechaCreacion->timestamp, $fechaCompletado->timestamp)
+                )->setTimezone('UTC');
             } else {
-                // Si no está completada, la fecha límite debe ser futura
-                $fechaLimite = $this->faker->dateTimeBetween('+1 day', '+3 months');
+                // Si no está completada, la fecha límite puede ser futura
+                $fechaLimite = Carbon::createFromTimestamp(
+                    mt_rand($now->timestamp, $now->copy()->addMonths(3)->timestamp)
+                )->setTimezone('UTC');
             }
             $fechaLimite = $fechaLimite->format('Y-m-d');
             $prioridadFecha = $this->faker->randomElement(['normal', 'importante', 'critica']);
@@ -64,7 +81,7 @@ class BitacoraFactory extends Factory
             'fecha_completado' => $fechaCompletado,
             'fecha_reactivacion' => $fechaReactivacion,
             'created_at' => $fechaCreacion,
-            'updated_at' => $this->faker->dateTimeBetween($fechaCreacion, '-1 minute'),
+            'updated_at' => $fechaActualizacion,
         ];
     }
 
@@ -74,10 +91,14 @@ class BitacoraFactory extends Factory
     public function normal(): Factory
     {
         return $this->state(function (array $attributes) {
+            // Asegurarnos de que created_at existe
+            $fechaCreacion = $attributes['created_at'] ?? Carbon::now('UTC')->subDays(mt_rand(1, 180));
+            
             return [
                 'tipo' => 'normal',
+                'titulo' => $attributes['titulo'] ?? $this->faker->sentence(),
                 'estado' => 'completado',
-                'fecha_completado' => $attributes['created_at'],
+                'fecha_completado' => $fechaCreacion,
                 'fecha_limite' => null,
                 'prioridad_fecha' => null,
             ];
@@ -91,16 +112,21 @@ class BitacoraFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             // Asegurarnos de que tenemos una fecha de creación válida
-            $fechaCreacion = $attributes['created_at'] instanceof \DateTime 
-                ? $attributes['created_at'] 
-                : new \DateTime($attributes['created_at']);
-
+            $fechaCreacion = $attributes['created_at'] ?? Carbon::now('UTC')->subDays(mt_rand(1, 180));
+            
+            // Asegurarnos de que el título se mantiene
+            $titulo = $attributes['titulo'] ?? $this->faker->sentence();
+            
             // La fecha límite debe ser futura
-            $fechaLimite = $this->faker->dateTimeBetween('+1 day', '+3 months');
+            $now = Carbon::now('UTC');
+            $fechaLimite = Carbon::createFromTimestamp(
+                mt_rand($now->timestamp, $now->copy()->addMonths(3)->timestamp)
+            )->format('Y-m-d');
 
             return [
                 'tipo' => 'seguimiento',
-                'fecha_limite' => $fechaLimite->format('Y-m-d'),
+                'titulo' => $titulo,
+                'fecha_limite' => $fechaLimite,
                 'prioridad_fecha' => $this->faker->randomElement(['normal', 'importante', 'critica']),
             ];
         });
@@ -113,24 +139,19 @@ class BitacoraFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             // Asegurarnos de que tenemos una fecha de creación válida
-            $fechaCreacion = $attributes['created_at'] instanceof \DateTime 
-                ? $attributes['created_at'] 
-                : new \DateTime($attributes['created_at']);
+            $fechaCreacion = $attributes['created_at'] ?? Carbon::now('UTC')->subDays(mt_rand(1, 180));
             
-            // Si hay fecha límite, asegurarnos de que es un objeto DateTime
-            $fechaLimite = null;
-            if (!empty($attributes['fecha_limite'])) {
-                $fechaLimite = $attributes['fecha_limite'] instanceof \DateTime 
-                    ? $attributes['fecha_limite'] 
-                    : new \DateTime($attributes['fecha_limite']);
-            }
+            // Asegurarnos de que el título se mantiene
+            $titulo = $attributes['titulo'] ?? $this->faker->sentence();
             
-            // Generar fecha de completado
-            $fechaCompletado = $fechaLimite 
-                ? $this->faker->dateTimeBetween($fechaCreacion, min($fechaLimite, new \DateTime('-1 minute')))
-                : $this->faker->dateTimeBetween($fechaCreacion, '-1 minute');
+            // Generar fecha de completado entre la creación y hace 1 hora
+            $now = Carbon::now('UTC');
+            $fechaCompletado = Carbon::createFromTimestamp(
+                mt_rand($fechaCreacion->timestamp, $now->copy()->subHour()->timestamp)
+            );
             
             return [
+                'titulo' => $titulo,
                 'estado' => 'completado',
                 'fecha_completado' => $fechaCompletado,
             ];
@@ -144,23 +165,26 @@ class BitacoraFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             // Asegurarnos de que tenemos una fecha de creación válida
-            $fechaCreacion = $attributes['created_at'] instanceof \DateTime 
-                ? $attributes['created_at'] 
-                : new \DateTime($attributes['created_at']);
+            $fechaCreacion = $attributes['created_at'] ?? Carbon::now('UTC')->subDays(mt_rand(1, 180));
             
-            // Calcular una fecha intermedia para el completado
-            $fechaIntermedia = clone $fechaCreacion;
-            $fechaIntermedia->modify('+1 hour'); // Asegurar al menos una hora después de la creación
+            // Asegurarnos de que el título se mantiene
+            $titulo = $attributes['titulo'] ?? $this->faker->sentence();
             
-            // Generar fecha de completado entre la creación y hace un minuto
-            $fechaCompletado = $this->faker->dateTimeBetween($fechaIntermedia, '-1 hour');
+            // Generar fecha de completado entre la creación y hace 2 horas
+            $now = Carbon::now('UTC');
+            $fechaCompletado = Carbon::createFromTimestamp(
+                mt_rand($fechaCreacion->timestamp, $now->copy()->subHours(2)->timestamp)
+            );
             
-            // Generar fecha de reactivación después del completado
-            $fechaReactivacion = $this->faker->dateTimeBetween($fechaCompletado, '-1 minute');
+            // Generar fecha de reactivación entre el completado y hace 1 hora
+            $fechaReactivacion = Carbon::createFromTimestamp(
+                mt_rand($fechaCompletado->timestamp, $now->copy()->subHour()->timestamp)
+            );
             
             return [
+                'titulo' => $titulo,
                 'estado' => 'en_proceso',
-                'fecha_completado' => null, // La fecha de completado se elimina al reactivar
+                'fecha_completado' => null,
                 'fecha_reactivacion' => $fechaReactivacion,
             ];
         });

@@ -6,6 +6,7 @@ use App\Models\BitacoraHistorialEstado;
 use App\Models\Bitacora;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Carbon\Carbon;
 
 class BitacoraHistorialEstadoFactory extends Factory
 {
@@ -22,13 +23,22 @@ class BitacoraHistorialEstadoFactory extends Factory
             'Actualización de información',
         ];
 
+        // Usar Carbon para manejar fechas de manera consistente
+        $now = Carbon::now('UTC');
+        $sixMonthsAgo = $now->copy()->subMonths(6);
+        
+        // Fecha entre hace 6 meses y hace 1 minuto
+        $fecha = Carbon::createFromTimestamp(
+            mt_rand($sixMonthsAgo->timestamp, $now->copy()->subMinute()->timestamp)
+        )->setTimezone('UTC');
+
         return [
             'bitacora_id' => Bitacora::factory(),
             'user_id' => User::factory(),
             'accion' => $this->faker->randomElement($acciones),
-            'fecha' => $this->faker->dateTimeBetween('-6 months', 'now'),
-            'created_at' => now(),
-            'updated_at' => now(),
+            'fecha' => $fecha,
+            'created_at' => $now,
+            'updated_at' => $now,
         ];
     }
 
