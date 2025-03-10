@@ -129,6 +129,7 @@
               @editar-documento="abrirModalEditar"
               @ver-documento="abrirModalVer"
               @honorario-actualizado="actualizarHonorario"
+              @agregar-bitacora="agregarBitacora"
               ref="documentoIndex"
             ></component>
           </keep-alive>
@@ -415,10 +416,17 @@ export default {
       this.cerrarModalEdicion();
     },
     agregarBitacora() {
-      // Cambiar a la pestaña de bitácora
-      this.activeTab = 'bitacora';
-      // Aquí podrías implementar lógica adicional si es necesario
-    },
+  // Cambiar a la pestaña de bitácora
+  this.activeTab = 'bitacora';
+  console.log('Cambiando a bitácora, ID:', this.expediente.id);
+  
+  // Esperar a que el componente se monte y luego forzar la carga de bitácoras
+  this.$nextTick(() => {
+    if (this.$refs.activeComponent && this.$refs.activeComponent.cargarBitacoras) {
+      this.$refs.activeComponent.cargarBitacoras();
+    }
+  });
+},
     programarAudiencia() {
       // Cambiar a la pestaña de audiencias
       this.activeTab = 'audiencias';

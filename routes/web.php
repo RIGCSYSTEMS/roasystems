@@ -14,6 +14,8 @@ use App\Http\Controllers\TipoDocumentoController;
 use App\Http\Controllers\SearchClientController;
 use App\Http\Controllers\SearchExpedientController;
 use App\Http\Controllers\TipoDocumentoExpedienteController;
+use App\Http\Controllers\BitacoraCategoriaController;
+use App\Http\Controllers\BitacoraActualizacionController;
 
 
 // Ruta principal
@@ -142,9 +144,33 @@ Route::put('/honorarios/{honorario}/abonos/{abono}', [HonorarioController::class
         Route::delete('/expedientes/{expediente}/audiencias/{audiencia}', [AudienciaController::class, 'destroy'])->name('audiencias.destroy');
         Route::get('/expedientes/{expediente}/audiencias/{audiencia}', [AudienciaController::class, 'show'])->name('audiencias.show');
 
-        Route::resource('expedientes.bitacoras', BitacoraController::class);
-        Route::get('/bitacoras/{client}', [BitacoraController::class, 'index'])->name('bitacoras.index');
-        Route::get('/client/{client}/bitacoras', [BitacoraController::class, 'index'])->name('client.bitacoras.index');
+// Rutas para categorías de bitácora
+Route::get('/bitacora-categorias', [BitacoraCategoriaController::class, 'index'])->name('bitacora-categorias.index');
+Route::post('/bitacora-categorias', [BitacoraCategoriaController::class, 'store'])->name('bitacora-categorias.store');
+Route::get('/bitacora-categorias/{categoria}', [BitacoraCategoriaController::class, 'show'])->name('bitacora-categorias.show');
+Route::put('/bitacora-categorias/{categoria}', [BitacoraCategoriaController::class, 'update'])->name('bitacora-categorias.update');
+Route::delete('/bitacora-categorias/{categoria}', [BitacoraCategoriaController::class, 'destroy'])->name('bitacora-categorias.destroy');
+
+// Rutas para bitácoras
+Route::get('/bitacoras', [BitacoraController::class, 'index'])->name('bitacoras.index');
+Route::post('/bitacoras', [BitacoraController::class, 'store'])->name('bitacoras.store');
+Route::get('/bitacoras/{bitacora}', [BitacoraController::class, 'show'])->name('bitacoras.show');
+Route::put('/bitacoras/{bitacora}', [BitacoraController::class, 'update'])->name('bitacoras.update');
+Route::delete('/bitacoras/{bitacora}', [BitacoraController::class, 'destroy'])->name('bitacoras.destroy');
+Route::post('/bitacoras/{bitacora}/completar', [BitacoraController::class, 'completar'])->name('bitacoras.completar');
+Route::post('/bitacoras/{bitacora}/reactivar', [BitacoraController::class, 'reactivar'])->name('bitacoras.reactivar');
+
+// Rutas para actualizaciones de bitácora
+Route::get('/bitacora-actualizaciones', [BitacoraActualizacionController::class, 'index'])->name('bitacora-actualizaciones.index');
+Route::post('/bitacora-actualizaciones', [BitacoraActualizacionController::class, 'store'])->name('bitacora-actualizaciones.store');
+Route::get('/bitacora-actualizaciones/{actualizacion}', [BitacoraActualizacionController::class, 'show'])->name('bitacora-actualizaciones.show');
+Route::put('/bitacora-actualizaciones/{actualizacion}', [BitacoraActualizacionController::class, 'update'])->name('bitacora-actualizaciones.update');
+Route::delete('/bitacora-actualizaciones/{actualizacion}', [BitacoraActualizacionController::class, 'destroy'])->name('bitacora-actualizaciones.destroy');
+
+// Ruta para la vista de bitácoras
+Route::get('/expedientes/{expediente}/bitacoras', function ($expedienteId) {
+    return view('expedientes.bitacoras', ['expedienteId' => $expedienteId]);
+})->name('expedientes.bitacoras');
     });
 });
 

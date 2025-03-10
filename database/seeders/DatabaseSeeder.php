@@ -21,7 +21,9 @@ class DatabaseSeeder extends Seeder
             TiposDocumentosExpedientesSeeder::class,
             TiposExpedientesSeeder::class,
             clientSeeder::class,
-            ExpedienteSeeder::class,         
+            ExpedienteSeeder::class,
+            BitacoraCategoriaSeeder::class,
+            BitacorasSeeder::class,       
            
             // AgendaSeeder::class,
             AudienciasSeeder::class,
@@ -31,7 +33,9 @@ class DatabaseSeeder extends Seeder
             HonorariosSeeder::class,
             AbonosSeeder::class,
             ExtrasSeeder::class,
-            BitacorasSeeder::class,
+
+            
+
           
             // followSeeder::class,
             // callSeeder::class,
