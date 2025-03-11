@@ -130,7 +130,7 @@
               @ver-documento="abrirModalVer"
               @honorario-actualizado="actualizarHonorario"
               @agregar-bitacora="agregarBitacora"
-              ref="documentoIndex"
+              ref="activeComponent"
             ></component>
           </keep-alive>
         </div>
@@ -309,10 +309,10 @@ export default {
       this.cerrarModalEditar();
     },
     cargarDocumentos() {
-      if (this.$refs.documentoIndex && 
+      if (this.$refs.activeComponent && 
       this.activeTab === 'DocumentoIndexExp' &&
-      this.$refs.documentoIndex.cargarDocumentos) {
-        this.$refs.documentoIndex.cargarDocumentos();
+      this.$refs.activeComponent.cargarDocumentos) {
+        this.$refs.activeComponent.cargarDocumentos();
       }
     },
     abrirModalCrear() {
@@ -355,7 +355,7 @@ export default {
         }
       }
       // O si necesitas recargar los documentos
-      this.$refs.documentoIndex?.cargarDocumentos();
+      this.$refs.activeComponent?.cargarDocumentos();
     },
 
     abrirModalEditar(documento) {
@@ -461,8 +461,8 @@ export default {
 .expediente-container {
   background-color: #ffffff;
   border-radius: 10px;
-  padding: 1.5rem; /* Reduce el padding general */
-  /* box-shadow: 0 0 20px rgba(0,0,0,0.1); */
+  padding: 1.5rem;
+  contain: content; /* Mejora el rendimiento de renderizado */
 }
 
 .expediente-header {
@@ -475,11 +475,13 @@ export default {
   border-radius: 15px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   color: white;
+  will-change: transform; /* Optimiza las animaciones */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.expediente-header:hover{
-transform: translateY(-5px);
-box-shadow: 0 10px 10px rgba(0,0,0,0.1);
+.expediente-header:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 10px rgba(0,0,0,0.1);
 }
 
 .expediente-title {
@@ -492,27 +494,39 @@ box-shadow: 0 10px 10px rgba(0,0,0,0.1);
   font-weight: 600;
 }
 
-/* Nuevo layout para el contenido principal y acciones rápidas */
-.expediente-layout {
+/* Layout principal optimizado */
+.two-column-layout {
   display: flex;
-  gap: 2rem;
-  align-items: flex-start;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+  contain: layout; /* Mejora el rendimiento de layout */
 }
 
-.expediente-content {
+.left-column {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.5rem;
 }
 
+.right-column {
+  width: 300px;
+  flex-shrink: 0;
+}
+
+.full-width-tabs {
+  width: 100%;
+  margin-top: 0;
+}
+
+/* Tarjetas optimizadas */
 .info-card, .tabs-card, .actions-card {
   background: white;
   border-radius: 1rem;
   overflow: hidden;
   box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  will-change: transform, box-shadow; /* Optimiza las animaciones */
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-
 }
 
 .info-card:hover, .tabs-card:hover, .actions-card:hover {
@@ -521,10 +535,10 @@ box-shadow: 0 10px 10px rgba(0,0,0,0.1);
 }
 
 .tabs-card {
-  margin-bottom: 0; /* Elimina el margen inferior */
+  margin-bottom: 0;
   display: flex;
   flex-direction: column;
-  min-height: 0; /* Importante para que se ajuste al contenido */
+  min-height: 0;
 }
 
 .actions-card {
@@ -561,54 +575,7 @@ box-shadow: 0 10px 10px rgba(0,0,0,0.1);
   background-color: rgba(255,255,255,0.3);
 }
 
-/* Layout principal */
-.expediente-container {
-  background-color: #ffffff;
-  border-radius: 10px;
-  padding: 2rem;
-  /* box-shadow: 0 0 20px rgba(0,0,0,0.1); */
-}
-
-/* Layout de dos columnas */
-.two-column-layout {
-  display: flex;
-  gap: 1.5rem; /* Reduce el espacio entre columnas */
-  margin-bottom: 1.5rem; /* Reduce el espacio antes de las pestañas */
-}
-
-/* Columna izquierda */
-.left-column {
-  flex: 1; /* Toma el espacio disponible */
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem; /* Reduce el espacio entre elementos */
-}
-
-/* Columna derecha */
-.right-column {
-  width: 300px; /* Ancho fijo para acciones rápidas */
-  flex-shrink: 0; /* Evita que se encoja */
-}
-
-/* Sección de pestañas a ancho completo */
-.full-width-tabs {
-  width: 100%;
-  margin-top: 0; /* Elimina el margen superior */
-}
-
-/* Responsive */
-@media (max-width: 1024px) {
-  .two-column-layout {
-    flex-direction: column; /* Apila las columnas en móvil */
-  }
-
-  .right-column {
-    width: 100%; /* Ancho completo en móvil */
-    order: -1; /* Mueve las acciones rápidas arriba en móvil */
-  }
-}
-
-/* Estilos para los botones de acción */
+/* Botones de acción optimizados */
 .action-button {
   display: flex;
   align-items: center;
@@ -621,7 +588,8 @@ box-shadow: 0 10px 10px rgba(0,0,0,0.1);
   background-color: #3498db;
   color: white;
   cursor: pointer;
-  transition: all 0.2s ease;
+  will-change: transform, background-color; /* Optimiza las animaciones */
+  transition: background-color 0.2s ease, transform 0.2s ease;
   text-align: left;
 }
 
@@ -638,7 +606,7 @@ box-shadow: 0 10px 10px rgba(0,0,0,0.1);
   font-size: 1.25rem;
 }
 
-/* Estilos para las pestañas */
+/* Pestañas optimizadas */
 .tabs-header {
   display: flex;
   background-color: #f8f9fa;
@@ -658,7 +626,7 @@ box-shadow: 0 10px 10px rgba(0,0,0,0.1);
   gap: 0.5rem;
   color: #6c757d;
   font-weight: 500;
-  transition: all 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease, border-bottom 0.3s ease;
 }
 
 .tab-button.active {
@@ -673,32 +641,12 @@ box-shadow: 0 10px 10px rgba(0,0,0,0.1);
 
 .tabs-content {
   padding: 1rem;
-  min-height: 200px;
-  height: auto; /* Elimina la altura fija */
-  min-height: 0; /* Permite que se ajuste al contenido */
-  overflow: auto; /* Permite scroll si el contenido es muy largo */
+  min-height: 0;
+  overflow: auto;
   transition: height 0.3s ease;
 }
 
-/* Asegúrate que los componentes de las pestañas también sean flexibles */
-.tabs-content > * {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-.empty-state {
-  padding: 2rem;
-  text-align: center;
-  color: #6c757d;
-}
-
-.empty-state i {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-}
-
-/* Estilos para la información */
+/* Información optimizada */
 .info-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -722,7 +670,7 @@ box-shadow: 0 10px 10px rgba(0,0,0,0.1);
   font-weight: 500;
 }
 
-/* Estilos para badges */
+/* Badges optimizados */
 .status-badge {
   font-size: 0.9rem;
   padding: 0.5em 1em;
@@ -746,30 +694,7 @@ box-shadow: 0 10px 10px rgba(0,0,0,0.1);
 .priority-urgent { background-color: #dc3545; color: white; }
 .priority-normal { background-color: #17a2b8; color: white; }
 
-/* Responsive */
-@media (max-width: 1024px) {
-  .expediente-layout {
-    flex-direction: column;
-  }
-
-  .actions-card {
-    width: 100%;
-    order: -1;
-  }
-
-  .expediente-header {
-    padding: 1.5rem;
-  }
-
-  .expediente-title {
-    font-size: 1.5rem;
-  }
-
-  .info-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
+/* Modal optimizado */
 .modal-wrapper {
   position: fixed;
   top: 0;
@@ -780,6 +705,7 @@ box-shadow: 0 10px 10px rgba(0,0,0,0.1);
   justify-content: center;
   align-items: center;
   z-index: 9999;
+  contain: strict; /* Mejora el rendimiento de renderizado */
 }
 
 .modal-backdrop {
@@ -809,5 +735,29 @@ box-shadow: 0 10px 10px rgba(0,0,0,0.1);
 
 .modal-enter, .modal-leave-to {
   opacity: 0;
+}
+
+/* Responsive optimizado */
+@media (max-width: 1024px) {
+  .two-column-layout {
+    flex-direction: column;
+  }
+
+  .right-column {
+    width: 100%;
+    order: -1;
+  }
+
+  .expediente-header {
+    padding: 1.5rem;
+  }
+
+  .expediente-title {
+    font-size: 1.5rem;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
 }
 </style>

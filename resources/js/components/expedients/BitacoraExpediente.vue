@@ -1244,8 +1244,8 @@ export default {
 }
 </script>
 
-<style>
-/* Estilos para la bitácora */
+<style scoped>
+/* Estilos base optimizados */
 .bitacora-dashboard {
   font-family: 'Inter', sans-serif;
   min-height: 100vh;
@@ -1262,17 +1262,17 @@ export default {
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+/* Panel de cristal optimizado */
 .glass-panel {
   background: rgba(255, 255, 255, 0.95);
   border-radius: 1rem;
   padding: 1.5rem;
   box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
   border: 1px solid rgba(255, 255, 255, 0.18);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
   margin-bottom: 2rem;
 }
 
+/* Títulos y encabezados */
 .section-title {
   font-size: 1.5rem;
   font-weight: 700;
@@ -1280,6 +1280,7 @@ export default {
   color: #9333ea;
 }
 
+/* Botones de modo */
 .mode-button {
   display: flex;
   flex-direction: column;
@@ -1292,7 +1293,7 @@ export default {
   border-radius: 1rem;
   border: 2px solid rgba(147, 51, 234, 0.2);
   background: white;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
   cursor: pointer;
 }
 
@@ -1326,6 +1327,7 @@ export default {
   text-align: center;
 }
 
+/* Pestañas de filtro */
 .filter-tabs {
   display: flex;
   flex-wrap: wrap;
@@ -1344,7 +1346,7 @@ export default {
   color: #718096;
   font-size: 0.875rem;
   font-weight: 500;
-  transition: all 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease;
   cursor: pointer;
   white-space: nowrap;
 }
@@ -1360,6 +1362,7 @@ export default {
   border-color: #9333ea;
 }
 
+/* Lista de bitácoras */
 .bitacora-list {
   display: flex;
   flex-direction: column;
@@ -1372,7 +1375,7 @@ export default {
   padding: 1.5rem;
   border-left: 4px solid #9333ea;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .bitacora-item:hover {
@@ -1406,6 +1409,7 @@ export default {
   line-height: 1.5;
 }
 
+/* Badges y etiquetas */
 .status-badge {
   display: inline-flex;
   align-items: center;
@@ -1441,6 +1445,7 @@ export default {
   font-weight: 600;
 }
 
+/* Estado vacío */
 .empty-state {
   display: flex;
   flex-direction: column;
@@ -1470,6 +1475,7 @@ export default {
   text-align: center;
 }
 
+/* Botones de acción */
 .action-button {
   display: inline-flex;
   align-items: center;
@@ -1477,7 +1483,7 @@ export default {
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
   font-weight: 600;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
   cursor: pointer;
   border: none;
 }
@@ -1523,7 +1529,7 @@ export default {
   cursor: pointer;
   padding: 0.25rem;
   border-radius: 0.25rem;
-  transition: all 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease;
   color: #718096;
 }
 
@@ -1532,6 +1538,7 @@ export default {
   color: #9333ea;
 }
 
+/* Modal personalizado */
 .custom-modal {
   position: fixed;
   top: 0;
@@ -1551,7 +1558,6 @@ export default {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(5px);
   z-index: 1051;
 }
 
@@ -1572,7 +1578,6 @@ export default {
   border-radius: 0.75rem;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
   border: 1px solid rgba(192, 38, 211, 0.1);
-  backdrop-filter: blur(10px);
 }
 
 .custom-modal-header {
@@ -1612,6 +1617,7 @@ export default {
   color: #9333ea;
 }
 
+/* Formulario */
 .modal-form {
   display: flex;
   flex-direction: column;
@@ -1636,7 +1642,7 @@ export default {
   border: 1px solid rgba(192, 38, 211, 0.2);
   background: white;
   color: #4a5568;
-  transition: all 0.3s ease;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .form-input:focus, .form-select:focus, .form-textarea:focus {
@@ -1646,10 +1652,6 @@ export default {
 }
 
 .form-static {
-  padding: 0.75rem;
-  border-radius: 0.5rem;
-  background: rgba(147, 51, 234, 0.05);
-  color: #4a5568;
   padding: 0.75rem;
   border-radius: 0.5rem;
   background: rgba(147, 51, 234, 0.05);
@@ -1669,6 +1671,7 @@ export default {
   justify-content: flex-end;
 }
 
+/* Detalles */
 .detail-title {
   font-size: 1.5rem;
   font-weight: 700;
@@ -1697,6 +1700,7 @@ export default {
   color: #4a5568;
 }
 
+/* Panel de fecha límite */
 .deadline-panel {
   display: flex;
   align-items: flex-start;
@@ -1725,6 +1729,7 @@ export default {
   font-weight: 600;
 }
 
+/* Panel de progreso */
 .progress-panel {
   background: white;
   border-radius: 0.75rem;
@@ -1757,6 +1762,7 @@ export default {
   color: #718096;
 }
 
+/* Banner de completado */
 .completed-banner {
   display: flex;
   align-items: center;
@@ -1784,6 +1790,7 @@ export default {
   color: #065f46;
 }
 
+/* Sección de actualizaciones */
 .updates-section {
   border-top: 1px solid rgba(192, 38, 211, 0.1);
   padding-top: 1.5rem;
@@ -1837,6 +1844,7 @@ export default {
   color: #718096;
 }
 
+/* Actualizaciones vacías */
 .empty-updates {
   background: white;
   border-radius: 0.75rem;
@@ -1856,6 +1864,7 @@ export default {
   color: #718096;
 }
 
+/* Botón de alternar */
 .toggle-button {
   display: inline-flex;
   align-items: center;
@@ -1880,6 +1889,7 @@ export default {
   margin-left: 0.5rem;
 }
 
+/* Panel de historial */
 .history-panel {
   background: white;
   border-radius: 0.75rem;
@@ -1918,62 +1928,20 @@ export default {
   color: #718096;
 }
 
-/* Animaciones */
+/* Animaciones optimizadas */
+.animate-fade-in-up {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
 @keyframes fadeIn {
   from { 
     opacity: 0; 
-    transform: translateY(20px); 
+    transform: translateY(10px); 
   }
   to { 
     opacity: 1; 
     transform: translateY(0); 
   }
-}
-
-@keyframes slideInLeft {
-  from { 
-    opacity: 0; 
-    transform: translateX(-50px); 
-  }
-  to { 
-    opacity: 1; 
-    transform: translateX(0); 
-  }
-}
-
-@keyframes slideInRight {
-  from { 
-    opacity: 0; 
-    transform: translateX(50px); 
-  }
-  to { 
-    opacity: 1; 
-    transform: translateX(0); 
-  }
-}
-
-.animate-fade-in-1 { 
-  animation: fadeIn 0.6s ease-out 0.1s both;
-}
-
-.animate-fade-in-2 { 
-  animation: fadeIn 0.6s ease-out 0.2s both;
-}
-
-.animate-fade-in-3 { 
-  animation: fadeIn 0.6s ease-out 0.3s both;
-}
-
-.animate-slide-in-left { 
-  animation: slideInLeft 0.6s ease-out both;
-}
-
-.animate-slide-in-right { 
-  animation: slideInRight 0.6s ease-out both;
-}
-
-.animate-fade-in-up { 
-  animation: fadeIn 0.6s ease-out 0.4s both;
 }
 
 /* Responsive */
