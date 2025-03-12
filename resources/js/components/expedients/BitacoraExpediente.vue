@@ -221,8 +221,9 @@
                 v-model="registro.categoria_id" 
                 class="form-select"
                 required
+                
               >
-                <option value="" disabled>Seleccione una categoría</option>
+                <option value="">Seleccione una categoría</option>
                 <option v-for="cat in categorias" :key="cat.id" :value="cat.id">{{ cat.nombre }}</option>
               </select>
             </div>
@@ -1637,7 +1638,11 @@ export default {
 }
 
 .form-input, .form-select, .form-textarea {
+  width: 100%;
+  appearance: auto;
   padding: 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
   border-radius: 0.5rem;
   border: 1px solid rgba(192, 38, 211, 0.2);
   background: white;
