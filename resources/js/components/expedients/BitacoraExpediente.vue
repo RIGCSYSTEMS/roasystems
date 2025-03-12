@@ -1162,7 +1162,7 @@ export default {
     watch([modalCreacionAbierto, modalDetalleAbierto], ([nuevoModalCreacion, nuevoModalDetalle], [antiguoModalCreacion, antiguoModalDetalle]) => {
       if ((nuevoModalCreacion || nuevoModalDetalle) && (!antiguoModalCreacion && !antiguoModalDetalle)) {
         // Si se abre cualquier modal, bloquear el scroll del body
-        document.body.style.overflow = 'hidden'
+        document.body.style.overflow = 'auto'
       } else if ((!nuevoModalCreacion && !nuevoModalDetalle) && (antiguoModalCreacion || antiguoModalDetalle)) {
         // Si se cierran todos los modales, restaurar el scroll del body
         document.body.style.overflow = ''
