@@ -154,7 +154,7 @@
                     <span v-else class="date-info">{{ formatearFecha(reg.created_at) }}</span>
                   </div>
                 </div>
-                <!-- Botones de acción (editar) -->
+                <!-- Botones de acción (editar y eliminar) -->
                 <div class="edit-button">
                   <button 
                     @click.stop="editarBitacora(reg)" 
@@ -163,6 +163,13 @@
                   >
                     <i class="bi bi-pencil-square"></i>
                   </button>
+                  <button 
+            @click.stop="eliminarBitacora(reg.id)" 
+            class="icon-button delete" 
+            title="Eliminar bitácora"
+          >
+            <i class="bi bi-trash"></i>
+          </button>
                 </div>
               </div>
             </div>
@@ -392,6 +399,15 @@
                 <i class="bi bi-pencil-square me-1"></i>
                 Editar
               </button>
+
+                          <!-- Botón para eliminar -->
+            <button 
+              @click="eliminarBitacora(bitacoraSeleccionada.id)" 
+              class="action-button danger btn-sm"
+            >
+              <i class="bi bi-trash me-1"></i>
+              Eliminar
+            </button>
               
               <!-- Botón para completar (solo visible si no está completada) -->
               <button 
@@ -552,6 +568,14 @@
                     >
                       <i class="bi bi-pencil-square"></i>
                     </button>
+                    <!-- Botón para eliminar sub-bitácora -->
+                    <button 
+                      @click.stop="eliminarSubBitacora(subBitacora.id)" 
+                      class="icon-button delete" 
+                      title="Eliminar actualización"
+                    >
+                      <i class="bi bi-trash"></i>
+                    </button>
                   </div>
                 </div>
                 <p class="update-description">{{ subBitacora.descripcion }}</p>
@@ -700,12 +724,12 @@ export default {
     }
 
     const cerrarModalCreacion = () => {
-      if (!guardando.value) {
+      // if (!guardando.value) {
         modalCreacionAbierto.value = false
         modoEdicion.value = false
         editandoSubBitacora.value = false
         subBitacoraEditandoIndex.value = -1
-      }
+      // }
     }
 
     const abrirModalDetalle = async (bitacora) => {
@@ -948,6 +972,60 @@ export default {
         accionEnProceso.value = false
       }
     }
+
+        // Eliminar bitácora
+        const eliminarBitacora = async (id) => {
+      // Confirmación antes de eliminar
+      if (!confirm('¿Está seguro que desea eliminar esta bitácora? Esta acción no se puede deshacer.')) {
+        return;
+      }
+      
+      accionEnProceso.value = true;
+      try {
+        await axios.delete(`/bitacoras/${id}`);
+        
+        // Cerrar el modal de detalle si está abierto
+        if (modalDetalleAbierto.value) {
+          cerrarModalDetalle();
+        }
+        
+        // Actualizar la lista de bitácoras
+        await cargarBitacoras();
+        
+        alert('Bitácora eliminada correctamente');
+        emit('bitacora-actualizada');
+      } catch (err) {
+        console.error('Error al eliminar la bitácora:', err);
+        alert('Error al eliminar la bitácora: ' + (err.response?.data?.message || 'Error desconocido'));
+      } finally {
+        accionEnProceso.value = false;
+      }
+    };
+
+    // Eliminar sub-bitácora (actualización)
+const eliminarSubBitacora = async (id) => {
+  // Confirmación antes de eliminar
+  if (!confirm('¿Está seguro que desea eliminar esta actualización? Esta acción no se puede deshacer.')) {
+    return;
+  }
+  
+  accionEnProceso.value = true;
+  try {
+    await axios.delete(`/bitacora-actualizaciones/${id}`);
+    
+    // Actualizar la lista de actualizaciones
+    if (bitacoraSeleccionada.value) {
+      await cargarActualizaciones(bitacoraSeleccionada.value.id);
+    }
+    
+    alert('Actualización eliminada correctamente');
+  } catch (err) {
+    console.error('Error al eliminar la actualización:', err);
+    alert('Error al eliminar la actualización: ' + (err.response?.data?.message || 'Error desconocido'));
+  } finally {
+    accionEnProceso.value = false;
+  }
+};
 
     // Iniciar nueva sub-bitácora
     const iniciarNuevaSubBitacora = () => {
@@ -1225,6 +1303,8 @@ export default {
       limpiarFormulario,
       completarBitacora,
       reactivarBitacora,
+      eliminarBitacora,
+      eliminarSubBitacora, 
       iniciarNuevaSubBitacora,
       formatearFecha,
       formatearFechaSimple,
@@ -1936,6 +2016,11 @@ export default {
 /* Animaciones optimizadas */
 .animate-fade-in-up {
   animation: fadeIn 0.4s ease-out forwards;
+}
+
+.icon-button.delete:hover {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
 }
 
 @keyframes fadeIn {
