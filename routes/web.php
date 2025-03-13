@@ -172,6 +172,8 @@ Route::get('/expedientes/{expediente}/bitacoras', function ($expedienteId) {
     return view('expedientes.bitacoras', ['expedienteId' => $expedienteId]);
 })->name('expedientes.bitacoras');
     });
+    // Ruta para obtener bitácoras por cliente
+Route::get('/bitacoras-por-cliente', [BitacoraController::class, 'bitacorasPorCliente'])->name('bitacoras.por-cliente');
 });
 
 // Ruta de inicio después de autenticación

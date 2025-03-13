@@ -20,7 +20,7 @@
       <!-- Barra lateral derecha -->
       <div class="col-lg-4">
         <Expedientes :expedientes="clientData.expedientes" :clientData="clientData" class="mb-4" />
-        <Bitacoras :bitacoras="clientData.bitacoras" :clientData="clientData" />
+        <Bitacoras :client="clientData" :clientId="clientData.id" :limite="5" />
       </div>
     </div>
 

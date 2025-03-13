@@ -9,6 +9,7 @@ use App\Models\Expediente;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 
 class BitacoraController extends Controller
 {
@@ -249,4 +250,40 @@ class BitacoraController extends Controller
         
         return response()->json($bitacora);
     }
+    /**
+ * Obtener bitácoras por cliente.
+ */
+public function bitacorasPorCliente(Request $request)
+{
+    Log::info('Solicitud de bitácoras para cliente:', ['client_id' => $request->client_id]);
+
+    $validator = Validator::make($request->all(), [
+        'client_id' => 'required|exists:clients,id',
+    ]);
+
+    if ($validator->fails()) {
+        Log::error('Validación fallida:', ['errors' => $validator->errors()]);
+        return response()->json(['errors' => $validator->errors()], 422);
+    }
+
+    // Obtener todos los expedientes del cliente
+    $expedientes = Expediente::where('client_id', $request->client_id)->pluck('id');
+    Log::info('Expedientes encontrados:', ['expedientes' => $expedientes]);
+    
+    if ($expedientes->isEmpty()) {
+        Log::info('No se encontraron expedientes para el cliente');
+        return response()->json([]);
+    }
+    
+    // Obtener las bitácoras de todos esos expedientes
+    $bitacoras = Bitacora::whereIn('expediente_id', $expedientes)
+        ->with(['categoria', 'usuario', 'expediente'])
+        ->orderBy('created_at', 'desc')
+        ->limit($request->limite ?? 10)
+        ->get();
+
+    Log::info('Bitácoras encontradas:', ['count' => $bitacoras->count()]);
+    
+    return response()->json($bitacoras);
+}
 }
